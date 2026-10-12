@@ -2,471 +2,334 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equilibrio - Mi Vida con Diabetes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Diabetes sin miedo</title>
     
     <!-- PWA Config -->
-    <meta name="theme-color" content="#264653">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Equilibrio - Mi Vida con Diabetes","short_name":"Equilibrio","start_url":"./","display":"standalone","background_color":"%23F4F7F6","theme_color":"%23264653","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🌿%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml"}]}'>
+    <meta name="theme-color" content="#0ea5e9">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Diabetes sin miedo","short_name":"Diabetes Sin Miedo","start_url":"./","display":"standalone","background_color":"%23f8fafc","theme_color":"%230ea5e9","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🛡️%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml"}]}'>
     
     <style>
         :root {
-            --primary: #2A9D8F;
-            --secondary: #264653;
-            --accent: #E9C46A;
-            --bg: #F4F7F6;
-            --card: #FFFFFF;
-            --text: #333333;
-            --text-light: #666666;
-            --danger: #E76F51;
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #0f172a;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 10px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+            --radius: 16px;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
+
+        body.dark-mode {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
         
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6; 
+            padding-bottom: 90px; 
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
         /* SPLASH SCREEN */
         .splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--secondary), #1d3540); color: white;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); 
+            color: white;
             display: flex; align-items: center; justify-content: center;
             z-index: 9999; text-align: center; padding: 2rem;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .splash-content h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-        .splash-content p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; max-width: 300px; }
+        .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .splash-content h1 { font-size: 2.8rem; margin-bottom: 0.5rem; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        .splash-content p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; max-width: 320px; margin-inline: auto; }
         .splash-btn {
-            background: var(--primary); color: white; border: none; padding: 15px; 
-            border-radius: 30px; width: 100%; max-width: 300px; font-size: 1.1rem; 
-            font-weight: bold; cursor: pointer; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+            color: white; border: none; padding: 16px; 
+            border-radius: 50px; width: 100%; max-width: 320px; font-size: 1.1rem; 
+            font-weight: 700; cursor: pointer; margin-bottom: 12px; 
+            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
+            transition: transform 0.2s;
         }
-        .splash-btn.enter { background: white; color: var(--secondary); }
-        .splash-btn.install { display: none; background: var(--accent); color: var(--secondary); } /* Hidden by default */
-        .splash-note { font-size: 0.8rem; margin-top: 15px; opacity: 0.6; }
+        .splash-btn:active { transform: scale(0.98); }
+        .splash-btn.install { background: linear-gradient(135deg, var(--accent), #d97706); color: #0f172a; display: none; }
+        .splash-btn.enter { background: white; color: #0f172a; }
 
         /* Header */
-        header { background: var(--secondary); color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; }
-        header h1 { font-size: 1.5rem; font-weight: 600; }
-        header p { font-size: 0.8rem; opacity: 0.8; }
+        header { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1rem; 
+            position: sticky; top: 0; z-index: 100; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        body.dark-mode header { background: rgba(30, 41, 59, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        header .brand { display: flex; flex-direction: column; }
+        header h1 { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+        header p { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
+        
+        .theme-toggle {
+            background: var(--card); border: 1px solid rgba(0,0,0,0.1); 
+            width: 44px; height: 44px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; cursor: pointer; box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { transform: rotate(15deg) scale(1.1); }
 
         /* Navigation */
-        nav { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 0.5rem 0; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        nav button { background: none; border: none; color: var(--text-light); font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
-        nav button.active { color: var(--primary); font-weight: bold; }
-        nav button span.icon { font-size: 1.5rem; }
+        nav { 
+            position: fixed; bottom: 0; width: 100%; 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,0,0,0.05); 
+            display: flex; justify-content: space-around; 
+            padding: 0.6rem 0; z-index: 100; 
+        }
+        body.dark-mode nav { background: rgba(30, 41, 59, 0.9); border-top: 1px solid rgba(255,255,255,0.05); }
+        nav button { 
+            background: none; border: none; color: var(--text-light); 
+            font-size: 0.7rem; display: flex; flex-direction: column; 
+            align-items: center; gap: 4px; cursor: pointer; 
+            transition: all 0.3s ease; padding: 4px 12px; border-radius: 12px;
+        }
+        nav button.active { color: var(--primary); font-weight: 700; background: rgba(14, 165, 233, 0.1); }
+        nav button span.icon { font-size: 1.4rem; transition: transform 0.2s; }
+        nav button:active span.icon { transform: scale(0.8); }
 
         /* Main Content */
-        main { max-width: 800px; margin: 0 auto; padding: 1rem; }
-        .section { display: none; animation: fadeIn 0.3s ease; }
+        main { max-width: 600px; margin: 0 auto; padding: 1rem; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Cards & Grids */
-        .card { background: var(--card); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .card h2 { color: var(--secondary); font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-        .card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 0.8rem; }
+        .card { 
+            background: var(--card); 
+            border-radius: var(--radius); 
+            padding: 1.5rem; 
+            margin-bottom: 1.2rem; 
+            box-shadow: var(--shadow); 
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-mode .card { border: 1px solid rgba(255,255,255,0.05); }
+        .card h2 { color: var(--text); font-size: 1.15rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+        .card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-        .grid-btn { background: var(--card); border: 2px solid #eee; border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; text-decoration: none; color: var(--text); }
-        .grid-btn:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(42,157,143,0.15); }
-        .grid-btn .icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .grid-btn { 
+            background: var(--card); border: 1px solid rgba(0,0,0,0.05); 
+            border-radius: var(--radius); padding: 1.2rem 1rem; 
+            text-align: center; cursor: pointer; transition: all 0.3s; 
+            text-decoration: none; color: var(--text);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        body.dark-mode .grid-btn { border: 1px solid rgba(255,255,255,0.05); }
+        .grid-btn:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+        .grid-btn .icon { font-size: 1.8rem; }
         .grid-btn span { font-size: 0.85rem; font-weight: 600; }
 
-        /* Forms & Inputs */
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; font-size: 1rem; }
-        button.primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 1rem; font-weight: bold; cursor: pointer; }
-        button.primary:hover { background: #21867a; }
+        /* Emergency Card */
+        .emergency-card { 
+            background: linear-gradient(135deg, #fef2f2, #fee2e2); 
+            border: 1px solid #fecaca; 
+        }
+        body.dark-mode .emergency-card { background: linear-gradient(135deg, #450a0a, #7f1d1d); border-color: #991b1b; }
+        .emergency-card h2 { color: var(--danger); }
+        .emergency-card p, .emergency-card li { color: #991b1b; }
+        body.dark-mode .emergency-card p, body.dark-mode .emergency-card li { color: #fecaca; }
+        .danger-btn { 
+            background: linear-gradient(135deg, var(--danger), #dc2626); 
+            color: white; border: none; padding: 12px; border-radius: 12px; 
+            width: 100%; font-size: 0.95rem; font-weight: 700; cursor: pointer; 
+            margin-top: 10px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
 
-        /* Alerts & Disclaimers */
-        .disclaimer { background: #FFF3CD; border-left: 4px solid var(--accent); padding: 1rem; border-radius: 8px; font-size: 0.85rem; color: #856404; margin-bottom: 1rem; }
-        .alert-danger { background: #F8D7DA; border-left: 4px solid var(--danger); padding: 1rem; border-radius: 8px; font-size: 0.9rem; color: #721C24; }
+        /* Forms & Inputs */
+        input, select, textarea { 
+            width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); 
+            border-radius: 12px; margin-bottom: 12px; font-size: 1rem; 
+            background: var(--bg); color: var(--text);
+            transition: border-color 0.3s;
+        }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { border-color: rgba(255,255,255,0.1); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
+        
+        button.primary { 
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+            color: white; border: none; padding: 14px; border-radius: 12px; 
+            width: 100%; font-size: 1rem; font-weight: 700; cursor: pointer; 
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35); }
+        button.primary:active { transform: scale(0.98); }
 
         /* Sub-sections */
-        .sub-content { background: #F8F9FA; border-radius: 8px; padding: 1rem; margin-top: 1rem; border: 1px solid #E9ECEF; display: none; }
+        .sub-content { 
+            background: var(--bg); border-radius: var(--radius); 
+            padding: 1.2rem; margin-top: 1rem; 
+            border: 1px solid rgba(0,0,0,0.05); display: none; 
+            animation: slideDown 0.3s ease;
+        }
+        body.dark-mode .sub-content { border-color: rgba(255,255,255,0.05); }
         .sub-content.active { display: block; }
-        .sub-content h3 { color: var(--primary); margin-bottom: 0.5rem; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .sub-content h3 { color: var(--primary); margin-bottom: 0.8rem; font-size: 1.1rem; }
         .sub-content ul { padding-left: 1.2rem; }
-        .sub-content li { margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .sub-content li { margin-bottom: 0.6rem; font-size: 0.9rem; color: var(--text-light); }
 
-        .tag { display: inline-block; background: #E0F2F1; color: var(--primary); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; margin-right: 5px; }
+        /* Interactive Widgets */
+        .water-tracker { display: flex; justify-content: space-between; gap: 4px; margin: 1rem 0; }
+        .water-glass { 
+            flex: 1; aspect-ratio: 1; border-radius: 8px; 
+            background: rgba(14, 165, 233, 0.1); border: 2px solid transparent;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: all 0.3s;
+        }
+        .water-glass.filled { background: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 4px 8px rgba(14, 165, 233, 0.3); }
+        
+        .log-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px; background: var(--bg); border-radius: 10px; margin-bottom: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        .log-item.high { border-left-color: var(--danger); }
+        .log-item.low { border-left-color: var(--accent); }
+        .log-item.normal { border-left-color: var(--success); }
+        .log-val { font-weight: 800; font-size: 1.1rem; }
+        .log-time { font-size: 0.75rem; color: var(--text-light); }
+
+        .tag { display: inline-block; background: rgba(14, 165, 233, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        
+        .premium-banner {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; padding: 1rem; border-radius: var(--radius);
+            text-align: center; margin-bottom: 1rem; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .premium-banner h3 { font-size: 1.1rem; margin-bottom: 4px; }
+        .premium-banner p { font-size: 0.85rem; opacity: 0.9; margin: 0; }
+
+        /* Disclaimer */
+        .disclaimer { 
+            background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent); 
+            padding: 1rem; border-radius: 12px; font-size: 0.85rem; 
+            color: var(--text); margin-bottom: 1.5rem; 
+        }
+        body.dark-mode .disclaimer { background: rgba(245, 158, 11, 0.15); }
     </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN (Pantalla de Bienvenida / Instalación) -->
+<!-- SPLASH SCREEN -->
 <div id="splash-screen" class="splash">
     <div class="splash-content">
-        <h1>🌿 Equilibrio</h1>
-        <p>¡Qué bueno que estés acá! Vivir bien con diabetes también se disfruta en la mesa.</p>
+        <h1>🛡️ Diabetes<br>sin miedo</h1>
+        <p>Tu compañero inteligente, seguro y profesional para vivir plenamente.</p>
         
-        <!-- Botón de Instalación PWA (Aparece solo si el navegador lo soporta) -->
-        <button id="splash-install" class="splash-btn install">📲 Instalar la app en mi celular</button>
-        
-        <button id="splash-enter" class="splash-btn enter">Entrar a la app</button>
-        <p class="splash-note">¿Ya la instalaste? Entrá y empezá.</p>
+        <button id="splash-install" class="splash-btn install">📲 Instalar en mi celular</button>
+        <button id="splash-enter" class="splash-btn enter">Comenzar ahora</button>
+        <p style="font-size: 0.8rem; margin-top: 20px; opacity: 0.6;">Tus datos se guardan de forma segura en tu dispositivo.</p>
     </div>
 </div>
 
 <header>
-    <h1>🌿 Equilibrio</h1>
-    <p>Mi Vida con Diabetes · Tu espacio personal</p>
+    <div class="brand">
+        <h1>Diabetes sin miedo</h1>
+        <p>Tu espacio personal de salud</p>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
 </header>
 
 <main>
-    <!-- DISCLAIMER GLOBAL -->
     <div class="disclaimer">
-        ⚠️ <strong>Importante:</strong> Esta app es educativa y organizativa. No reemplaza a tu médico ni indica dosis de medicamentos. Los objetivos deben ser personalizados por tu equipo de salud.
+        ⚠️ <strong>Importante:</strong> Esta app es una herramienta educativa y de organización. No reemplaza el criterio de tu médico ni indica dosis de medicamentos.
     </div>
 
     <!-- SECCION: INICIO -->
     <section id="inicio" class="section active">
-        <div class="card">
-            <h2>👋 ¡Qué bueno que estés acá!</h2>
-            <p>Organizá comidas, anotá mediciones y cuidá tu bienestar día a día.</p>
-            <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('inicio', 'glucosa-rapido')">
-                    <span class="icon">🩸</span>
-                    <span>Registrar Glucosa</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="switchTab('comidas')">
-                    <span class="icon">🥗</span>
-                    <span>Recetas y Plan</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="switchTab('bienestar')">
-                    <span class="icon">🧘</span>
-                    <span>Bienestar</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="switchTab('educacion')">
-                    <span class="icon">💡</span>
-                    <span>Educación</span>
-                </a>
-            </div>
+        
+        <!-- EMERGENCIA -->
+        <div class="card emergency-card">
+            <h2>🚨 ¿Sientes una Hipoglucemia?</h2>
+            <p>Si tu glucosa es <strong>menor a 70 mg/dL</strong>, aplica la Regla del 15:</p>
+            <ol style="margin-left: 20px; margin-top: 8px; font-size: 0.9rem;">
+                <li>Come 15g de carbohidratos (3 caramelos, 1/2 vaso de jugo).</li>
+                <li>Espera 15 minutos.</li>
+                <li>Vuelve a medir. Si sigue bajo, repite.</li>
+            </ol>
+            <button class="danger-btn" onclick="alert('📞 Si los síntomas son graves (confusión, desmayo), busca ayuda médica inmediata o llama a emergencias.')">Ver Protocolo de Emergencia</button>
         </div>
 
+        <!-- TRACKER DE AGUA -->
         <div class="card">
-            <h2>✅ Checklist de Autocuidado de Hoy</h2>
-            <label><input type="checkbox"> Tomé mi medicación</label><br>
-            <label><input type="checkbox"> Medí mi glucosa</label><br>
-            <label><input type="checkbox"> Bebí suficiente agua</label><br>
-            <label><input type="checkbox"> Me moví al menos 10 min</label>
+            <h2>💧 Hidratación de Hoy</h2>
+            <div class="water-tracker" id="waterTracker"></div>
+            <p id="waterText" style="text-align: center; font-weight: 700; color: var(--primary);">0 / 8 vasos</p>
+        </div>
+
+        <!-- REGISTRO DE GLUCOSA -->
+        <div class="card">
+            <h2>🩸 Últimos Registros</h2>
+            <div id="glucoseList" style="margin-bottom: 1rem;">
+                <p style="text-align: center; color: var(--text-light); font-size: 0.9rem;">No hay registros aún. ¡Agrega el primero!</p>
+            </div>
+            <button class="primary" onclick="showSub('inicio', 'glucosa-rapido')">+ Nuevo Registro</button>
         </div>
 
         <div id="glucosa-rapido" class="sub-content">
-            <h3>🩸 Registro Rápido de Glucosa</h3>
-            <input type="number" placeholder="Valor (mg/dL)">
-            <select>
-                <option>En ayunas</option>
-                <option>Antes de comer</option>
-                <option>Después de comer</option>
-                <option>Antes de dormir</option>
+            <h3>🩸 Registrar Glucosa</h3>
+            <input type="number" id="glucoseVal" placeholder="Valor (mg/dL)">
+            <select id="glucoseTime">
+                <option value="En ayunas">En ayunas</option>
+                <option value="Antes de comer">Antes de comer</option>
+                <option value="Después de comer">Después de comer</option>
+                <option value="Antes de dormir">Antes de dormir</option>
             </select>
-            <textarea placeholder="Notas (comida, síntomas, etc.)" rows="2"></textarea>
-            <button class="primary" onclick="alert('Guardado en tu dispositivo (Simulación)')">Guardar Medición</button>
+            <textarea id="glucoseNote" placeholder="Notas (ej: Me sentía mareado, comí pasta...)" rows="2"></textarea>
+            <button class="primary" onclick="saveGlucose()">Guardar Registro</button>
+        </div>
+
+        <!-- CHECKLIST -->
+        <div class="card">
+            <h2>✅ Autocuidado de Hoy</h2>
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('meds', this.checked)"> Tomé mi medicación
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('water', this.checked)"> Bebí suficiente agua
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('move', this.checked)"> Me moví al menos 10 min
+            </label>
         </div>
     </section>
 
-    <!-- SECCION: COMIDAS Y RECETAS -->
+    <!-- SECCION: COMIDAS -->
     <section id="comidas" class="section">
         <div class="card">
-            <h2>🥗 Alimentación y Recetas</h2>
-            <p>Ideas generales, no prescripciones. Adaptá ingredientes a tu plan.</p>
+            <h2>🥗 Alimentación Inteligente</h2>
+            <p>Ideas generales para adaptar a tu plan personalizado.</p>
             <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'recetario')"><span class="icon">📖</span><span>Recetario</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'plato')"><span class="icon">🍽️</span><span>Método del Plato</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'fuera')"><span class="icon">🍔</span><span>Comer Fuera</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'colaciones')"><span class="icon">🍎</span><span>Colaciones</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'hidratacion')"><span class="icon">💧</span><span>Hidratación</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'lista')"><span class="icon">🛒</span><span>Lista de Compras</span></a>
-            </div>
-        </div>
-
-        <div id="recetario" class="sub-content">
-            <h3>📖 Recetario Saludable</h3>
-            <ul>
-                <li><strong>Omelette de espinaca y champignones:</strong> Proteína y verduras sin almidón.</li>
-                <li><strong>Ensalada de legumbres:</strong> Lentejas, tomate, cebolla y aceite de oliva.</li>
-                <li><strong>Pollo al horno con hierbas:</strong> Acompañado con brócoli al vapor.</li>
-            </ul>
-        </div>
-        <div id="plato" class="sub-content">
-            <h3>🍽️ Idea para armar el plato</h3>
-            <p>🥬 <strong>1/2 plato:</strong> Verduras sin almidón.<br>🍗 <strong>1/4 plato:</strong> Proteína magra.<br>🍚 <strong>1/4 plato:</strong> Carbohidratos integrales.</p>
-        </div>
-        <div id="fuera" class="sub-content">
-            <h3>🍔 Comer Fuera de Casa</h3>
-            <ul>
-                <li>Pedí las salsas y aderezos <strong>aparte</strong>.</li>
-                <li>Elegí cocciones al horno, plancha o vapor en lugar de fritos.</li>
-                <li>Reemplazá las papas fritas por ensalada o vegetales grillados.</li>
-            </ul>
-        </div>
-        <div id="colaciones" class="sub-content">
-            <h3>🍎 Colaciones de Bolsillo</h3>
-            <ul>
-                <li>Un puñado de frutos secos sin sal.</li>
-                <li>Yogur natural sin azúcar con semillas de chía.</li>
-                <li>Bastones de zanahoria o apio con hummus.</li>
-            </ul>
-        </div>
-        <div id="hidratacion" class="sub-content">
-            <h3>💧 Hidratación Inteligente</h3>
-            <ul>
-                <li><strong>Agua saborizada:</strong> Rodajas de limón, menta o pepino.</li>
-                <li><strong>Infusiones:</strong> Té, mate o manzanilla sin azúcar.</li>
-            </ul>
-        </div>
-        <div id="lista" class="sub-content">
-            <h3>🛒 Lista de Compras</h3>
-            <input type="text" placeholder="Agregar producto...">
-            <button class="primary">Agregar</button>
-        </div>
-    </section>
-
-    <!-- SECCION: BIENESTAR Y MOVIMIENTO -->
-    <section id="bienestar" class="section">
-        <div class="card">
-            <h2>🧘 Bienestar, Mente y Cuerpo</h2>
-            <p>El estrés y el sedentarismo impactan en tu glucosa. Cuidá tu cuerpo y tu mente.</p>
-            <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'stress')"><span class="icon">🧠</span><span>Manejo del Estrés</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'rutinas')"><span class="icon">🏃</span><span>Ejercicios Leves</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sedentario')"><span class="icon">🛋️</span><span>Adiós Sedentarismo</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sueno')"><span class="icon">😴</span><span>Sueño y Descanso</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'emocional')"><span class="icon">🫂</span><span>Apoyo Emocional</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'tracker')"><span class="icon">📊</span><span>Tracker de Hábitos</span></a>
-            </div>
-        </div>
-
-        <div id="stress" class="sub-content">
-            <h3>🧠 Manejo del Estrés</h3>
-            <p>El estrés libera <strong>cortisol</strong>, que puede elevar tu glucosa.</p>
-            <ul>
-                <li><strong>Respiración 4-7-8:</strong> Inhalá en 4s, retené 7s, exhalá en 8s.</li>
-                <li><strong>Mindfulness:</strong> 5 min al día a solo observar tu respiración.</li>
-            </ul>
-        </div>
-        <div id="rutinas" class="sub-content">
-            <h3>🏃 Rutinas de Ejercicios Leves</h3>
-            <ul>
-                <li><strong>Caminata post-comida:</strong> 10-15 minutos a paso ligero.</li>
-                <li><strong>Estiramientos matutinos:</strong> 5 min al despertar.</li>
-                <li><strong>Ejercicios en silla:</strong> Levantamientos de rodillas o giros de tobillos.</li>
-            </ul>
-        </div>
-        <div id="sedentario" class="sub-content">
-            <h3>🛋️ Guía para Sedentarios</h3>
-            <p>Aplicá la <strong>Regla de los 5 Minutos</strong>:</p>
-            <ul>
-                <li>Cada 1 hora, levantate y movete 5 minutos.</li>
-                <li>Usá el teléfono o mirá TV de pie o caminando en tu lugar.</li>
-            </ul>
-        </div>
-        <div id="sueno" class="sub-content">
-            <h3>😴 Sueño y Descanso</h3>
-            <ul>
-                <li>Mantené horarios regulares para dormir y despertar.</li>
-                <li>Evitá pantallas 1 hora antes de acostarte.</li>
-            </ul>
-        </div>
-        <div id="emocional" class="sub-content">
-            <h3>🫂 Apoyo Emocional</h3>
-            <p>El "Burnout por Diabetes" es real. Cansarse de cuidarse es normal.</p>
-            <ul>
-                <li>Hablá con tu equipo de salud sobre cómo te sentís.</li>
-                <li>No te culpes por un valor alto de glucosa; es un dato, no un fracaso.</li>
-            </ul>
-        </div>
-        <div id="tracker" class="sub-content">
-            <h3>📊 Tracker de Hábitos Diarios</h3>
-            <label><input type="checkbox"> Bebí 2L de agua</label><br>
-            <label><input type="checkbox"> Caminé 30 min</label><br>
-            <label><input type="checkbox"> Dormí 7-8 horas</label>
-        </div>
-    </section>
-
-    <!-- SECCION: EDUCACION Y GUIAS -->
-    <section id="educacion" class="section">
-        <div class="card">
-            <h2>💡 Educación y Guías Prácticas</h2>
-            <p>Información oficial y consejos para situaciones específicas.</p>
-            <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'mitos')"><span class="icon">🧠</span><span>Mitos y Realidades</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'enfermedad')"><span class="icon">🤒</span><span>Días de Enfermedad</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'viaje')"><span class="icon">🎒</span><span>Kit de Viaje</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'trabajo')"><span class="icon">💼</span><span>Trabajo y Estudio</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'controles')"><span class="icon">🩺</span><span>Controles Anuales</span></a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'pies')"><span class="icon">🦶</span><span>Cuidado de Pies</span></a>
-            </div>
-        </div>
-
-        <div id="mitos" class="sub-content">
-            <h3>🧠 Mitos y Realidades</h3>
-            <ul>
-                <li><strong>Mito:</strong> "No puedo comer frutas". <br><strong>Realidad:</strong> Sí podés, en porciones adecuadas y preferentemente enteras.</li>
-                <li><strong>Mito:</strong> "La diabetes tipo 2 es por comer mucho azúcar". <br><strong>Realidad:</strong> Es multifactorial (genética, peso, edad, estilo de vida).</li>
-            </ul>
-        </div>
-        <div id="enfermedad" class="sub-content">
-            <h3>🤒 Reglas para Días de Enfermedad</h3>
-            <ul>
-                <li>Medí tu glucosa con más frecuencia (cada 4 horas).</li>
-                <li>Mantenete hidratado.</li>
-                <li><strong>Nunca suspendas tu insulina</strong> sin consultar a tu médico.</li>
-            </ul>
-        </div>
-        <div id="viaje" class="sub-content">
-            <h3>🎒 Kit de Viaje y Emergencia</h3>
-            <ul>
-                <li>Glucómetro, tiras reactivas y lancetas (el doble de lo calculado).</li>
-                <li>Medicamentos / Insulina.</li>
-                <li>Fuente de azúcar de acción rápida (caramelos).</li>
-            </ul>
-        </div>
-        <div id="trabajo" class="sub-content">
-            <h3>💼 Diabetes en el Trabajo/Estudio</h3>
-            <ul>
-                <li>Tené siempre una colación en tu escritorio.</li>
-                <li>Hacé pausas activas cada hora.</li>
-            </ul>
-        </div>
-        <div id="controles" class="sub-content">
-            <h3>🩺 Checklist de Controles Anuales</h3>
-            <ul>
-                <li>👁️ Fondo de ojo (anual).</li>
-                <li>🩸 Función renal (anual).</li>
-                <li>🦶 Examen de pies (en cada consulta).</li>
-            </ul>
-        </div>
-        <div id="pies" class="sub-content">
-            <h3>🦶 Cuidado de los Pies</h3>
-            <ul>
-                <li>Revisá a diario la piel y plantas.</li>
-                <li>Lavá con agua tibia y secá muy bien entre los dedos.</li>
-                <li><strong>Nunca camines descalzo</strong>.</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- SECCION: AJUSTES -->
-    <section id="ajustes" class="section">
-        <div class="card">
-            <h2>⚙️ Mis Datos y Consultas</h2>
-            <div class="grid">
-                <a href="#" class="grid-btn" onclick="switchTab('inicio')"><span class="icon">📓</span><span>Diario para el Doctor</span></a>
-                <a href="#" class="grid-btn"><span class="icon">📤</span><span>Exportar Datos</span></a>
-                <a href="#" class="grid-btn"><span class="icon">🔗</span><span>Biblioteca Web</span></a>
-            </div>
-        </div>
-        
-        <div class="card">
-            <h2>📝 Preguntas útiles para tu próxima consulta</h2>
-            <ul style="padding-left: 1.2rem; font-size: 0.9rem; color: var(--text-light);">
-                <li>¿Cuál es mi objetivo personal de glucosa (HbA1c)?</li>
-                <li>¿Cómo adaptar las comidas a mi medicación y horarios?</li>
-                <li>¿Qué debo hacer si tengo una glucosa muy alta o muy baja?</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>🔗 Recursos Oficiales</h2>
-            <p><a href="https://www.niddk.nih.gov/health-information/informacion-de-la-salud/diabetes" target="_blank">Instituto Nacional de la Diabetes (NIDDK)</a></p>
-            <p><a href="https://www.cdc.gov/diabetes/es/healthy-eating/planificacion-de-comidas.html" target="_blank">CDC — planificación de comidas</a></p>
-            <p><a href="https://www.fad.org.ar/" target="_blank">Federación Argentina de Diabetes</a></p>
-        </div>
-    </section>
-</main>
-
-<!-- NAVIGATION BAR -->
-<nav>
-    <button class="active" onclick="switchTab('inicio')">
-        <span class="icon">🏠</span> Inicio
-    </button>
-    <button onclick="switchTab('comidas')">
-        <span class="icon">🥗</span> Comidas
-    </button>
-    <button onclick="switchTab('bienestar')">
-        <span class="icon">🧘</span> Bienestar
-    </button>
-    <button onclick="switchTab('educacion')">
-        <span class="icon">💡</span> Guías
-    </button>
-    <button onclick="switchTab('ajustes')">
-        <span class="icon">⚙️</span> Ajustes
-    </button>
-</nav>
-
-<script>
-    // ==========================================
-    // LÓGICA DE INSTALACIÓN PWA (SPLASH SCREEN)
-    // ==========================================
-    let deferredPrompt;
-    const splashScreen = document.getElementById('splash-screen');
-    const splashInstallBtn = document.getElementById('splash-install');
-    const splashEnterBtn = document.getElementById('splash-enter');
-
-    // Capturar el evento de instalación del navegador
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // Mostrar el botón de instalación en la pantalla de bienvenida
-        if (splashInstallBtn) splashInstallBtn.style.display = 'block';
-    });
-
-    // Acción del botón de instalar
-    if (splashInstallBtn) {
-        splashInstallBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                splashInstallBtn.style.display = 'none';
-            }
-        });
-    }
-
-    // Acción del botón "Entrar a la app"
-    splashEnterBtn.addEventListener('click', () => {
-        splashScreen.style.opacity = '0';
-        setTimeout(() => {
-            splashScreen.style.display = 'none';
-        }, 400);
-    });
-
-    // Ocultar botón si ya se instaló
-    window.addEventListener('appinstalled', () => {
-        deferredPrompt = null;
-        if (splashInstallBtn) splashInstallBtn.style.display = 'none';
-    });
-
-    // ==========================================
-    // NAVEGACIÓN DE LA APP
-    // ==========================================
-    function switchTab(tabId) {
-        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        
-        document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-        // Usamos event.currentTarget si existe, sino buscamos el botón por índice o texto (fallback para onclick inline)
-        if(event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
-        } else {
-            // Fallback para botones de grid
-            const navBtns = document.querySelectorAll('nav button');
-            navBtns.forEach(b => b.classList.remove('active'));
-            const map = {'inicio':0, 'comidas':1, 'bienestar':2, 'educacion':3, 'ajustes':4};
-            if(map[tabId] !== undefined) navBtns[map[tabId]].classList.add('active');
-        }
-        
-        window.scrollTo(0, 0);
-    }
-
-    function showSub(parentId, subId) {
-        document.querySelectorAll(`#${parentId} .sub-content`).forEach(sub => sub.classList.remove('active'));
-        document.getElementById(subId).classList.add('active');
-        setTimeout(() => {
-            document.getElementById(subId).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-    }
-</script>
-
-</body>
-</html>
+                <div class="grid-btn" onclick="showSub('comidas', 'recetario')"><span class="icon">📖</span><span>Recetario</span></div>
+                <div class="grid-btn" onclick="showSub('comidas', 'plato')"><span class="icon">🍽️</span><span>Método del Plato</span></div>
+                <div class="grid-btn" onclick="showSub('comidas', 'fuera')"><span class="icon">🍔</span><span>Comer Fuera</span></div>
+                <div class="grid-btn" onclick="showSub('comidas', 'colaciones')"><span class="icon">🍎</span><span>Colaciones</span></div>
+           
