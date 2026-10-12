@@ -1,335 +1,2207 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Diabetes sin miedo</title>
-    
-    <!-- PWA Config -->
-    <meta name="theme-color" content="#0ea5e9">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Diabetes sin miedo","short_name":"Diabetes Sin Miedo","start_url":"./","display":"standalone","background_color":"%23f8fafc","theme_color":"%230ea5e9","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🛡️%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml"}]}'>
-    
-    <style>
-        :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #0f172a;
-            --accent: #f59e0b;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-hover: 0 10px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
-            --radius: 16px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <meta name="description" content="Diabetes sin miedo: control de glucosa, alimentación, bienestar y educación para vivir con más seguridad." />
+  <title>Diabetes sin miedo</title>
 
-        body.dark-mode {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f1f5f9;
-            --text-light: #94a3b8;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-        }
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --primary-2: #6366f1;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --success: #10b981;
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            line-height: 1.6; 
-            padding-bottom: 90px; 
-            transition: background 0.3s ease, color 0.3s ease;
-        }
+      --bg: #f3f7fb;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(15, 23, 42, 0.09);
+      --soft: rgba(14, 165, 233, 0.07);
+      --input: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 22px;
+    }
 
-        /* SPLASH SCREEN */
-        .splash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); 
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 9999; text-align: center; padding: 2rem;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .splash-content h1 { font-size: 2.8rem; margin-bottom: 0.5rem; background: linear-gradient(to right, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-        .splash-content p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; max-width: 320px; margin-inline: auto; }
-        .splash-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-            color: white; border: none; padding: 16px; 
-            border-radius: 50px; width: 100%; max-width: 320px; font-size: 1.1rem; 
-            font-weight: 700; cursor: pointer; margin-bottom: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4);
-            transition: transform 0.2s;
-        }
-        .splash-btn:active { transform: scale(0.98); }
-        .splash-btn.install { background: linear-gradient(135deg, var(--accent), #d97706); color: #0f172a; display: none; }
-        .splash-btn.enter { background: white; color: #0f172a; }
+    [data-theme="dark"] {
+      --bg: #0b1220;
+      --surface: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.09);
+      --soft: rgba(148, 163, 184, 0.09);
+      --input: #0b1220;
+      --shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+    }
 
-        /* Header */
-        header { 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding: 1rem; 
-            position: sticky; top: 0; z-index: 100; 
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        body.dark-mode header { background: rgba(30, 41, 59, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        header .brand { display: flex; flex-direction: column; }
-        header h1 { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
-        header p { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
-        
-        .theme-toggle {
-            background: var(--card); border: 1px solid rgba(0,0,0,0.1); 
-            width: 44px; height: 44px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.3rem; cursor: pointer; box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        .theme-toggle:hover { transform: rotate(15deg) scale(1.1); }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* Navigation */
-        nav { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(0,0,0,0.05); 
-            display: flex; justify-content: space-around; 
-            padding: 0.6rem 0; z-index: 100; 
-        }
-        body.dark-mode nav { background: rgba(30, 41, 59, 0.9); border-top: 1px solid rgba(255,255,255,0.05); }
-        nav button { 
-            background: none; border: none; color: var(--text-light); 
-            font-size: 0.7rem; display: flex; flex-direction: column; 
-            align-items: center; gap: 4px; cursor: pointer; 
-            transition: all 0.3s ease; padding: 4px 12px; border-radius: 12px;
-        }
-        nav button.active { color: var(--primary); font-weight: 700; background: rgba(14, 165, 233, 0.1); }
-        nav button span.icon { font-size: 1.4rem; transition: transform 0.2s; }
-        nav button:active span.icon { transform: scale(0.8); }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
 
-        /* Main Content */
-        main { max-width: 600px; margin: 0 auto; padding: 1rem; }
-        .section { display: none; animation: fadeIn 0.4s ease; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    body {
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(14, 165, 233, 0.12), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      padding-bottom: calc(88px + env(safe-area-inset-bottom));
+      transition: background 0.25s ease, color 0.25s ease;
+      line-height: 1.55;
+    }
 
-        /* Cards & Grids */
-        .card { 
-            background: var(--card); 
-            border-radius: var(--radius); 
-            padding: 1.5rem; 
-            margin-bottom: 1.2rem; 
-            box-shadow: var(--shadow); 
-            border: 1px solid rgba(0,0,0,0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        body.dark-mode .card { border: 1px solid rgba(255,255,255,0.05); }
-        .card h2 { color: var(--text); font-size: 1.15rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px; font-weight: 700; }
-        .card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; }
-        
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        .grid-btn { 
-            background: var(--card); border: 1px solid rgba(0,0,0,0.05); 
-            border-radius: var(--radius); padding: 1.2rem 1rem; 
-            text-align: center; cursor: pointer; transition: all 0.3s; 
-            text-decoration: none; color: var(--text);
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-        }
-        body.dark-mode .grid-btn { border: 1px solid rgba(255,255,255,0.05); }
-        .grid-btn:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-        .grid-btn .icon { font-size: 1.8rem; }
-        .grid-btn span { font-size: 0.85rem; font-weight: 600; }
+    button, input, select, textarea {
+      font: inherit;
+    }
 
-        /* Emergency Card */
-        .emergency-card { 
-            background: linear-gradient(135deg, #fef2f2, #fee2e2); 
-            border: 1px solid #fecaca; 
-        }
-        body.dark-mode .emergency-card { background: linear-gradient(135deg, #450a0a, #7f1d1d); border-color: #991b1b; }
-        .emergency-card h2 { color: var(--danger); }
-        .emergency-card p, .emergency-card li { color: #991b1b; }
-        body.dark-mode .emergency-card p, body.dark-mode .emergency-card li { color: #fecaca; }
-        .danger-btn { 
-            background: linear-gradient(135deg, var(--danger), #dc2626); 
-            color: white; border: none; padding: 12px; border-radius: 12px; 
-            width: 100%; font-size: 0.95rem; font-weight: 700; cursor: pointer; 
-            margin-top: 10px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
+    button {
+      cursor: pointer;
+      border: 0;
+    }
 
-        /* Forms & Inputs */
-        input, select, textarea { 
-            width: 100%; padding: 12px; border: 1px solid rgba(0,0,0,0.1); 
-            border-radius: 12px; margin-bottom: 12px; font-size: 1rem; 
-            background: var(--bg); color: var(--text);
-            transition: border-color 0.3s;
-        }
-        body.dark-mode input, body.dark-mode select, body.dark-mode textarea { border-color: rgba(255,255,255,0.1); }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); }
-        
-        button.primary { 
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-            color: white; border: none; padding: 14px; border-radius: 12px; 
-            width: 100%; font-size: 1rem; font-weight: 700; cursor: pointer; 
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        button.primary:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35); }
-        button.primary:active { transform: scale(0.98); }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+    }
 
-        /* Sub-sections */
-        .sub-content { 
-            background: var(--bg); border-radius: var(--radius); 
-            padding: 1.2rem; margin-top: 1rem; 
-            border: 1px solid rgba(0,0,0,0.05); display: none; 
-            animation: slideDown 0.3s ease;
-        }
-        body.dark-mode .sub-content { border-color: rgba(255,255,255,0.05); }
-        .sub-content.active { display: block; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .sub-content h3 { color: var(--primary); margin-bottom: 0.8rem; font-size: 1.1rem; }
-        .sub-content ul { padding-left: 1.2rem; }
-        .sub-content li { margin-bottom: 0.6rem; font-size: 0.9rem; color: var(--text-light); }
+    .muted {
+      color: var(--muted);
+    }
 
-        /* Interactive Widgets */
-        .water-tracker { display: flex; justify-content: space-between; gap: 4px; margin: 1rem 0; }
-        .water-glass { 
-            flex: 1; aspect-ratio: 1; border-radius: 8px; 
-            background: rgba(14, 165, 233, 0.1); border: 2px solid transparent;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; transition: all 0.3s;
-        }
-        .water-glass.filled { background: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 4px 8px rgba(14, 165, 233, 0.3); }
-        
-        .log-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px; background: var(--bg); border-radius: 10px; margin-bottom: 8px;
-            border-left: 4px solid var(--primary);
-        }
-        .log-item.high { border-left-color: var(--danger); }
-        .log-item.low { border-left-color: var(--accent); }
-        .log-item.normal { border-left-color: var(--success); }
-        .log-val { font-weight: 800; font-size: 1.1rem; }
-        .log-time { font-size: 0.75rem; color: var(--text-light); }
+    .small {
+      font-size: 0.86rem;
+    }
 
-        .tag { display: inline-block; background: rgba(14, 165, 233, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-        
-        .premium-banner {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white; padding: 1rem; border-radius: var(--radius);
-            text-align: center; margin-bottom: 1rem; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-        .premium-banner h3 { font-size: 1.1rem; margin-bottom: 4px; }
-        .premium-banner p { font-size: 0.85rem; opacity: 0.9; margin: 0; }
+    /* SPLASH */
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(14, 165, 233, 0.35), transparent 28%),
+        radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.35), transparent 30%),
+        linear-gradient(145deg, #0f172a, #1e3a8a);
+      color: white;
+      transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s ease;
+    }
 
-        /* Disclaimer */
-        .disclaimer { 
-            background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--accent); 
-            padding: 1rem; border-radius: 12px; font-size: 0.85rem; 
-            color: var(--text); margin-bottom: 1.5rem; 
-        }
-        body.dark-mode .disclaimer { background: rgba(245, 158, 11, 0.15); }
-    </style>
+    .splash.hide {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .splash-card {
+      width: min(460px, 100%);
+      text-align: center;
+      padding: 30px 24px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(18px);
+    }
+
+    .logo {
+      font-size: 68px;
+      line-height: 1;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
+    }
+
+    .splash-card h1 {
+      margin: 8px 0 12px;
+      font-size: 2.3rem;
+      line-height: 1.05;
+      letter-spacing: -0.8px;
+    }
+
+    .splash-card h1 span {
+      display: block;
+      background: linear-gradient(90deg, #7dd3fc, #c4b5fd, #fda4af);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .splash-card p {
+      margin: 0 auto 18px;
+      max-width: 320px;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .splash-note {
+      display: block;
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    /* BOTONES */
+    .btn {
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 800;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.28);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #f97316);
+      color: white;
+      box-shadow: 0 12px 28px rgba(239, 68, 68, 0.24);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-danger-outline {
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-block {
+      width: 100%;
+      display: block;
+    }
+
+    /* HEADER */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    [data-theme="dark"] .topbar {
+      background: rgba(15, 23, 42, 0.78);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 10px 22px rgba(14, 165, 233, 0.25);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-text small {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .theme-actions {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 19px;
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+    }
+
+    .icon-btn.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    /* MAIN */
+    main {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 16px 14px 30px;
+    }
+
+    .page {
+      display: none;
+      animation: fadeUp 0.35s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+
+    .card h2 {
+      font-size: 1.25rem;
+    }
+
+    .card h3 {
+      font-size: 1.08rem;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background:
+        linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(99, 102, 241, 0.16)),
+        var(--surface);
+    }
+
+    .hero h2 {
+      margin-bottom: 4px;
+    }
+
+    .hero-badge {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.16);
+      color: #b45309;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    [data-theme="dark"] .hero-badge {
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.18);
+    }
+
+    /* GRID TILES */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .tile {
+      min-height: 118px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 12px;
+      font-size: 31px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tile span {
+      font-size: 0.9rem;
+      font-weight: 850;
+      text-align: center;
+    }
+
+    .tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(14, 165, 233, 0.35);
+    }
+
+    .tile-blue {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.20), rgba(14, 165, 233, 0.06));
+    }
+
+    .tile-green {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.20), rgba(16, 185, 129, 0.06));
+    }
+
+    .tile-orange {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.06));
+    }
+
+    .tile-purple {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(99, 102, 241, 0.06));
+    }
+
+    /* PANELS */
+    .panel {
+      display: none;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel.open {
+      display: block;
+      animation: fadeUp 0.25s ease;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--input);
+      color: var(--text);
+      outline: none;
+      margin-bottom: 10px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 52px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row-actions > * {
+      flex: 1 1 140px;
+    }
+
+    /* WATER */
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .water-row {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 7px;
+      margin: 12px 0 8px;
+    }
+
+    .water-glass {
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(14, 165, 233, 0.08);
+      color: var(--text);
+      font-size: 18px;
+      display: grid;
+      place-items: center;
+      opacity: 0.45;
+      transition: all 0.2s ease;
+    }
+
+    .water-glass.filled {
+      opacity: 1;
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.22);
+    }
+
+    /* EMERGENCY */
+    .emergency {
+      border-left: 5px solid var(--danger);
+      background:
+        linear-gradient(135deg, rgba(239, 68, 68, 0.13), rgba(249, 115, 22, 0.08)),
+        var(--surface);
+    }
+
+    .protocol {
+      margin: 10px 0 14px 20px;
+      padding: 0;
+    }
+
+    .protocol li {
+      margin-bottom: 6px;
+    }
+
+    /* METRICS */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 12px 0 14px;
+    }
+
+    .metric {
+      background: var(--soft);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .metric strong {
+      font-size: 1.08rem;
+    }
+
+    .chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 140px;
+      padding: 12px;
+      border-radius: 18px;
+      background: var(--soft);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .bar {
+      flex: 1;
+      min-width: 8px;
+      border-radius: 10px 10px 5px 5px;
+      background: var(--primary);
+      min-height: 12px;
+    }
+
+    .bar.low {
+      background: var(--accent);
+    }
+
+    .bar.ok {
+      background: var(--success);
+    }
+
+    .bar.high {
+      background: var(--danger);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--soft);
+      border-left: 4px solid var(--primary);
+    }
+
+    .history-item.low {
+      border-left-color: var(--accent);
+    }
+
+    .history-item.ok {
+      border-left-color: var(--success);
+    }
+
+    .history-item.high {
+      border-left-color: var(--danger);
+    }
+
+    .badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      background: rgba(14, 165, 233, 0.12);
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .badge.low {
+      background: rgba(245, 158, 11, 0.16);
+      color: #b45309;
+    }
+
+    .badge.ok {
+      background: rgba(16, 185, 129, 0.16);
+      color: #047857;
+    }
+
+    .badge.high {
+      background: rgba(239, 68, 68, 0.16);
+      color: #b91c1c;
+    }
+
+    [data-theme="dark"] .badge.low {
+      color: #fbbf24;
+    }
+
+    [data-theme="dark"] .badge.ok {
+      color: #34d399;
+    }
+
+    [data-theme="dark"] .badge.high {
+      color: #fca5a5;
+    }
+
+    /* TABS MINI */
+    .tabs-mini {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .tabs-mini::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mini-tab {
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 850;
+    }
+
+    .mini-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .sub {
+      display: none;
+    }
+
+    .sub.active {
+      display: block;
+      animation: fadeUp 0.25s ease;
+    }
+
+    /* LISTS */
+    .clean-list,
+    .med-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .clean-list li,
+    .med-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .med-item label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    .med-item label span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .med-item.done label {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .med-item input[type="checkbox"],
+    .check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      flex: 0 0 auto;
+    }
+
+    .delete-btn {
+      background: transparent;
+      color: var(--danger);
+      font-size: 18px;
+      font-weight: 900;
+      padding: 4px 8px;
+      border-radius: 10px;
+    }
+
+    .delete-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* CHIPS */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--success), var(--primary));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.18);
+    }
+
+    /* ACCORDION */
+    .accordion {
+      display: grid;
+      gap: 10px;
+    }
+
+    .acc-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      background: var(--soft);
+      color: var(--text);
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 850;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .acc-btn::after {
+      content: "+";
+      font-size: 22px;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .acc-btn.open::after {
+      content: "−";
+    }
+
+    .acc-panel {
+      display: none;
+      padding: 4px 14px 12px;
+      color: var(--muted);
+    }
+
+    .acc-panel.open {
+      display: block;
+      animation: fadeUp 0.22s ease;
+    }
+
+    .acc-panel ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+
+    .acc-panel li {
+      margin-bottom: 6px;
+    }
+
+    /* PREMIUM */
+    .premium {
+      color: white;
+      border: 0;
+      background: linear-gradient(135deg, #f59e0b, #fb7185, #8b5cf6);
+      box-shadow: 0 18px 45px rgba(245, 158, 11, 0.22);
+    }
+
+    .premium h2,
+    .premium p {
+      color: white;
+    }
+
+    .premium .btn {
+      background: white;
+      color: #9a3412;
+      box-shadow: none;
+    }
+
+    /* SETTINGS */
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .setting-info strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .setting-info small {
+      color: var(--muted);
+    }
+
+    .segmented {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .segmented button {
+      background: var(--surface);
+      color: var(--muted);
+      padding: 10px 14px;
+      font-weight: 850;
+    }
+
+    .segmented button.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 90;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.88);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    [data-theme="dark"] .bottom-nav {
+      background: rgba(15, 23, 42, 0.88);
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: var(--muted);
+      border-radius: 16px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.64rem;
+      font-weight: 850;
+    }
+
+    .nav-btn span {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      color: var(--primary);
+      background: rgba(14, 165, 233, 0.12);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(96px + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s ease;
+      z-index: 120;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+      max-width: 90vw;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(2, 6, 23, 0.58);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal-card {
+      width: min(560px, 100%);
+      max-height: 82vh;
+      overflow: auto;
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+    }
+
+    .modal-card h3 {
+      margin-top: 0;
+    }
+
+    .notice {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(245, 158, 11, 0.12);
+      color: #92400e;
+      font-size: 0.9rem;
+      margin: 10px 0;
+    }
+
+    [data-theme="dark"] .notice {
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.16);
+    }
+
+    .disclaimer {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(245, 158, 11, 0.12);
+      border-left: 4px solid var(--accent);
+      color: var(--text);
+      font-size: 0.88rem;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .splash-card h1 {
+        font-size: 2rem;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .water-row {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .nav-btn {
+        font-size: 0.58rem;
+      }
+
+      .nav-btn span {
+        font-size: 20px;
+      }
+
+      .brand-text strong {
+        font-size: 0.98rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-<!-- SPLASH SCREEN -->
-<div id="splash-screen" class="splash">
-    <div class="splash-content">
-        <h1>🛡️ Diabetes<br>sin miedo</h1>
-        <p>Tu compañero inteligente, seguro y profesional para vivir plenamente.</p>
-        
-        <button id="splash-install" class="splash-btn install">📲 Instalar en mi celular</button>
-        <button id="splash-enter" class="splash-btn enter">Comenzar ahora</button>
-        <p style="font-size: 0.8rem; margin-top: 20px; opacity: 0.6;">Tus datos se guardan de forma segura en tu dispositivo.</p>
+  <noscript>
+    <div style="padding:24px;text-align:center;font-family:sans-serif;">
+      <h1>Diabetes sin miedo</h1>
+      <p>Esta aplicación necesita JavaScript para funcionar. Por favor, actívalo en tu navegador.</p>
     </div>
-</div>
+  </noscript>
 
-<header>
+  <!-- SPLASH -->
+  <div id="splash" class="splash">
+    <div class="splash-card">
+      <div class="logo">🛡️</div>
+      <h1>Diabetes <span>sin miedo</span></h1>
+      <p>Tu compañero para controlar glucosa, hábitos, alimentación y bienestar.</p>
+
+      <button
+        id="enterApp"
+        class="btn btn-primary btn-block"
+        onclick="var s=document.getElementById('splash'); if(s){s.classList.add('hide'); setTimeout(function(){var x=document.getElementById('splash'); if(x && x.parentNode){x.parentNode.removeChild(x);}},500);}"
+      >
+        Entrar a la app
+      </button>
+
+      <small class="splash-note">Tus datos se guardan localmente en este dispositivo.</small>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="topbar">
     <div class="brand">
-        <h1>Diabetes sin miedo</h1>
-        <p>Tu espacio personal de salud</p>
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-text">
+        <strong>Diabetes sin miedo</strong>
+        <small>Tu salud, tu control</small>
+      </div>
     </div>
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
-</header>
 
-<main>
+    <div class="theme-actions">
+      <button class="icon-btn" id="dayBtn" title="Modo día" aria-label="Modo día">☀️</button>
+      <button class="icon-btn" id="nightBtn" title="Modo noche" aria-label="Modo noche">🌙</button>
+    </div>
+  </header>
+
+  <main>
     <div class="disclaimer">
-        ⚠️ <strong>Importante:</strong> Esta app es una herramienta educativa y de organización. No reemplaza el criterio de tu médico ni indica dosis de medicamentos.
+      ⚠️ <strong>Importante:</strong> Esta app es educativa y organizativa. No reemplaza a tu médico, no indica dosis y no sustituye una urgencia médica.
     </div>
 
-    <!-- SECCION: INICIO -->
-    <section id="inicio" class="section active">
-        
-        <!-- EMERGENCIA -->
-        <div class="card emergency-card">
-            <h2>🚨 ¿Sientes una Hipoglucemia?</h2>
-            <p>Si tu glucosa es <strong>menor a 70 mg/dL</strong>, aplica la Regla del 15:</p>
-            <ol style="margin-left: 20px; margin-top: 8px; font-size: 0.9rem;">
-                <li>Come 15g de carbohidratos (3 caramelos, 1/2 vaso de jugo).</li>
-                <li>Espera 15 minutos.</li>
-                <li>Vuelve a medir. Si sigue bajo, repite.</li>
-            </ol>
-            <button class="danger-btn" onclick="alert('📞 Si los síntomas son graves (confusión, desmayo), busca ayuda médica inmediata o llama a emergencias.')">Ver Protocolo de Emergencia</button>
+    <!-- INICIO -->
+    <section id="page-inicio" class="page active">
+      <div class="card hero">
+        <div>
+          <h2>Hola 👋</h2>
+          <p id="summaryText" class="muted">Empieza registrando tu glucosa de hoy.</p>
+        </div>
+        <div class="hero-badge" id="streakBadge">🔥 0 días</div>
+      </div>
+
+      <div class="grid-2">
+        <button class="tile tile-blue" data-open="quick-glucose">
+          🩸
+          <span>Registrar glucosa</span>
+        </button>
+
+        <button class="tile tile-green" data-target="page-registros">
+          📊
+          <span>Ver historial</span>
+        </button>
+
+        <button class="tile tile-orange" data-target="page-comidas">
+          🥗
+          <span>Comidas</span>
+        </button>
+
+        <button class="tile tile-purple" data-target="page-bienestar">
+          🧘
+          <span>Bienestar</span>
+        </button>
+      </div>
+
+      <div id="quick-glucose" class="panel">
+        <h3>🩸 Registro rápido de glucosa</h3>
+
+        <div class="field-row">
+          <input id="glucoseValue" type="number" inputmode="numeric" min="20" max="600" placeholder="Valor en mg/dL" />
+          <select id="glucoseMoment">
+            <option value="En ayunas">En ayunas</option>
+            <option value="Antes de comer">Antes de comer</option>
+            <option value="Después de comer">Después de comer</option>
+            <option value="Antes de dormir">Antes de dormir</option>
+            <option value="Otro momento">Otro momento</option>
+          </select>
         </div>
 
-        <!-- TRACKER DE AGUA -->
-        <div class="card">
-            <h2>💧 Hidratación de Hoy</h2>
-            <div class="water-tracker" id="waterTracker"></div>
-            <p id="waterText" style="text-align: center; font-weight: 700; color: var(--primary);">0 / 8 vasos</p>
+        <textarea id="glucoseNote" rows="2" placeholder="Nota opcional: comida, síntoma, ejercicio, estrés..."></textarea>
+
+        <div class="row-actions">
+          <button id="saveGlucoseBtn" class="btn btn-primary">Guardar registro</button>
+          <button id="closeGlucoseBtn" class="btn btn-ghost">Cerrar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>💧 Agua de hoy</h3>
+          <span id="waterLabel" class="badge ok">0/8</span>
         </div>
 
-        <!-- REGISTRO DE GLUCOSA -->
-        <div class="card">
-            <h2>🩸 Últimos Registros</h2>
-            <div id="glucoseList" style="margin-bottom: 1rem;">
-                <p style="text-align: center; color: var(--text-light); font-size: 0.9rem;">No hay registros aún. ¡Agrega el primero!</p>
-            </div>
-            <button class="primary" onclick="showSub('inicio', 'glucosa-rapido')">+ Nuevo Registro</button>
-        </div>
+        <div class="water-row" id="waterRow"></div>
+        <p class="muted small">Toca los vasos para marcar tu avance diario.</p>
+      </div>
 
-        <div id="glucosa-rapido" class="sub-content">
-            <h3>🩸 Registrar Glucosa</h3>
-            <input type="number" id="glucoseVal" placeholder="Valor (mg/dL)">
-            <select id="glucoseTime">
-                <option value="En ayunas">En ayunas</option>
-                <option value="Antes de comer">Antes de comer</option>
-                <option value="Después de comer">Después de comer</option>
-                <option value="Antes de dormir">Antes de dormir</option>
-            </select>
-            <textarea id="glucoseNote" placeholder="Notas (ej: Me sentía mareado, comí pasta...)" rows="2"></textarea>
-            <button class="primary" onclick="saveGlucose()">Guardar Registro</button>
-        </div>
+      <div class="card">
+        <h3>✅ Checklist de autocuidado</h3>
+        <ul class="clean-list" id="dailyChecklist">
+          <li class="check-item">
+            <label><input type="checkbox" data-check="medicacion" /> Tomé mi medicación</label>
+          </li>
+          <li class="check-item">
+            <label><input type="checkbox" data-check="glucosa" /> Medí mi glucosa</label>
+          </li>
+          <li class="check-item">
+            <label><input type="checkbox" data-check="agua" /> Bebí suficiente agua</label>
+          </li>
+          <li class="check-item">
+            <label><input type="checkbox" data-check="movimiento" /> Me moví al menos 10 minutos</label>
+          </li>
+          <li class="check-item">
+            <label><input type="checkbox" data-check="pies" /> Revisé mis pies</label>
+          </li>
+        </ul>
+      </div>
 
-        <!-- CHECKLIST -->
-        <div class="card">
-            <h2>✅ Autocuidado de Hoy</h2>
-            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
-                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('meds', this.checked)"> Tomé mi medicación
-            </label>
-            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
-                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('water', this.checked)"> Bebí suficiente agua
-            </label>
-            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                <input type="checkbox" style="width: 20px; height: 20px; margin: 0;" onchange="saveCheck('move', this.checked)"> Me moví al menos 10 min
-            </label>
-        </div>
+      <div class="card emergency">
+        <h3>🚨 Protocolo de hipoglucemia</h3>
+        <p>Si tienes temblor, sudor frío, mareo, hambre intensa o glucosa menor a <strong>70 mg/dL</strong>:</p>
+        <ol class="protocol">
+          <li>Consume <strong>15 g</strong> de azúcar rápida.</li>
+          <li>Espera <strong>15 minutos</strong>.</li>
+          <li>Vuelve a medir.</li>
+          <li>Si sigue bajo, repite.</li>
+        </ol>
+        <button id="emergencyBtn" class="btn btn-danger btn-block">Abrir guía de emergencia</button>
+      </div>
     </section>
 
-    <!-- SECCION: COMIDAS -->
-    <section id="comidas" class="section">
-        <div class="card">
-            <h2>🥗 Alimentación Inteligente</h2>
-            <p>Ideas generales para adaptar a tu plan personalizado.</p>
-            <div class="grid">
-                <div class="grid-btn" onclick="showSub('comidas', 'recetario')"><span class="icon">📖</span><span>Recetario</span></div>
-                <div class="grid-btn" onclick="showSub('comidas', 'plato')"><span class="icon">🍽️</span><span>Método del Plato</span></div>
-                <div class="grid-btn" onclick="showSub('comidas', 'fuera')"><span class="icon">🍔</span><span>Comer Fuera</span></div>
-                <div class="grid-btn" onclick="showSub('comidas', 'colaciones')"><span class="icon">🍎</span><span>Colaciones</span></div>
-           
+    <!-- REGISTROS -->
+    <section id="page-registros" class="page">
+      <div class="card">
+        <h2>📊 Historial de glucosa</h2>
+
+        <div class="metrics">
+          <div class="metric">
+            <span>Última</span>
+            <strong id="lastGlucose">--</strong>
+          </div>
+          <div class="metric">
+            <span>Promedio 7 días</span>
+            <strong id="avgGlucose">--</strong>
+          </div>
+          <div class="metric">
+            <span>En rango</span>
+            <strong id="rangeGlucose">--</strong>
+          </div>
+        </div>
+
+        <div class="chart" id="chart"></div>
+
+        <div id="glucoseHistory" class="history-list"></div>
+
+        <div class="row-actions">
+          <button class="btn btn-primary" data-open="quick-glucose">+ Nuevo registro</button>
+          <button id="clearGlucoseBtn" class="btn btn-danger-outline">Limpiar historial</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🧠 Lectura rápida</h3>
+        <ul>
+          <li><strong>Menor a 70 mg/dL:</strong> posible hipoglucemia. Aplicar regla del 15.</li>
+          <li><strong>Entre 70 y 180 mg/dL:</strong> zona generalmente deseable según muchos planes, pero tu médico puede personalizarla.</li>
+          <li><strong>Mayor a 180 mg/dL:</strong> posible hiperglucemia. Revisa hidratación, comida, medicación y consulta si se repite.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- COMIDAS -->
+    <section id="page-comidas" class="page">
+      <div class="card">
+        <h2>🥗 Alimentación inteligente</h2>
+
+        <div class="tabs-mini">
+          <button class="mini-tab active" data-sub="sub-plato">Plato saludable</button>
+          <button class="mini-tab" data-sub="sub-recetas">Recetas</button>
+          <button class="mini-tab" data-sub="sub-fuera">Comer fuera</button>
+          <button class="mini-tab" data-sub="sub-colaciones">Colaciones</button>
+        </div>
+
+        <div id="sub-plato" class="sub active">
+          <h3>🍽️ Método del plato</h3>
+          <p>Una guía visual sencilla para armado de comidas principales:</p>
+          <ul>
+            <li>🥬 <strong>1/2 plato:</strong> verduras y hortalizas sin almidón.</li>
+            <li>🍗 <strong>1/4 plato:</strong> proteína magra.</li>
+            <li>🍚 <strong>1/4 plato:</strong> carbohidrato integral o legumbre.</li>
+            <li>💧 Acompaña con agua, infusión o mate sin azúcar.</li>
+          </ul>
+        </div>
+
+        <div id="sub-recetas" class="sub">
+          <h3>📖 Ideas de recetas</h3>
+          <ul>
+            <li><strong>Omelette verde:</strong> huevo, espinaca, champiñones y aceitunas.</li>
+            <li><strong>Ensalada completa:</strong> leafy greens, tomate, pepinte, pollo y aceite de oliva.</li>
+            <li><strong>Lentejas caseras:</strong> con zanahoria, calabaza, cebolla y especias.</li>
+            <li><strong>Yogur con semillas:</strong> yogur natural sin azúcar, chía, linaza y canela.</li>
+          </ul>
+        </div>
+
+        <div id="sub-fuera" class="sub">
+          <h3>🍔 Comer fuera de casa</h3>
+          <ul>
+            <li>Pide salsas y aderezos aparte.</li>
+            <li>Elige plancha, horno, vapor o parrilla.</li>
+            <li>Reemplaza frituras por ensalada o vegetales.</li>
+            <li>Evita bebidas azucaradas; pide agua o soda sin azúcar.</li>
+          </ul>
+        </div>
+
+        <div id="sub-colaciones" class="sub">
+          <h3>🍎 Colaciones prácticas</h3>
+          <ul>
+            <li>Un puñado pequeño de frutos secos sin sal.</li>
+            <li>Yogur natural sin azúcar.</li>
+            <li>Zanahoria, apio o pepino con hummus.</li>
+            <li>Una fruta entera, preferiblemente con cáscara si aplica.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🛒 Lista de compras</h3>
+        <div class="row-actions">
+          <input id="shoppingInput" placeholder="Ej: espinaca, pollo, lentejas..." />
+          <button id="addShoppingBtn" class="btn btn-primary">Agregar</button>
+        </div>
+        <ul id="shoppingList" class="clean-list"></ul>
+      </div>
+    </section>
+
+    <!-- BIENESTAR -->
+    <section id="page-bienestar" class="page">
+      <div class="card">
+        <h2>🧘 Bienestar y hábitos</h2>
+
+        <div class="accordion">
+          <button class="acc-btn" data-acc="acc-stress">Estrés y glucosa</button>
+          <div id="acc-stress" class="acc-panel">
+            <p>El estrés puede elevar la glucosa por hormonas como cortisol y adrenalina.</p>
+            <ul>
+              <li>Respiración 4-7-8: inhala 4 seg, sostiene 7 seg, exhala 8 seg.</li>
+              <li>Camina 10 minutos cuando sientas tensión.</li>
+              <li>Escribe 3 cosas que puedes controlar hoy.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="acc-exercise">Movimiento seguro</button>
+          <div id="acc-exercise" class="acc-panel">
+            <ul>
+              <li>Caminata posterior a comidas: 10 a 15 minutos.</li>
+              <li>Fuerza ligera 2 o 3 veces por semana.</li>
+              <li>Estiramientos suaves al despertar.</li>
+              <li>Si haces ejercicio intenso, controla tu glucosa antes y después.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="acc-sleep">Sueño y descanso</button>
+          <div id="acc-sleep" class="acc-panel">
+            <ul>
+              <li>Intenta dormir entre 7 y 8 horas.</li>
+              <li>Mantén horarios regulares.</li>
+              <li>Evita pantallas al menos 30 a 60 minutos antes de dormir.</li>
+              <li>Reduce cafeína tardía si te afecta el sueño.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="acc-emotional">Salud emocional</button>
+          <div id="acc-emotional" class="acc-panel">
+            <p>El cansancio por cuidar la diabetes es real. No estás solo.</p>
+            <ul>
+              <li>Habla con tu equipo de salud si sientes ansiedad o agotamiento.</li>
+              <li>Un valor alto no es un fracaso; es información para ajustar.</li>
+              <li>Celebra pequeños avances: agua, caminata, medicación, registro.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>💊 Medicación de hoy</h3>
+        <div class="row-actions">
+          <input id="medInput" placeholder="Ej: Metformina 850 mg" />
+          <button id="addMedBtn" class="btn btn-primary">Agregar</button>
+        </div>
+        <ul id="medList" class="med-list"></ul>
+      </div>
+
+      <div class="card">
+        <h3>🏃 Actividad física de hoy</h3>
+        <div class="chips" id="activityChips">
+          <button class="chip" data-activity="Caminata 10 min">Caminata 10 min</button>
+          <button class="chip" data-activity="Caminata 20 min">Caminata 20 min</button>
+          <button class="chip" data-activity="Caminata 30 min">Caminata 30 min</button>
+          <button class="chip" data-activity="Estiramientos">Estiramientos</button>
+          <button class="chip" data-activity="Fuerza ligera">Fuerza ligera</button>
+          <button class="chip" data-activity="Baile">Baile</button>
+        </div>
+        <p id="activityText" class="muted small">Registra tu movimiento de hoy.</p>
+      </div>
+    </section>
+
+    <!-- EDUCACIÓN -->
+    <section id="page-educacion" class="page">
+      <div class="card">
+        <h2>💡 Educación y guías</h2>
+
+        <div class="accordion">
+          <button class="acc-btn" data-acc="edu-mitos">Mitos y realidades</button>
+          <div id="edu-mitos" class="acc-panel">
+            <ul>
+              <li><strong>Mito:</strong> “No puedo comer frutas.”<br><strong>Realidad:</strong> sí puedes, con porción adecuada y preferiblemente enteras.</li>
+              <li><strong>Mito:</strong> “La diabetes tipo 2 es solo por comer azúcar.”<br><strong>Realidad:</strong> es multifactorial: genética, peso, actividad, edad, hábitos y otros factores.</li>
+              <li><strong>Mito:</strong> “Si me siento bien, no necesito medirme.”<br><strong>Realidad:</strong> la glucosa puede estar alterada sin síntomas evidentes.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="edu-sick">Días de enfermedad</button>
+          <div id="edu-sick" class="acc-panel">
+            <ul>
+              <li>Mídete con más frecuencia, por ejemplo cada 4 horas si tu equipo lo indica.</li>
+              <li>Mantén hidratación.</li>
+              <li>No suspendas insulina ni medicación sin consultar.</li>
+              <li>Consulta si hay vómitos, fiebre alta, glucosa muy elevada o dificultad para comer.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="edu-travel">Kit de viaje</button>
+          <div id="edu-travel" class="acc-panel">
+            <ul>
+              <li>Glucómetro, tiras y lancetas en cantidad extra.</li>
+              <li>Medicamentos e insulina con cadena de frío si aplica.</li>
+              <li>Azúcar de acción rápida: caramelos, sobres de glucosa o jugo.</li>
+              <li>Documento o receta de tus medicamentos.</li>
+              <li>Contacto de emergencia y seguro médico.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="edu-feet">Cuidado de pies</button>
+          <div id="edu-feet" class="acc-panel">
+            <ul>
+              <li>Revisa tus pies diariamente.</li>
+              <li>Lava con agua tibia y seca bien, sobre todo entre los dedos.</li>
+              <li>Usa calzado cómodo y calcetines sin costuras molestas.</li>
+              <li>Nunca camines descalzo.</li>
+              <li>Consulta ante heridas, ampollas, enrojecimiento o dolor.</li>
+            </ul>
+          </div>
+
+          <button class="acc-btn" data-acc="edu-work">Trabajo y estudio</button>
+          <div id="edu-work" class="acc-panel">
+            <ul>
+              <li>Lleva colación y fuente de azúcar rápida.</li>
+              <li>Programa pausas activas.</li>
+              <li>Si usas insulina o medicación, organiza horarios discretos.</li>
+              <li>Educa a una persona de confianza sobre qué hacer ante una baja.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📞 Recursos útiles</h3>
+        <p>Consulta siempre fuentes oficiales y a tu equipo de salud.</p>
+        <ul>
+          <li><a href="https://www.cdc.gov/diabetes/es/index.html" target="_blank" rel="noopener">CDC Diabetes en español</a></li>
+          <li><a href="https://www.niddk.nih.gov/health-information/informacion-de-la-salud/diabetes" target="_blank" rel="noopener">NIDDK Diabetes</a></li>
+          <li><a href="https://www.fad.org.ar/" target="_blank" rel="noopener">Federación Argentina de Diabetes</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- AJUSTES -->
+    <section id="page-ajustes" class="page">
+      <div class="card premium">
+        <h2>👑 Versión Pro</h2>
+        <p>Informe PDF para el médico, recordatorios con alarma, sincronización en la nube, plan familiar y seguimiento avanzado.</p>
+        <button class="btn btn-block" id="premiumBtn">Quiero la versión Pro</button>
+      </div>
+
+      <div class="card">
+        <h2>⚙️ Ajustes</h2>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <strong>Apariencia</strong>
+            <small>Cambia entre modo día y modo noche.</small>
+          </div>
+          <div class="segmented">
+            <button id="setDay">Día</button>
+            <button id="setNight">Noche</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <strong>Exportar datos</strong>
+            <small>Descarga un respaldo en formato JSON.</small>
+          </div>
+          <button id="exportBtn" class="btn btn-outline">Exportar</button>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <strong>Borrar datos</strong>
+            <small>Elimina toda la información guardada en este dispositivo.</small>
+          </div>
+          <button id="resetBtn" class="btn btn-danger-outline">Borrar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>ℹ️ Acerca de Diabetes sin miedo</h3>
+        <p>
+          Esta aplicación busca acompañar a personas con diabetes o prediabetes mediante registro, educación y organización de hábitos.
+          No reemplaza consulta médica ni tratamiento profesional.
+        </p>
+        <div class="notice">
+          Ante síntomas graves, confusión, desmayo, dificultad para respirar o glucosa extremadamente alterada, busca ayuda médica inmediata.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-target="page-inicio">
+      <span>🏠</span>
+      <small>Inicio</small>
+    </button>
+    <button class="nav-btn" data-target="page-registros">
+      <span>📊</span>
+      <small>Registros</small>
+    </button>
+    <button class="nav-btn" data-target="page-comidas">
+      <span>🥗</span>
+      <small>Comidas</small>
+    </button>
+    <button class="nav-btn" data-target="page-bienestar">
+      <span>🧘</span>
+      <small>Bienestar</small>
+    </button>
+    <button class="nav-btn" data-target="page-educacion">
+      <span>💡</span>
+      <small>Guías</small>
+    </button>
+    <button class="nav-btn" data-target="page-ajustes">
+      <span>⚙️</span>
+      <small>Ajustes</small>
+    </button>
+  </nav>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <button id="modalClose" class="btn btn-primary btn-block">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const $ = (selector, container = document) => container.querySelector(selector);
+      const $$ = (selector, container = document) => Array.from(container.querySelectorAll(selector));
+
+      const KEYS = {
+        theme: "dsm_theme",
+        glucose: "dsm_glucose",
+        water: "dsm_water",
+        meds: "dsm_meds",
+        shopping: "dsm_shopping",
+        activity: "dsm_activity",
+        checklist: "dsm_checklist",
+        streak: "dsm_streak"
+      };
+
+      const store = {
+        get(key, fallback) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (raw === null) return fallback;
+            return JSON.parse(raw);
+          } catch (_) {
+            return fallback;
+          }
+        },
+        set(key, value) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (_) {}
+        },
+        remove(key) {
+          try {
+            localStorage.removeItem(key);
+          } catch (_) {}
+        }
+      };
+
+      function todayKey() {
+        return new Date().toISOString().slice(0, 10);
+      }
+
+      function yesterdayKey() {
+        return new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      let toastTimer = null;
+      function toast(message) {
+        const el = $("#toast");
+        if (!el) return;
+        el.textContent = message;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
+      }
+
+      function openModal(title, bodyHtml) {
+        $("#modalTitle").textContent = title;
+        $("#modalBody").innerHTML = bodyHtml;
+        $("#modal").classList.remove("hidden");
+      }
+
+      function closeModal() {
+        $("#modal").classList.add("hidden");
+      }
+
+      $("#modalClose").addEventListener("click", closeModal);
+      $("#modal").addEventListener("click", (event) => {
+        if (event.target.id === "modal") closeModal();
+      });
+
+      // THEME
+      function setTheme(mode) {
+        document.documentElement.setAttribute("data-theme", mode);
+        store.set(KEYS.theme, mode);
+
+        $("#dayBtn").classList.toggle("active", mode === "light");
+        $("#nightBtn").classList.toggle("active", mode === "dark");
+        $("#setDay").classList.toggle("active", mode === "light");
+        $("#setNight").classList.toggle("active", mode === "dark");
+
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", mode === "dark" ? "#0b1220" : "#0ea5e9");
+      }
+
+      setTheme(store.get(KEYS.theme, "light"));
+
+      $("#dayBtn").addEventListener("click", () => setTheme("light"));
+      $("#nightBtn").addEventListener("click", () => setTheme("dark"));
+      $("#setDay").addEventListener("click", () => setTheme("light"));
+      $("#setNight").addEventListener("click", () => setTheme("dark"));
+
+      // SPLASH
+      const splash = $("#splash");
+      function hideSplash() {
+        if (!splash || splash.classList.contains("hide")) return;
+        splash.classList.add("hide");
+        setTimeout(() => {
+          if (splash.parentNode) splash.parentNode.removeChild(splash);
+        }, 500);
+      }
+
+      $("#enterApp").addEventListener("click", hideSplash);
+
+      // NAVIGATION
+      function switchPage(pageId) {
+        $$(".page").forEach((page) => page.classList.toggle("active", page.id === pageId));
+        $$(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.target === pageId));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      $$(".nav-btn").forEach((btn) => {
+        btn.addEventListener("click", () => switchPage(btn.dataset.target));
+      });
+
+      $$("[data-target]").forEach((el) => {
+        if (el.classList.contains("nav-btn")) return;
+        el.addEventListener("click", () => switchPage(el.dataset.target));
+      });
+
+      function togglePanel(panelId, forceOpen) {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !panel.classList.contains("open");
+        panel.classList.toggle("open", shouldOpen);
+        if (shouldOpen) {
+          setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "nearest" }), 80);
+        }
+      }
+
+      $$("[data-open]").forEach((btn) => {
+        btn.addEventListener("click", () => togglePanel(btn.dataset.open));
+      });
+
+      $("#closeGlucoseBtn").addEventListener("click", () => togglePanel("quick-glucose", false));
+
+      // MINI TABS
+      $$(".mini-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const card = btn.closest(".card");
+          const subId = btn.dataset.sub;
+          $$(".mini-tab", card).forEach((b) => b.classList.toggle("active", b === btn));
+          $$(".sub", card).forEach((s) => s.classList.toggle("active", s.id === subId));
+        });
+      });
+
+      // ACCORDIONS
+      $$(".acc-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const panel = document.getElementById(btn.dataset.acc);
+          if (!panel) return;
+          const isOpen = panel.classList.contains("open");
+          btn.classList.toggle("open", !isOpen);
+          panel.classList.toggle("open", !isOpen);
+        });
+      });
+
+      // STREAK
+      function bumpStreak() {
+        const data = store.get(KEYS.streak, { last: "", count: 0 });
+        const today = todayKey();
+        if (data.last === today) return;
+
+        data.count = data.last === yesterdayKey() ? (Number(data.count) || 0) + 1 : 1;
+        data.last = today;
+        store.set(KEYS.streak, data);
+        updateDashboard();
+      }
+
+      // GLUCOSE
+      function getGlucoseLogs() {
+        return store.get(KEYS.glucose, []);
+      }
+
+      function glucoseStatus(value) {
+        const num = Number(value);
+        if (num < 70) return { label: "Bajo", cls: "low" };
+        if (num <= 180) return { label: "Rango", cls: "ok" };
+        return { label: "Alto", cls: "high" };
+      }
+
+      function saveGlucose() {
+        const raw = $("#glucoseValue").value.trim();
+        const value = Number(raw);
+
+        if (!raw || Number.isNaN(value)) {
+          toast("Ingresa un valor de glucosa.");
+          return;
+        }
+
+        if (value < 20 || value > 600) {
+          toast("Usa un valor realista entre 20 y 600 mg/dL.");
+          return;
+        }
+
+        const entry = {
+          id: Date.now(),
+          value,
+          moment: $("#glucoseMoment").value,
+          note: $("#glucoseNote").value.trim(),
+          date: new Date().toISOString()
+        };
+
+        const logs = getGlucoseLogs();
+        logs.unshift(entry);
+        store.set(KEYS.glucose, logs.slice(0, 200));
+
+        $("#glucoseValue").value = "";
+        $("#glucoseNote").value = "";
+
+        togglePanel("quick-glucose", false);
+        renderGlucose();
+        updateDashboard();
+        bumpStreak();
+        toast("Registro guardado ✅");
+      }
+
+      function renderGlucose() {
+        const logs = getGlucoseLogs();
+        const history = $("#glucoseHistory");
+        const chart = $("#chart");
+
+        if (!logs.length) {
+          history.innerHTML = '<p class="muted small">Todavía no hay registros. Empieza anotando tu primera medición.</p>';
+          chart.innerHTML = "";
+          $("#lastGlucose").textContent = "--";
+          $("#avgGlucose").textContent = "--";
+          $("#rangeGlucose").textContent = "--";
+          return;
+        }
+
+        history.innerHTML = logs.slice(0, 12).map((log) => {
+          const st = glucoseStatus(log.value);
+          const d = new Date(log.date);
+          const dateStr = d.toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) +
+            " · " +
+            d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+
+          return `
+            <div class="history-item ${st.cls}">
+              <div>
+                <strong>${escapeHtml(log.value)} mg/dL</strong>
+                <div class="muted small">${escapeHtml(dateStr)} · ${escapeHtml(log.moment)}</div>
+                ${log.note ? `<div class="small">${escapeHtml(log.note)}</div>` : ""}
+              </div>
+              <span class="badge ${st.cls}">${st.label}</span>
+            </div>
+          `;
+        }).join("");
+
+        const now = Date.now();
+        const recent = logs.filter((log) => now - new Date(log.date).getTime() <= 7 * 86400000);
+        const avg = recent.length ? Math.round(recent.reduce((sum, item) => sum + item.value, 0) / recent.length) : 0;
+        const inRange = recent.length
+          ? Math.round((recent.filter((item) => item.value >= 70 && item.value <= 180).length / recent.length) * 100)
+          : 0;
+
+        $("#lastGlucose").textContent = `${logs[0].value} mg/dL`;
+        $("#avgGlucose").textContent = avg ? `${avg} mg/dL` : "--";
+        $("#rangeGlucose").textContent = recent.length ? `${inRange}%` : "--";
+
+        const chartData = logs.slice(0, 10).reverse();
+        const max = Math.max(250, ...chartData.map((item) => item.value));
+
+        chart.innerHTML = chartData.map((item) => {
+          const st = glucoseStatus(item.value);
+          const height = Math.max(12, Math.min(100, Math.round((item.value / max) * 100)));
+          return `<div class="bar ${st.cls}" style="height:${height}%" title="${item.value} mg/dL"></div>`;
+        }).join("");
+      }
+
+      $("#saveGlucoseBtn").addEventListener("click", saveGlucose);
+
+      $("#clearGlucoseBtn").addEventListener("click", () => {
+        if (!confirm("¿Seguro que quieres borrar el historial de glucosa?")) return;
+        store.set(KEYS.glucose, []);
+        renderGlucose();
+        updateDashboard();
+        toast("Historial borrado");
+      });
+
+      // WATER
+      function getWaterState() {
+        const raw = store.get(KEYS.water, { date: todayKey(), count: 0 });
+        if (raw.date !== todayKey()) {
+          return { date: todayKey(), count: 0 };
+        }
+        return raw;
+      }
+
+      function renderWater() {
+        const state = getWaterState();
+        const row = $("#waterRow");
+        row.innerHTML = "";
+
+        for (let i = 1; i <= 8; i++) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "water-glass" + (i <= state.count ? " filled" : "");
+          btn.textContent = "💧";
+          btn.setAttribute("aria-label", "Vaso " + i);
+          btn.addEventListener("click", () => {
+            const current = getWaterState();
+            current.count = i === current.count ? i - 1 : i;
+            store.set(KEYS.water, current);
+            renderWater();
+            updateDashboard();
+            if (current.count > 0) bumpStreak();
+          });
+          row.appendChild(btn);
+        }
+
+        const label = $("#waterLabel");
+        label.textContent = `${state.count}/8`;
+        label.className = "badge " + (state.count >= 8 ? "ok" : state.count >= 4 ? "low" : "high");
+      }
+
+      // MEDS
+      function getMedsState() {
+        const raw = store.get(KEYS.meds, { date: todayKey(), items: [] });
+        if (raw.date !== todayKey()) {
+          return {
+            date: todayKey(),
+            items: (raw.items || []).map((item) => ({ ...item, done: false }))
+          };
+        }
+        return raw;
+      }
+
+      function renderMeds() {
+        const state = getMedsState();
+        const list = $("#medList");
+
+        if (!state.items.length) {
+          list.innerHTML = '<li class="muted small">Agrega tus medicamentos para marcarlos como tomados hoy.</li>';
+          updateDashboard();
+          return;
+        }
+
+        list.innerHTML = state.items.map((med) => `
+          <li class="med-item ${med.done ? "done" : ""}">
+            <label>
+              <input type="checkbox" data-med-toggle="${med.id}" ${med.done ? "checked" : ""} />
+              <span>${escapeHtml(med.name)}</span>
+            </label>
+            <button class="delete-btn" data-med-delete="${med.id}" title="Eliminar">✕</button>
+          </li>
+        `).join("");
+
+        updateDashboard();
+      }
+
+      $("#addMedBtn").addEventListener("click", () => {
+        const name = $("#medInput").value.trim();
+        if (!name) {
+          toast("Escribe el nombre del medicamento.");
+          return;
+        }
+
+        const state = getMedsState();
+        state.items.unshift({ id: Date.now(), name, done: false });
+        store.set(KEYS.meds, state);
+        $("#medInput").value = "";
+        renderMeds();
+        bumpStreak();
+        toast("Medicamento agregado");
+      });
+
+      $("#medList").addEventListener("change", (event) => {
+        const id = event.target.dataset.medToggle;
+        if (!id) return;
+
+        const state = getMedsState();
+        const item = state.items.find((med) => String(med.id) === String(id));
+        if (!item) return;
+
+        item.done = event.target.checked;
+        store.set(KEYS.meds, state);
+        renderMeds();
+        if (item.done) bumpStreak();
+      });
+
+      $("#medList").addEventListener("click", (event) => {
+        const id = event.target.dataset.medDelete;
+        if (!id) return;
+
+        const state = getMedsState();
+        state.items = state.items.filter((med) => String(med.id) !== String(id));
+        store.set(KEYS.meds, state);
+        renderMeds();
+      });
+
+      // ACTIVITY
+      function getActivityState() {
+        const raw = store.get(KEYS.activity, { date: todayKey(), items: [] });
+        return raw.date === todayKey() ? raw : { date: todayKey(), items: [] };
+      }
+
+      function renderActivity() {
+        const state = getActivityState();
+        $$("#activityChips .chip").forEach((chip) => {
+          chip.classList.toggle("active", state.items.includes(chip.dataset.activity));
+        });
+
+        $("#activityText").textContent = state.items.length
+          ? `Actividades registradas hoy: ${state.items.join(", ")}.`
+          : "Registra tu movimiento de hoy.";
+      }
+
+      $("#activityChips").addEventListener("click", (event) => {
+        const chip = event.target.closest(".chip");
+        if (!chip) return;
+
+        const state = getActivityState();
+        const value = chip.dataset.activity;
+
+        if (state.items.includes(value)) {
+          state.items = state.items.filter((item) => item !== value);
+        } else {
+          state.items.push(value);
+        }
+
+        store.set(KEYS.activity, state);
+        renderActivity();
+        if (state.items.length) bumpStreak();
+      });
+
+      // SHOPPING
+      function getShoppingList() {
+        return store.get(KEYS.shopping, []);
+      }
+
+      function renderShopping() {
+        const items = getShoppingList();
+        const list = $("#shoppingList");
+
+        if (!items.length) {
+          list.innerHTML = '<li class="muted small">Tu lista está vacía. Agrega alimentos saludables.</li>';
+          return;
+        }
+
+        list.innerHTML = items.map((item, index) => `
+          <li>
+            <span>${escapeHtml(item)}</span>
+            <button class="delete-btn" data-shop-delete="${index}" title="Eliminar">✕</button>
+          </li>
+        `).join("");
+      }
+
+      $("#addShoppingBtn").addEventListener("click", () => {
+        const value = $("#shoppingInput").value.trim();
+        if (!value) return;
+
+        const items = getShoppingList();
+        items.push(value);
+        store.set(KEYS.shopping, items);
+        $("#shoppingInput").value = "";
+        renderShopping();
+      });
+
+      $("#shoppingInput").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          $("#addShoppingBtn").click();
+        }
+      });
+
+      $("#shoppingList").addEventListener("click", (event) => {
+        const index = event.target.dataset.shopDelete;
+        if (index === undefined) return;
+
+        const items = getShoppingList();
+        items.splice(Number(index), 1);
+        store.set(KEYS.shopping, items);
+        renderShopping();
+      });
+
+      // CHECKLIST
+      function getChecklistState() {
+        const raw = store.get(KEYS.checklist, { date: todayKey(), items: {} });
+        if (raw.date !== todayKey()) {
+          return { date: todayKey(), items: {} };
+        }
+        return raw;
+      }
+
+      function renderChecklist() {
+        const state = getChecklistState();
+        $$("#dailyChecklist input[type='checkbox']").forEach((box) => {
+          box.checked = Boolean(state.items[box.dataset.check]);
+        });
+      }
+
+      $("#dailyChecklist").addEventListener("change", (event) => {
+        const key = event.target.dataset.check;
+        if (!key) return;
+
+        const state = getChecklistState();
+        state.items[key] = event.target.checked;
+        store.set(KEYS.checklist, state);
+
+        if (event.target.checked) bumpStreak();
+        updateDashboard();
+      });
+
+      // DASHBOARD
+      function updateDashboard() {
+        const logs = getGlucoseLogs();
+        const water = getWaterState();
+        const meds = getMedsState();
+        const streak = store.get(KEYS.streak, { count: 0, last: "" });
+
+        const doneMeds = meds.items.filter((med) => med.done).length;
+        const totalMeds = meds.items.length;
+
+        let text = "Empieza registrando tu glucosa de hoy.";
+
+        if (logs.length) {
+          const st = glucoseStatus(logs[0].value);
+          text = `Última glucosa: ${logs[0].value} mg/dL · ${st.label}.`;
+        } else if (water.count > 0) {
+          text = `Vasos de agua hoy: ${water.count}/8. ¡Buen comienzo!`;
+        } else if (totalMeds > 0) {
+          text = `Medicación: ${doneMeds}/${totalMeds} marcada como tomada hoy.`;
+        }
+
+        $("#summaryText").textContent = text;
+        $("#streakBadge").textContent = `🔥 ${Number(streak.count) || 0} días`;
+      }
+
+      // EMERGENCY MODAL
+      $("#emergencyBtn").addEventListener("click", () => {
+        openModal(
+          "🚨 Guía de emergencia",
+          `
+            <p><strong>Si sospechas hipoglucemia</strong> (glucosa baja), puedes sentir:</p>
+            <ul>
+              <li>Temblor</li>
+              <li>Sudor frío</li>
+              <li>Mareo</li>
+              <li>Hambre intensa</li>
+              <li>Irritabilidad</li>
+              <li>Visión borrosa</li>
+            </ul>
+
+            <p><strong>Regla del 15:</strong></p>
+            <ol>
+              <li>Consume 15 g de carbohidrato de acción rápida.</li>
+              <li>Ejemplos: 3-4 caramelos duros, 1 sobre de glucosa, 1/2 vaso de jugo común o 1 cucharada de miel/azúcar disuelta.</li>
+              <li>Espera 15 minutos.</li>
+              <li>Vuelve a medir.</li>
+              <li>Si sigue bajo, repite.</li>
+            </ol>
+
+            <div class="notice">
+              Si hay confusión, desmayo, convulsión o no puede tragar, <strong>no des comida ni bebida</strong>. Busca ayuda médica inmediata.
+            </div>
+
+            <p><strong>Hiperglucemia persistente:</strong> si tienes glucosa muy alta, sed intensa, orina frecuente, náuseas, vómitos, aliento afrutado o dificultad para respirar, consulta urgentemente.</p>
+          `
+        );
+      });
+
+      // PREMIUM
+      $("#premiumBtn").addEventListener("click", () => {
+        openModal(
+          "👑 Diabetes sin miedo Pro",
+          `
+            <p>La versión Pro está pensada para usuarios que quieren un seguimiento más serio:</p>
+            <ul>
+              <li>Informe PDF listo para llevar al médico.</li>
+              <li>Gráficas por período.</li>
+              <li>Recordatorios de medicación con alarma.</li>
+              <li>Sincronización en la nube.</li>
+              <li>Perfil familiar o de cuidador.</li>
+              <li>Plan de comidas personalizado con nutricionista.</li>
+            </ul>
+            <div class="notice">
+              Esta es una demostración. Para venderla realmente, necesitarías backend, base de datos, autenticación, pagos y cumplimiento legal sanitario.
+            </div>
+          `
+        );
+      });
+
+      // EXPORT
+      $("#exportBtn").addEventListener("click", () => {
+        const payload = {
+          app: "Diabetes sin miedo",
+          exportedAt: new Date().toISOString(),
+          theme: document.documentElement.getAttribute("data-theme"),
+          glucose: getGlucoseLogs(),
+          water: getWaterState(),
+          meds: getMedsState(),
+          activity: getActivityState(),
+          shopping: getShoppingList(),
+          checklist: getChecklistState(),
+          streak: store.get(KEYS.streak, { count: 0, last: "" })
+        };
+
+        try {
+          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "diabetes-sin-miedo-datos.json";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          toast("Datos exportados 📤");
+        } catch (_) {
+          toast("No se pudo exportar en este navegador.");
+        }
+      });
+
+      // RESET
+      $("#resetBtn").addEventListener("click", () => {
+        if (!confirm("¿Seguro que quieres borrar todos los datos guardados en este dispositivo?")) return;
+
+        Object.values(KEYS).forEach((key) => store.remove(key));
+        location.reload();
+      });
+
+      // OPTIONAL MANIFEST FOR PWA-LIKE INSTALL
+      try {
+        const svg =
+          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>" +
+          "<rect width='512' height='512' rx='96' fill='#0ea5e9'/>" +
+          "<circle cx='256' cy='256' r='145' fill='white' opacity='0.92'/>" +
+          "<text x='256' y='318' font-size='150' text-anchor='middle' fill='#0ea5e9' font-family='Arial'>DSM</text>" +
+          "</svg>";
+
+        const iconUrl = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+
+        const manifest = {
+          name: "Diabetes sin miedo",
+          short_name: "Diabetes sin miedo",
+          description: "Control de glucosa, hábitos, alimentación y bienestar.",
+          start_url: ".",
+          display: "standalone",
+          background_color: "#f3f7fb",
+          theme_color: "#0ea5e9",
+          icons: [
+            {
+              src: iconUrl,
+              sizes: "any",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            }
+          ]
+        };
+
+        const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+        const link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = URL.createObjectURL(blob);
+        document.head.appendChild(link);
+      } catch (_) {}
+
+      // INITIAL RENDER
+      renderWater();
+      renderGlucose();
+      renderMeds();
+      renderActivity();
+      renderShopping();
+      renderChecklist();
+      updateDashboard();
+    })();
+  </script>
+</body>
+</html>
