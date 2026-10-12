@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equilibrio - Mi Vida con Diabetes</title>
+    
+    <!-- PWA Config -->
+    <meta name="theme-color" content="#264653">
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Equilibrio - Mi Vida con Diabetes","short_name":"Equilibrio","start_url":"./","display":"standalone","background_color":"%23F4F7F6","theme_color":"%23264653","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E🌿%3C/text%3E%3C/svg%3E","sizes":"any","type":"image/svg+xml"}]}'>
+    
     <style>
         :root {
             --primary: #2A9D8F;
@@ -18,6 +23,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 80px; }
         
+        /* SPLASH SCREEN */
+        .splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--secondary), #1d3540); color: white;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; text-align: center; padding: 2rem;
+            transition: opacity 0.4s ease;
+        }
+        .splash-content h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .splash-content p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; max-width: 300px; }
+        .splash-btn {
+            background: var(--primary); color: white; border: none; padding: 15px; 
+            border-radius: 30px; width: 100%; max-width: 300px; font-size: 1.1rem; 
+            font-weight: bold; cursor: pointer; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .splash-btn.enter { background: white; color: var(--secondary); }
+        .splash-btn.install { display: none; background: var(--accent); color: var(--secondary); } /* Hidden by default */
+        .splash-note { font-size: 0.8rem; margin-top: 15px; opacity: 0.6; }
+
         /* Header */
         header { background: var(--secondary); color: white; padding: 1rem; text-align: center; position: sticky; top: 0; z-index: 100; }
         header h1 { font-size: 1.5rem; font-weight: 600; }
@@ -55,7 +79,7 @@
         .disclaimer { background: #FFF3CD; border-left: 4px solid var(--accent); padding: 1rem; border-radius: 8px; font-size: 0.85rem; color: #856404; margin-bottom: 1rem; }
         .alert-danger { background: #F8D7DA; border-left: 4px solid var(--danger); padding: 1rem; border-radius: 8px; font-size: 0.9rem; color: #721C24; }
 
-        /* Sub-sections (Modal-like or inline expand) */
+        /* Sub-sections */
         .sub-content { background: #F8F9FA; border-radius: 8px; padding: 1rem; margin-top: 1rem; border: 1px solid #E9ECEF; display: none; }
         .sub-content.active { display: block; }
         .sub-content h3 { color: var(--primary); margin-bottom: 0.5rem; }
@@ -66,6 +90,20 @@
     </style>
 </head>
 <body>
+
+<!-- SPLASH SCREEN (Pantalla de Bienvenida / Instalación) -->
+<div id="splash-screen" class="splash">
+    <div class="splash-content">
+        <h1>🌿 Equilibrio</h1>
+        <p>¡Qué bueno que estés acá! Vivir bien con diabetes también se disfruta en la mesa.</p>
+        
+        <!-- Botón de Instalación PWA (Aparece solo si el navegador lo soporta) -->
+        <button id="splash-install" class="splash-btn install">📲 Instalar la app en mi celular</button>
+        
+        <button id="splash-enter" class="splash-btn enter">Entrar a la app</button>
+        <p class="splash-note">¿Ya la instalaste? Entrá y empezá.</p>
+    </div>
+</div>
 
 <header>
     <h1>🌿 Equilibrio</h1>
@@ -131,74 +169,54 @@
             <h2>🥗 Alimentación y Recetas</h2>
             <p>Ideas generales, no prescripciones. Adaptá ingredientes a tu plan.</p>
             <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'recetario')">
-                    <span class="icon">📖</span><span>Recetario</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'plato')">
-                    <span class="icon">🍽️</span><span>Método del Plato</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'fuera')">
-                    <span class="icon">🍔</span><span>Comer Fuera</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'colaciones')">
-                    <span class="icon">🍎</span><span>Colaciones</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'hidratacion')">
-                    <span class="icon">💧</span><span>Hidratación</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('comidas', 'lista')">
-                    <span class="icon">🛒</span><span>Lista de Compras</span>
-                </a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'recetario')"><span class="icon">📖</span><span>Recetario</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'plato')"><span class="icon">🍽️</span><span>Método del Plato</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'fuera')"><span class="icon">🍔</span><span>Comer Fuera</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'colaciones')"><span class="icon">🍎</span><span>Colaciones</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'hidratacion')"><span class="icon">💧</span><span>Hidratación</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('comidas', 'lista')"><span class="icon">🛒</span><span>Lista de Compras</span></a>
             </div>
         </div>
 
         <div id="recetario" class="sub-content">
             <h3>📖 Recetario Saludable</h3>
-            <p>Filtrar por: <button class="tag">Desayuno</button> <button class="tag">Almuerzo</button> <button class="tag">Cena</button></p>
             <ul>
                 <li><strong>Omelette de espinaca y champignones:</strong> Proteína y verduras sin almidón.</li>
                 <li><strong>Ensalada de legumbres:</strong> Lentejas, tomate, cebolla y aceite de oliva.</li>
-                <li><strong>Polido al horno con hierbas:</strong> Acompañado con brócoli al vapor.</li>
+                <li><strong>Pollo al horno con hierbas:</strong> Acompañado con brócoli al vapor.</li>
             </ul>
         </div>
         <div id="plato" class="sub-content">
             <h3>🍽️ Idea para armar el plato</h3>
-            <p>🥬 <strong>1/2 plato:</strong> Verduras sin almidón.<br>
-            🍗 <strong>1/4 plato:</strong> Proteína magra.<br>
-            🍚 <strong>1/4 plato:</strong> Carbohidratos (integrales preferentemente).</p>
+            <p>🥬 <strong>1/2 plato:</strong> Verduras sin almidón.<br>🍗 <strong>1/4 plato:</strong> Proteína magra.<br>🍚 <strong>1/4 plato:</strong> Carbohidratos integrales.</p>
         </div>
         <div id="fuera" class="sub-content">
             <h3>🍔 Comer Fuera de Casa</h3>
             <ul>
                 <li>Pedí las salsas y aderezos <strong>aparte</strong>.</li>
-                <li>Elegí cociones al horno, plancha o vapor en lugar de fritos.</li>
+                <li>Elegí cocciones al horno, plancha o vapor en lugar de fritos.</li>
                 <li>Reemplazá las papas fritas por ensalada o vegetales grillados.</li>
-                <li>En delivery: buscá opciones de "bowls" o ensaladas con proteína.</li>
             </ul>
         </div>
         <div id="colaciones" class="sub-content">
             <h3>🍎 Colaciones de Bolsillo</h3>
             <ul>
-                <li>Un puñado de frutos secos sin sal (nueces, almendras).</li>
+                <li>Un puñado de frutos secos sin sal.</li>
                 <li>Yogur natural sin azúcar con semillas de chía.</li>
                 <li>Bastones de zanahoria o apio con hummus.</li>
-                <li>Una fruta pequeña (ej. manzana) con queso cottage.</li>
             </ul>
         </div>
         <div id="hidratacion" class="sub-content">
             <h3>💧 Hidratación Inteligente</h3>
-            <p>El agua es la mejor opción. Evitá jugos y gaseosas (incluso "diet" en exceso).</p>
             <ul>
-                <li><strong>Agua saborizada:</strong> Agregá rodajas de limón, menta o pepino.</li>
+                <li><strong>Agua saborizada:</strong> Rodajas de limón, menta o pepino.</li>
                 <li><strong>Infusiones:</strong> Té, mate o manzanilla sin azúcar.</li>
-                <li><strong>Agua con gas:</strong> Con un chorrito de limón natural.</li>
             </ul>
         </div>
         <div id="lista" class="sub-content">
             <h3>🛒 Lista de Compras</h3>
             <input type="text" placeholder="Agregar producto...">
             <button class="primary">Agregar</button>
-            <p style="margin-top:10px; color:#666;">(Lista guardada localmente)</p>
         </div>
     </section>
 
@@ -208,62 +226,44 @@
             <h2>🧘 Bienestar, Mente y Cuerpo</h2>
             <p>El estrés y el sedentarismo impactan en tu glucosa. Cuidá tu cuerpo y tu mente.</p>
             <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'stress')">
-                    <span class="icon">🧠</span><span>Manejo del Estrés</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'rutinas')">
-                    <span class="icon">🏃</span><span>Ejercicios Leves</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sedentario')">
-                    <span class="icon">🛋️</span><span>Adiós Sedentarismo</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sueno')">
-                    <span class="icon">😴</span><span>Sueño y Descanso</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'emocional')">
-                    <span class="icon">🫂</span><span>Apoyo Emocional</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'tracker')">
-                    <span class="icon">📊</span><span>Tracker de Hábitos</span>
-                </a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'stress')"><span class="icon">🧠</span><span>Manejo del Estrés</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'rutinas')"><span class="icon">🏃</span><span>Ejercicios Leves</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sedentario')"><span class="icon">🛋️</span><span>Adiós Sedentarismo</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'sueno')"><span class="icon">😴</span><span>Sueño y Descanso</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'emocional')"><span class="icon">🫂</span><span>Apoyo Emocional</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('bienestar', 'tracker')"><span class="icon">📊</span><span>Tracker de Hábitos</span></a>
             </div>
         </div>
 
         <div id="stress" class="sub-content">
             <h3>🧠 Manejo del Estrés</h3>
-            <p>El estrés libera <strong>cortisol</strong>, una hormona que puede elevar tu glucosa. </p>
+            <p>El estrés libera <strong>cortisol</strong>, que puede elevar tu glucosa.</p>
             <ul>
                 <li><strong>Respiración 4-7-8:</strong> Inhalá en 4s, retené 7s, exhalá en 8s.</li>
-                <li><strong>Mindfulness:</strong> Dedicá 5 min al día a solo observar tu respiración.</li>
-                <li><strong>Hobbies:</strong> Leer, escuchar música o jardinería ayudan a bajar las revoluciones.</li>
+                <li><strong>Mindfulness:</strong> 5 min al día a solo observar tu respiración.</li>
             </ul>
         </div>
         <div id="rutinas" class="sub-content">
             <h3>🏃 Rutinas de Ejercicios Leves</h3>
-            <p>No necesitás correr un maratón. El movimiento constante es clave.</p>
             <ul>
-                <li><strong>Caminata post-comida:</strong> 10-15 minutos caminando a paso ligero ayuda a bajar el pico de glucosa.</li>
-                <li><strong>Estiramientos matutinos:</strong> 5 min de elongación al despertar para activar la circulación.</li>
-                <li><strong>Ejercicios en silla:</strong> Levantamientos de rodillas o giros de tobillos mientras mirás TV.</li>
+                <li><strong>Caminata post-comida:</strong> 10-15 minutos a paso ligero.</li>
+                <li><strong>Estiramientos matutinos:</strong> 5 min al despertar.</li>
+                <li><strong>Ejercicios en silla:</strong> Levantamientos de rodillas o giros de tobillos.</li>
             </ul>
-            <p class="alert-danger" style="margin-top:10px;">⚠️ Consultá a tu médico antes de iniciar rutinas si tenés complicaciones en pies o vista.</p>
         </div>
         <div id="sedentario" class="sub-content">
             <h3>🛋️ Guía para Sedentarios</h3>
-            <p>¿Pasás muchas horas sentado? Aplicá la <strong>Regla de los 5 Minutos</strong>:</p>
+            <p>Aplicá la <strong>Regla de los 5 Minutos</strong>:</p>
             <ul>
-                <li>Cada 1 hora, levantate y movete 5 minutos (ir por agua, estirarte, caminar por la casa).</li>
+                <li>Cada 1 hora, levantate y movete 5 minutos.</li>
                 <li>Usá el teléfono o mirá TV de pie o caminando en tu lugar.</li>
-                <li>Estacioná más lejos o bajá una parada antes del colectivo.</li>
             </ul>
         </div>
         <div id="sueno" class="sub-content">
             <h3>😴 Sueño y Descanso</h3>
-            <p>Dormir mal aumenta la resistencia a la insulina.</p>
             <ul>
                 <li>Mantené horarios regulares para dormir y despertar.</li>
                 <li>Evitá pantallas 1 hora antes de acostarte.</li>
-                <li>Dejá el celular lejos de la cama.</li>
             </ul>
         </div>
         <div id="emocional" class="sub-content">
@@ -271,7 +271,6 @@
             <p>El "Burnout por Diabetes" es real. Cansarse de cuidarse es normal.</p>
             <ul>
                 <li>Hablá con tu equipo de salud sobre cómo te sentís.</li>
-                <li>Buscá grupos de apoyo (presenciales o online).</li>
                 <li>No te culpes por un valor alto de glucosa; es un dato, no un fracaso.</li>
             </ul>
         </div>
@@ -279,8 +278,7 @@
             <h3>📊 Tracker de Hábitos Diarios</h3>
             <label><input type="checkbox"> Bebí 2L de agua</label><br>
             <label><input type="checkbox"> Caminé 30 min</label><br>
-            <label><input type="checkbox"> Dormí 7-8 horas</label><br>
-            <label><input type="checkbox"> Mi ánimo hoy es: 😐 😊 😫</label>
+            <label><input type="checkbox"> Dormí 7-8 horas</label>
         </div>
     </section>
 
@@ -290,24 +288,12 @@
             <h2>💡 Educación y Guías Prácticas</h2>
             <p>Información oficial y consejos para situaciones específicas.</p>
             <div class="grid">
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'mitos')">
-                    <span class="icon">🧠</span><span>Mitos y Realidades</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'enfermedad')">
-                    <span class="icon">🤒</span><span>Días de Enfermedad</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'viaje')">
-                    <span class="icon">🎒</span><span>Kit de Viaje</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'trabajo')">
-                    <span class="icon">💼</span><span>Trabajo y Estudio</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'controles')">
-                    <span class="icon">🩺</span><span>Controles Anuales</span>
-                </a>
-                <a href="#" class="grid-btn" onclick="showSub('educacion', 'pies')">
-                    <span class="icon">🦶</span><span>Cuidado de Pies</span>
-                </a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'mitos')"><span class="icon">🧠</span><span>Mitos y Realidades</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'enfermedad')"><span class="icon">🤒</span><span>Días de Enfermedad</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'viaje')"><span class="icon">🎒</span><span>Kit de Viaje</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'trabajo')"><span class="icon">💼</span><span>Trabajo y Estudio</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'controles')"><span class="icon">🩺</span><span>Controles Anuales</span></a>
+                <a href="#" class="grid-btn" onclick="showSub('educacion', 'pies')"><span class="icon">🦶</span><span>Cuidado de Pies</span></a>
             </div>
         </div>
 
@@ -316,78 +302,57 @@
             <ul>
                 <li><strong>Mito:</strong> "No puedo comer frutas". <br><strong>Realidad:</strong> Sí podés, en porciones adecuadas y preferentemente enteras.</li>
                 <li><strong>Mito:</strong> "La diabetes tipo 2 es por comer mucho azúcar". <br><strong>Realidad:</strong> Es multifactorial (genética, peso, edad, estilo de vida).</li>
-                <li><strong>Mito:</strong> "Los productos 'diet' o 'sin azúcar' no afectan la glucosa". <br><strong>Realidad:</strong> Pueden tener harinas o grasas que sí la afectan.</li>
             </ul>
         </div>
         <div id="enfermedad" class="sub-content">
             <h3>🤒 Reglas para Días de Enfermedad</h3>
-            <p>Si te resfrías o tenés una infección, tu glucosa puede descontrolarse.</p>
             <ul>
                 <li>Medí tu glucosa con más frecuencia (cada 4 horas).</li>
-                <li>Mantenete hidratado (agua, caldos, té sin azúcar).</li>
-                <li><strong>Nunca suspendas tu insulina</strong> sin consultar a tu médico, incluso si no podés comer.</li>
-                <li>Consultá urgente si hay vómitos persistentes o confusión.</li>
+                <li>Mantenete hidratado.</li>
+                <li><strong>Nunca suspendas tu insulina</strong> sin consultar a tu médico.</li>
             </ul>
         </div>
         <div id="viaje" class="sub-content">
             <h3>🎒 Kit de Viaje y Emergencia</h3>
-            <p>Checklist para tu bolso:</p>
             <ul>
-                <li>Glucómetro, tiras reactivas y lancetas (llevá el doble de lo que calculás).</li>
-                <li>Medicamentos / Insulina (con refrigerador portátil si es necesario).</li>
-                <li>Fuente de azúcar de acción rápida (caramelos, juguito).</li>
-                <li>Carnet de identificación que diga que tenés diabetes.</li>
-                <li>Snacks seguros (frutos secos, barras).</li>
+                <li>Glucómetro, tiras reactivas y lancetas (el doble de lo calculado).</li>
+                <li>Medicamentos / Insulina.</li>
+                <li>Fuente de azúcar de acción rápida (caramelos).</li>
             </ul>
         </div>
         <div id="trabajo" class="sub-content">
             <h3>💼 Diabetes en el Trabajo/Estudio</h3>
             <ul>
-                <li>Tené siempre una colación en tu escritorio o mochila.</li>
-                <li>Hacé pausas activas cada hora para estirar las piernas.</li>
-                <li>Conocé tus derechos laborales/estudiantiles respecto a tus controles y comidas.</li>
-                <li>Avisá a alguien de confianza qué hacer en caso de hipoglucemia.</li>
+                <li>Tené siempre una colación en tu escritorio.</li>
+                <li>Hacé pausas activas cada hora.</li>
             </ul>
         </div>
         <div id="controles" class="sub-content">
             <h3>🩺 Checklist de Controles Anuales</h3>
-            <p>Hablá con tu médico sobre estos estudios:</p>
             <ul>
                 <li>👁️ Fondo de ojo (anual).</li>
-                <li>🩸 Microalbuminuria / Función renal (anual).</li>
-                <li>🦶 Examen de pies y sensibilidad (en cada consulta).</li>
-                <li>🦷 Salud dental y encías (cada 6 meses).</li>
-                <li>❤️ Perfil lipídico y presión arterial.</li>
+                <li>🩸 Función renal (anual).</li>
+                <li>🦶 Examen de pies (en cada consulta).</li>
             </ul>
         </div>
         <div id="pies" class="sub-content">
             <h3>🦶 Cuidado de los Pies</h3>
             <ul>
-                <li>Revisá a diario la piel, plantas y entre los dedos (usá un espejo si hace falta).</li>
-                <li>Lavá con agua tibia (no caliente) y secá muy bien entre los dedos.</li>
-                <li>Usá calzado cómodo y <strong>nunca camines descalzo</strong>.</li>
-                <li>Hidratá la piel, pero no pongas crema entre los dedos.</li>
+                <li>Revisá a diario la piel y plantas.</li>
+                <li>Lavá con agua tibia y secá muy bien entre los dedos.</li>
+                <li><strong>Nunca camines descalzo</strong>.</li>
             </ul>
         </div>
     </section>
 
-    <!-- SECCION: AJUSTES / DIARIO -->
+    <!-- SECCION: AJUSTES -->
     <section id="ajustes" class="section">
         <div class="card">
             <h2>⚙️ Mis Datos y Consultas</h2>
             <div class="grid">
-                <a href="#" class="grid-btn" onclick="switchTab('inicio')">
-                    <span class="icon">📓</span><span>Diario para el Doctor</span>
-                </a>
-                <a href="#" class="grid-btn">
-                    <span class="icon">📤</span><span>Exportar Datos (CSV)</span>
-                </a>
-                <a href="#" class="grid-btn">
-                    <span class="icon">🔗</span><span>Biblioteca Web</span>
-                </a>
-                <a href="#" class="grid-btn">
-                    <span class="icon">🗑️</span><span>Borrar Mis Datos</span>
-                </a>
+                <a href="#" class="grid-btn" onclick="switchTab('inicio')"><span class="icon">📓</span><span>Diario para el Doctor</span></a>
+                <a href="#" class="grid-btn"><span class="icon">📤</span><span>Exportar Datos</span></a>
+                <a href="#" class="grid-btn"><span class="icon">🔗</span><span>Biblioteca Web</span></a>
             </div>
         </div>
         
@@ -397,13 +362,12 @@
                 <li>¿Cuál es mi objetivo personal de glucosa (HbA1c)?</li>
                 <li>¿Cómo adaptar las comidas a mi medicación y horarios?</li>
                 <li>¿Qué debo hacer si tengo una glucosa muy alta o muy baja?</li>
-                <li>¿Necesito consultar con nutricionista o educador en diabetes?</li>
             </ul>
         </div>
 
         <div class="card">
             <h2>🔗 Recursos Oficiales</h2>
-            <p><a href="https://www.niddk.nih.gov/health-information/informacion-de-la-salud/diabetes" target="_blank">Instituto Nacional de la Diabetes (NIDDK) — español</a></p>
+            <p><a href="https://www.niddk.nih.gov/health-information/informacion-de-la-salud/diabetes" target="_blank">Instituto Nacional de la Diabetes (NIDDK)</a></p>
             <p><a href="https://www.cdc.gov/diabetes/es/healthy-eating/planificacion-de-comidas.html" target="_blank">CDC — planificación de comidas</a></p>
             <p><a href="https://www.fad.org.ar/" target="_blank">Federación Argentina de Diabetes</a></p>
         </div>
@@ -430,24 +394,74 @@
 </nav>
 
 <script>
-    // Función para cambiar de pestaña principal
+    // ==========================================
+    // LÓGICA DE INSTALACIÓN PWA (SPLASH SCREEN)
+    // ==========================================
+    let deferredPrompt;
+    const splashScreen = document.getElementById('splash-screen');
+    const splashInstallBtn = document.getElementById('splash-install');
+    const splashEnterBtn = document.getElementById('splash-enter');
+
+    // Capturar el evento de instalación del navegador
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Mostrar el botón de instalación en la pantalla de bienvenida
+        if (splashInstallBtn) splashInstallBtn.style.display = 'block';
+    });
+
+    // Acción del botón de instalar
+    if (splashInstallBtn) {
+        splashInstallBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                splashInstallBtn.style.display = 'none';
+            }
+        });
+    }
+
+    // Acción del botón "Entrar a la app"
+    splashEnterBtn.addEventListener('click', () => {
+        splashScreen.style.opacity = '0';
+        setTimeout(() => {
+            splashScreen.style.display = 'none';
+        }, 400);
+    });
+
+    // Ocultar botón si ya se instaló
+    window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (splashInstallBtn) splashInstallBtn.style.display = 'none';
+    });
+
+    // ==========================================
+    // NAVEGACIÓN DE LA APP
+    // ==========================================
     function switchTab(tabId) {
         document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         
         document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        // Usamos event.currentTarget si existe, sino buscamos el botón por índice o texto (fallback para onclick inline)
+        if(event && event.currentTarget) {
+            event.currentTarget.classList.add('active');
+        } else {
+            // Fallback para botones de grid
+            const navBtns = document.querySelectorAll('nav button');
+            navBtns.forEach(b => b.classList.remove('active'));
+            const map = {'inicio':0, 'comidas':1, 'bienestar':2, 'educacion':3, 'ajustes':4};
+            if(map[tabId] !== undefined) navBtns[map[tabId]].classList.add('active');
+        }
         
         window.scrollTo(0, 0);
     }
 
-    // Función para mostrar sub-contenidos (modales inline)
     function showSub(parentId, subId) {
-        // Ocultar todos los sub-contenidos de la sección padre
         document.querySelectorAll(`#${parentId} .sub-content`).forEach(sub => sub.classList.remove('active'));
-        // Mostrar el seleccionado
         document.getElementById(subId).classList.add('active');
-        // Scroll suave al sub-contenido
         setTimeout(() => {
             document.getElementById(subId).scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
