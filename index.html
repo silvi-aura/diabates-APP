@@ -4,2204 +4,622 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0ea5e9" />
-  <meta name="description" content="Diabetes sin miedo: control de glucosa, alimentación, bienestar y educación para vivir con más seguridad." />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Diabetes sin miedo: control de glucosa, recetas, plan de comidas, bienestar, educación y registro de hábitos." />
   <title>Diabetes sin miedo</title>
-
   <style>
-    :root {
-      --primary: #0ea5e9;
-      --primary-dark: #0284c7;
-      --primary-2: #6366f1;
-      --accent: #f59e0b;
-      --danger: #ef4444;
-      --success: #10b981;
-
-      --bg: #f3f7fb;
-      --surface: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: rgba(15, 23, 42, 0.09);
-      --soft: rgba(14, 165, 233, 0.07);
-      --input: #ffffff;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --radius: 22px;
-    }
-
-    [data-theme="dark"] {
-      --bg: #0b1220;
-      --surface: #111827;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.09);
-      --soft: rgba(148, 163, 184, 0.09);
-      --input: #0b1220;
-      --shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(14, 165, 233, 0.12), transparent 38%),
-        var(--bg);
-      color: var(--text);
-      padding-bottom: calc(88px + env(safe-area-inset-bottom));
-      transition: background 0.25s ease, color 0.25s ease;
-      line-height: 1.55;
-    }
-
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-      border: 0;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .small {
-      font-size: 0.86rem;
-    }
-
-    /* SPLASH */
-    .splash {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(circle at 30% 20%, rgba(14, 165, 233, 0.35), transparent 28%),
-        radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.35), transparent 30%),
-        linear-gradient(145deg, #0f172a, #1e3a8a);
-      color: white;
-      transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s ease;
-    }
-
-    .splash.hide {
-      opacity: 0;
-      visibility: hidden;
-      transform: scale(1.04);
-      pointer-events: none;
-    }
-
-    .splash-card {
-      width: min(460px, 100%);
-      text-align: center;
-      padding: 30px 24px;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.09);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
-      backdrop-filter: blur(18px);
-    }
-
-    .logo {
-      font-size: 68px;
-      line-height: 1;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
-    }
-
-    .splash-card h1 {
-      margin: 8px 0 12px;
-      font-size: 2.3rem;
-      line-height: 1.05;
-      letter-spacing: -0.8px;
-    }
-
-    .splash-card h1 span {
-      display: block;
-      background: linear-gradient(90deg, #7dd3fc, #c4b5fd, #fda4af);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .splash-card p {
-      margin: 0 auto 18px;
-      max-width: 320px;
-      color: rgba(255, 255, 255, 0.88);
-    }
-
-    .splash-note {
-      display: block;
-      margin-top: 14px;
-      font-size: 0.78rem;
-      color: rgba(255, 255, 255, 0.62);
-    }
-
-    /* BOTONES */
-    .btn {
-      border-radius: 16px;
-      padding: 14px 18px;
-      font-weight: 800;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      box-shadow: 0 12px 28px rgba(14, 165, 233, 0.28);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #ef4444, #f97316);
-      color: white;
-      box-shadow: 0 12px 28px rgba(239, 68, 68, 0.24);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
-
-    .btn-danger-outline {
-      background: transparent;
-      border: 1px solid var(--danger);
-      color: var(--danger);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .btn-block {
-      width: 100%;
-      display: block;
-    }
-
-    /* HEADER */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 80;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.82);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(18px);
-    }
-
-    [data-theme="dark"] .topbar {
-      background: rgba(15, 23, 42, 0.78);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 15px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      font-size: 22px;
-      box-shadow: 0 10px 22px rgba(14, 165, 233, 0.25);
-      flex: 0 0 auto;
-    }
-
-    .brand-text {
-      min-width: 0;
-    }
-
-    .brand-text strong {
-      display: block;
-      font-size: 1.05rem;
-      line-height: 1.15;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .brand-text small {
-      color: var(--muted);
-      font-size: 0.75rem;
-    }
-
-    .theme-actions {
-      display: flex;
-      gap: 8px;
-      flex: 0 0 auto;
-    }
-
-    .icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 15px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 19px;
-      box-shadow: var(--shadow);
-      display: grid;
-      place-items: center;
-    }
-
-    .icon-btn.active {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-    }
-
-    /* MAIN */
-    main {
-      width: min(760px, 100%);
-      margin: 0 auto;
-      padding: 16px 14px 30px;
-    }
-
-    .page {
-      display: none;
-      animation: fadeUp 0.35s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .card h2,
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      line-height: 1.25;
-    }
-
-    .card h2 {
-      font-size: 1.25rem;
-    }
-
-    .card h3 {
-      font-size: 1.08rem;
-    }
-
-    .hero {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background:
-        linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(99, 102, 241, 0.16)),
-        var(--surface);
-    }
-
-    .hero h2 {
-      margin-bottom: 4px;
-    }
-
-    .hero-badge {
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: rgba(245, 158, 11, 0.16);
-      color: #b45309;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    [data-theme="dark"] .hero-badge {
-      color: #fbbf24;
-      background: rgba(245, 158, 11, 0.18);
-    }
-
-    /* GRID TILES */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .tile {
-      min-height: 118px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 16px 12px;
-      font-size: 31px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .tile span {
-      font-size: 0.9rem;
-      font-weight: 850;
-      text-align: center;
-    }
-
-    .tile:hover {
-      transform: translateY(-2px);
-      border-color: rgba(14, 165, 233, 0.35);
-    }
-
-    .tile-blue {
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.20), rgba(14, 165, 233, 0.06));
-    }
-
-    .tile-green {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.20), rgba(16, 185, 129, 0.06));
-    }
-
-    .tile-orange {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(245, 158, 11, 0.06));
-    }
-
-    .tile-purple {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(99, 102, 241, 0.06));
-    }
-
-    /* PANELS */
-    .panel {
-      display: none;
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .panel.open {
-      display: block;
-      animation: fadeUp 0.25s ease;
-    }
-
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 13px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--input);
-      color: var(--text);
-      outline: none;
-      margin-bottom: 10px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 52px;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.14);
-    }
-
-    .row-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .row-actions > * {
-      flex: 1 1 140px;
-    }
-
-    /* WATER */
-    .card-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .water-row {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 7px;
-      margin: 12px 0 8px;
-    }
-
-    .water-glass {
-      aspect-ratio: 1 / 1;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(14, 165, 233, 0.08);
-      color: var(--text);
-      font-size: 18px;
-      display: grid;
-      place-items: center;
-      opacity: 0.45;
-      transition: all 0.2s ease;
-    }
-
-    .water-glass.filled {
-      opacity: 1;
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.22);
-    }
-
-    /* EMERGENCY */
-    .emergency {
-      border-left: 5px solid var(--danger);
-      background:
-        linear-gradient(135deg, rgba(239, 68, 68, 0.13), rgba(249, 115, 22, 0.08)),
-        var(--surface);
-    }
-
-    .protocol {
-      margin: 10px 0 14px 20px;
-      padding: 0;
-    }
-
-    .protocol li {
-      margin-bottom: 6px;
-    }
-
-    /* METRICS */
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 12px 0 14px;
-    }
-
-    .metric {
-      background: var(--soft);
-      border-radius: 16px;
-      padding: 12px;
-      text-align: center;
-    }
-
-    .metric span {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .metric strong {
-      font-size: 1.08rem;
-    }
-
-    .chart {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-      height: 140px;
-      padding: 12px;
-      border-radius: 18px;
-      background: var(--soft);
-      margin-bottom: 14px;
-      overflow: hidden;
-    }
-
-    .bar {
-      flex: 1;
-      min-width: 8px;
-      border-radius: 10px 10px 5px 5px;
-      background: var(--primary);
-      min-height: 12px;
-    }
-
-    .bar.low {
-      background: var(--accent);
-    }
-
-    .bar.ok {
-      background: var(--success);
-    }
-
-    .bar.high {
-      background: var(--danger);
-    }
-
-    .history-list {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      padding: 12px;
-      border-radius: 16px;
-      background: var(--soft);
-      border-left: 4px solid var(--primary);
-    }
-
-    .history-item.low {
-      border-left-color: var(--accent);
-    }
-
-    .history-item.ok {
-      border-left-color: var(--success);
-    }
-
-    .history-item.high {
-      border-left-color: var(--danger);
-    }
-
-    .badge {
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 900;
-      background: rgba(14, 165, 233, 0.12);
-      color: var(--primary);
-      white-space: nowrap;
-    }
-
-    .badge.low {
-      background: rgba(245, 158, 11, 0.16);
-      color: #b45309;
-    }
-
-    .badge.ok {
-      background: rgba(16, 185, 129, 0.16);
-      color: #047857;
-    }
-
-    .badge.high {
-      background: rgba(239, 68, 68, 0.16);
-      color: #b91c1c;
-    }
-
-    [data-theme="dark"] .badge.low {
-      color: #fbbf24;
-    }
-
-    [data-theme="dark"] .badge.ok {
-      color: #34d399;
-    }
-
-    [data-theme="dark"] .badge.high {
-      color: #fca5a5;
-    }
-
-    /* TABS MINI */
-    .tabs-mini {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
-      scrollbar-width: none;
-    }
-
-    .tabs-mini::-webkit-scrollbar {
-      display: none;
-    }
-
-    .mini-tab {
-      white-space: nowrap;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--muted);
-      border-radius: 999px;
-      padding: 9px 14px;
-      font-weight: 850;
-    }
-
-    .mini-tab.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    .sub {
-      display: none;
-    }
-
-    .sub.active {
-      display: block;
-      animation: fadeUp 0.25s ease;
-    }
-
-    /* LISTS */
-    .clean-list,
-    .med-list {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0 0;
-      display: grid;
-      gap: 8px;
-    }
-
-    .clean-list li,
-    .med-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: var(--soft);
-    }
-
-    .med-item label {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      min-width: 0;
-    }
-
-    .med-item label span {
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .med-item.done label {
-      text-decoration: line-through;
-      color: var(--muted);
-    }
-
-    .med-item input[type="checkbox"],
-    .check-item input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin: 0;
-      flex: 0 0 auto;
-    }
-
-    .delete-btn {
-      background: transparent;
-      color: var(--danger);
-      font-size: 18px;
-      font-weight: 900;
-      padding: 4px 8px;
-      border-radius: 10px;
-    }
-
-    .delete-btn:hover {
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    /* CHIPS */
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 10px 0;
-    }
-
-    .chip {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 800;
-    }
-
-    .chip.active {
-      background: linear-gradient(135deg, var(--success), var(--primary));
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.18);
-    }
-
-    /* ACCORDION */
-    .accordion {
-      display: grid;
-      gap: 10px;
-    }
-
-    .acc-btn {
-      width: 100%;
-      text-align: left;
-      border: 1px solid var(--border);
-      background: var(--soft);
-      color: var(--text);
-      padding: 14px;
-      border-radius: 16px;
-      font-weight: 850;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .acc-btn::after {
-      content: "+";
-      font-size: 22px;
-      color: var(--primary);
-      line-height: 1;
-    }
-
-    .acc-btn.open::after {
-      content: "−";
-    }
-
-    .acc-panel {
-      display: none;
-      padding: 4px 14px 12px;
-      color: var(--muted);
-    }
-
-    .acc-panel.open {
-      display: block;
-      animation: fadeUp 0.22s ease;
-    }
-
-    .acc-panel ul {
-      margin: 8px 0 0 18px;
-      padding: 0;
-    }
-
-    .acc-panel li {
-      margin-bottom: 6px;
-    }
-
-    /* PREMIUM */
-    .premium {
-      color: white;
-      border: 0;
-      background: linear-gradient(135deg, #f59e0b, #fb7185, #8b5cf6);
-      box-shadow: 0 18px 45px rgba(245, 158, 11, 0.22);
-    }
-
-    .premium h2,
-    .premium p {
-      color: white;
-    }
-
-    .premium .btn {
-      background: white;
-      color: #9a3412;
-      box-shadow: none;
-    }
-
-    /* SETTINGS */
-    .setting-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .setting-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .setting-info strong {
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    .setting-info small {
-      color: var(--muted);
-    }
-
-    .segmented {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      flex: 0 0 auto;
-    }
-
-    .segmented button {
-      background: var(--surface);
-      color: var(--muted);
-      padding: 10px 14px;
-      font-weight: 850;
-    }
-
-    .segmented button.active {
-      background: var(--primary);
-      color: white;
-    }
-
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 90;
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 4px;
-      padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.88);
-      border-top: 1px solid var(--border);
-      backdrop-filter: blur(18px);
-    }
-
-    [data-theme="dark"] .bottom-nav {
-      background: rgba(15, 23, 42, 0.88);
-    }
-
-    .nav-btn {
-      background: transparent;
-      color: var(--muted);
-      border-radius: 16px;
-      padding: 8px 4px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      font-size: 0.64rem;
-      font-weight: 850;
-    }
-
-    .nav-btn span {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .nav-btn.active {
-      color: var(--primary);
-      background: rgba(14, 165, 233, 0.12);
-    }
-
-    /* TOAST */
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: calc(96px + env(safe-area-inset-bottom));
-      transform: translateX(-50%) translateY(20px);
-      background: #0f172a;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 999px;
-      opacity: 0;
-      pointer-events: none;
-      transition: 0.25s ease;
-      z-index: 120;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-      max-width: 90vw;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* MODAL */
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 130;
-      display: grid;
-      place-items: center;
-      padding: 18px;
-      background: rgba(2, 6, 23, 0.58);
-      backdrop-filter: blur(10px);
-    }
-
-    .modal.hidden {
-      display: none;
-    }
-
-    .modal-card {
-      width: min(560px, 100%);
-      max-height: 82vh;
-      overflow: auto;
-      background: var(--surface);
-      color: var(--text);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-      border: 1px solid var(--border);
-    }
-
-    .modal-card h3 {
-      margin-top: 0;
-    }
-
-    .notice {
-      padding: 12px;
-      border-radius: 14px;
-      background: rgba(245, 158, 11, 0.12);
-      color: #92400e;
-      font-size: 0.9rem;
-      margin: 10px 0;
-    }
-
-    [data-theme="dark"] .notice {
-      color: #fbbf24;
-      background: rgba(245, 158, 11, 0.16);
-    }
-
-    .disclaimer {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(245, 158, 11, 0.12);
-      border-left: 4px solid var(--accent);
-      color: var(--text);
-      font-size: 0.88rem;
-      margin-bottom: 16px;
-    }
-
-    @media (max-width: 520px) {
-      .splash-card h1 {
-        font-size: 2rem;
-      }
-
-      .metrics {
-        grid-template-columns: 1fr;
-      }
-
-      .field-row {
-        grid-template-columns: 1fr;
-      }
-
-      .water-row {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .nav-btn {
-        font-size: 0.58rem;
-      }
-
-      .nav-btn span {
-        font-size: 20px;
-      }
-
-      .brand-text strong {
-        font-size: 0.98rem;
-      }
-    }
+    :root{
+      --primary:#0ea5e9; --primary2:#6366f1; --accent:#f59e0b; --danger:#ef4444; --success:#10b981;
+      --bg:#f3f7fb; --surface:#fff; --text:#0f172a; --muted:#64748b; --border:rgba(15,23,42,.09);
+      --soft:rgba(14,165,233,.08); --shadow:0 12px 34px rgba(15,23,42,.09); --radius:22px;
+    }
+    [data-theme="dark"]{
+      --bg:#0b1220; --surface:#111827; --text:#e5e7eb; --muted:#94a3b8; --border:rgba(255,255,255,.1);
+      --soft:rgba(148,163,184,.1); --shadow:0 16px 44px rgba(0,0,0,.38);
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0;min-height:100%}
+    body{
+      font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text);
+      line-height:1.55; padding-bottom:calc(92px + env(safe-area-inset-bottom)); transition:.25s ease;
+    }
+    button,input,select,textarea{font:inherit} button{cursor:pointer;border:0}
+    a{color:var(--primary);text-decoration:none;font-weight:700}
+    .muted{color:var(--muted)} .small{font-size:.86rem} .center{text-align:center}
+    .hide{display:none !important}
+
+    .splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:20px;
+      background:radial-gradient(circle at 20% 20%,rgba(14,165,233,.35),transparent 28%),radial-gradient(circle at 80% 70%,rgba(99,102,241,.35),transparent 30%),linear-gradient(145deg,#0f172a,#1e3a8a);
+      color:#fff;transition:.45s ease}
+    .splash.hide{opacity:0;visibility:hidden;transform:scale(1.03);pointer-events:none}
+    .splash-card{width:min(520px,100%);padding:26px 22px;border-radius:30px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);box-shadow:0 24px 70px rgba(0,0,0,.28);backdrop-filter:blur(18px);text-align:center}
+    .logo{font-size:64px;line-height:1;margin-bottom:6px}.splash-card h1{margin:6px 0 10px;font-size:2.2rem;line-height:1.05}
+    .splash-card h1 span{display:block;background:linear-gradient(90deg,#7dd3fc,#c4b5fd,#fda4af);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .splash-card p{margin:0 auto 16px;max-width:360px;color:rgba(255,255,255,.88)}
+    .splash-note{display:block;margin-top:12px;font-size:.78rem;color:rgba(255,255,255,.65)}
+
+    .btn{border-radius:16px;padding:13px 16px;font-weight:800;transition:.18s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn:active{transform:scale(.98)} .btn-block{width:100%;display:flex}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;box-shadow:0 12px 28px rgba(14,165,233,.25)}
+    .btn-danger{background:linear-gradient(135deg,#ef4444,#f97316);color:#fff;box-shadow:0 12px 28px rgba(239,68,68,.22)}
+    .btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
+    .btn-danger-outline{background:transparent;border:1px solid var(--danger);color:var(--danger)}
+    .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+    .btn-white{background:#fff;color:#0f172a}
+
+    .topbar{position:sticky;top:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:rgba(255,255,255,.82);border-bottom:1px solid var(--border);backdrop-filter:blur(18px)}
+    [data-theme="dark"] .topbar{background:rgba(15,23,42,.78)}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;font-size:22px;box-shadow:0 10px 22px rgba(14,165,233,.22);flex:0 0 auto}
+    .brand-text{min-width:0}.brand-text strong{display:block;font-size:1.02rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-text small{color:var(--muted);font-size:.74rem}
+    .theme-actions{display:flex;gap:8px}.icon-btn{width:44px;height:44px;border-radius:15px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:19px;box-shadow:var(--shadow);display:grid;place-items:center}
+    .icon-btn.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,233,.15)}
+
+    main{width:min(860px,100%);margin:0 auto;padding:14px 14px 28px}
+    .page{display:none;animation:fadeUp .32s ease}.page.active{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+    .card h2,.card h3{margin:0 0 10px;line-height:1.25}.card h2{font-size:1.22rem}.card h3{font-size:1.05rem}
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,rgba(14,165,233,.18),rgba(99,102,241,.16)),var(--surface)}
+    .hero-badge{padding:9px 12px;border-radius:999px;background:rgba(245,158,11,.16);color:#b45309;font-weight:900;white-space:nowrap}
+    [data-theme="dark"] .hero-badge{color:#fbbf24;background:rgba(245,158,11,.18)}
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+    .tile{min-height:112px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px 10px;font-size:30px;transition:.2s ease}
+    .tile span{font-size:.88rem;font-weight:850;text-align:center}.tile:hover{transform:translateY(-2px);border-color:rgba(14,165,233,.35)}
+    .tile-blue{background:linear-gradient(135deg,rgba(14,165,233,.2),rgba(14,165,233,.06))}.tile-green{background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(16,185,129,.06))}
+    .tile-orange{background:linear-gradient(135deg,rgba(245,158,11,.22),rgba(245,158,11,.06))}.tile-purple{background:linear-gradient(135deg,rgba(99,102,241,.22),rgba(99,102,241,.06))}
+    .panel{display:none;background:var(--surface);border:1px dashed var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow)}.panel.open{display:block;animation:fadeUp .25s ease}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    input,select,textarea{width:100%;padding:12px 13px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);outline:none;margin-bottom:10px;transition:.2s ease}
+    textarea{resize:vertical;min-height:50px} input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(14,165,233,.14)}
+    .row-actions{display:flex;gap:10px;flex-wrap:wrap}.row-actions>*{flex:1 1 140px}
+    .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .water-row{display:grid;grid-template-columns:repeat(8,1fr);gap:7px;margin:12px 0 8px}
+    .water-glass{aspect-ratio:1/1;border-radius:14px;border:1px solid var(--border);background:rgba(14,165,233,.08);color:var(--text);font-size:18px;display:grid;place-items:center;opacity:.45;transition:.2s ease}
+    .water-glass.filled{opacity:1;transform:scale(1.05);background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff;border-color:transparent;box-shadow:0 10px 20px rgba(14,165,233,.22)}
+    .emergency{border-left:5px solid var(--danger);background:linear-gradient(135deg,rgba(239,68,68,.13),rgba(249,115,22,.08)),var(--surface)}
+    .protocol{margin:10px 0 14px 20px;padding:0}.protocol li{margin-bottom:6px}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 14px}
+    .metric{background:var(--soft);border-radius:16px;padding:12px;text-align:center}.metric span{display:block;font-size:.74rem;color:var(--muted);margin-bottom:4px}.metric strong{font-size:1rem}
+    .chart{display:flex;align-items:flex-end;gap:6px;height:140px;padding:12px;border-radius:18px;background:var(--soft);margin-bottom:14px;overflow:hidden}
+    .bar{flex:1;min-width:8px;border-radius:10px 10px 5px 5px;background:var(--primary);min-height:12px}
+    .bar.low{background:var(--accent)}.bar.ok{background:var(--success)}.bar.high{background:var(--danger)}
+    .history-list{display:grid;gap:10px;margin-bottom:14px}
+    .history-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px;border-radius:16px;background:var(--soft);border-left:4px solid var(--primary)}
+    .history-item.low{border-left-color:var(--accent)}.history-item.ok{border-left-color:var(--success)}.history-item.high{border-left-color:var(--danger)}
+    .badge{padding:5px 10px;border-radius:999px;font-size:.75rem;font-weight:900;background:rgba(14,165,233,.12);color:var(--primary);white-space:nowrap}
+    .badge.low{background:rgba(245,158,11,.16);color:#b45309}.badge.ok{background:rgba(16,185,129,.16);color:#047857}.badge.high{background:rgba(239,68,68,.16);color:#b91c1c}
+    [data-theme="dark"] .badge.low{color:#fbbf24}[data-theme="dark"] .badge.ok{color:#34d399}[data-theme="dark"] .badge.high{color:#fca5a5}
+    .tabs-mini{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none}.tabs-mini::-webkit-scrollbar{display:none}
+    .mini-tab{white-space:nowrap;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;padding:9px 14px;font-weight:850}
+    .mini-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .recipe-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:14px;box-shadow:var(--shadow);cursor:pointer;transition:.2s ease;position:relative}
+    .recipe-card:hover{transform:translateY(-2px);border-color:rgba(14,165,233,.35)}
+    .recipe-card h4{margin:0 0 6px;font-size:1rem;line-height:1.25}.recipe-meta{font-size:.8rem;color:var(--muted);margin-bottom:8px}
+    .tag-list{display:flex;flex-wrap:wrap;gap:6px}.tag{font-size:.7rem;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--soft);color:var(--primary)}
+    .fav-btn{position:absolute;top:10px;right:10px;background:transparent;color:var(--danger);font-size:20px;padding:4px 8px;border-radius:12px}
+    .clean-list,.med-list,.plan-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+    .clean-list li,.med-item,.plan-item,.shop-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:var(--soft)}
+    .med-item label,.check-item label{flex:1;display:flex;align-items:center;gap:10px;cursor:pointer;min-width:0}
+    .med-item label span,.check-item label span{min-width:0;overflow-wrap:anywhere}.med-item.done label{text-decoration:line-through;color:var(--muted)}
+    .med-item input[type="checkbox"],.check-item input[type="checkbox"]{width:20px;height:20px;margin:0;flex:0 0 auto}
+    .delete-btn{background:transparent;color:var(--danger);font-size:18px;font-weight:900;padding:4px 8px;border-radius:10px}.delete-btn:hover{background:rgba(239,68,68,.1)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.chip{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 14px;font-weight:850}
+    .chip.active{background:linear-gradient(135deg,var(--success),var(--primary));color:#fff;border-color:transparent;box-shadow:0 10px 20px rgba(16,185,129,.18)}
+    .accordion{display:grid;gap:10px}.acc-btn{width:100%;text-align:left;border:1px solid var(--border);background:var(--soft);color:var(--text);padding:14px;border-radius:16px;font-weight:850;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .acc-btn::after{content:"+";font-size:22px;color:var(--primary);line-height:1}.acc-btn.open::after{content:"−"}
+    .acc-panel{display:none;padding:4px 14px 12px;color:var(--muted)}.acc-panel.open{display:block;animation:fadeUp .22s ease}.acc-panel ul{margin:8px 0 0 18px;padding:0}.acc-panel li{margin-bottom:6px}
+    .premium{color:#fff;border:0;background:linear-gradient(135deg,#f59e0b,#fb7185,#8b5cf6);box-shadow:0 18px 45px rgba(245,158,11,.22)}.premium h2,.premium p{color:#fff}.premium .btn{background:#fff;color:#9a3412;box-shadow:none}
+    .setting-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}.setting-row:last-child{border-bottom:0;padding-bottom:0}
+    .setting-info strong{display:block;margin-bottom:2px}.setting-info small{color:var(--muted)}
+    .segmented{display:flex;border:1px solid var(--border);border-radius:14px;overflow:hidden;flex:0 0 auto}.segmented button{background:var(--surface);color:var(--muted);padding:10px 14px;font-weight:850}.segmented button.active{background:var(--primary);color:#fff}
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:90;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.88);border-top:1px solid var(--border);backdrop-filter:blur(18px)}
+    [data-theme="dark"] .bottom-nav{background:rgba(15,23,42,.88)}
+    .nav-btn{background:transparent;color:var(--muted);border-radius:16px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.58rem;font-weight:850}
+    .nav-btn span{font-size:21px;line-height:1}.nav-btn.active{color:var(--primary);background:rgba(14,165,233,.12)}
+    .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#0f172a;color:#fff;padding:12px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s ease;z-index:120;box-shadow:0 16px 40px rgba(0,0,0,.25);max-width:90vw;text-align:center;font-weight:800}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .modal{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:18px;background:rgba(2,6,23,.58);backdrop-filter:blur(10px)}.modal.hidden{display:none}
+    .modal-card{width:min(680px,100%);max-height:84vh;overflow:auto;background:var(--surface);color:var(--text);border-radius:24px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.35);border:1px solid var(--border)}
+    .modal-card h3{margin-top:0}.notice{padding:12px;border-radius:14px;background:rgba(245,158,11,.12);color:#92400e;font-size:.9rem;margin:10px 0}
+    [data-theme="dark"] .notice{color:#fbbf24;background:rgba(245,158,11,.16)}
+    .disclaimer{padding:12px 14px;border-radius:16px;background:rgba(245,158,11,.12);border-left:4px solid var(--accent);color:var(--text);font-size:.88rem;margin-bottom:14px}
+    .nutrition{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.nutrition div{background:var(--soft);border-radius:12px;padding:8px;text-align:center;font-size:.82rem}
+    details{border:1px solid var(--border);border-radius:16px;padding:12px;background:var(--soft);margin-bottom:10px} summary{font-weight:850;cursor:pointer} details p,details ul{margin:10px 0 0}
+    table{width:100%;border-collapse:collapse;font-size:.88rem} th,td{border-bottom:1px solid var(--border);padding:8px;text-align:left}
+    @media (max-width:650px){.metrics{grid-template-columns:repeat(2,1fr)}.field-row{grid-template-columns:1fr}.water-row{grid-template-columns:repeat(4,1fr)}.nutrition{grid-template-columns:repeat(2,1fr)}}
+    @media print{body>*:not(#modal){display:none !important}#modal{position:static !important;background:#fff !important;backdrop-filter:none !important;padding:0 !important}.modal-card{box-shadow:none !important;border:0 !important;max-height:none !important;width:100% !important}#modalClose,[data-action="print"]{display:none !important}}
   </style>
 </head>
-
 <body>
-  <noscript>
-    <div style="padding:24px;text-align:center;font-family:sans-serif;">
-      <h1>Diabetes sin miedo</h1>
-      <p>Esta aplicación necesita JavaScript para funcionar. Por favor, actívalo en tu navegador.</p>
-    </div>
-  </noscript>
+  <noscript><div style="padding:24px;text-align:center"><h1>Diabetes sin miedo</h1><p>Necesitás JavaScript para usar la aplicación.</p></div></noscript>
 
-  <!-- SPLASH -->
   <div id="splash" class="splash">
     <div class="splash-card">
       <div class="logo">🛡️</div>
       <h1>Diabetes <span>sin miedo</span></h1>
-      <p>Tu compañero para controlar glucosa, hábitos, alimentación y bienestar.</p>
-
-      <button
-        id="enterApp"
-        class="btn btn-primary btn-block"
-        onclick="var s=document.getElementById('splash'); if(s){s.classList.add('hide'); setTimeout(function(){var x=document.getElementById('splash'); if(x && x.parentNode){x.parentNode.removeChild(x);}},500);}"
-      >
-        Entrar a la app
-      </button>
-
+      <p>Control, recetas, educación, hábitos y seguimiento en un solo lugar.</p>
+      <input id="splashName" placeholder="¿Cómo te llamás? (opcional)" />
+      <div style="display:flex;gap:10px;justify-content:center;margin:10px 0 14px">
+        <button id="splashDay" class="btn btn-white">☀️ Día</button>
+        <button id="splashNight" class="btn btn-white">🌙 Noche</button>
+      </div>
+      <button id="installBtn" class="btn btn-primary btn-block hide">📲 Instalar en el celular</button>
+      <button id="enterApp" class="btn btn-primary btn-block">Entrar a la app</button>
       <small class="splash-note">Tus datos se guardan localmente en este dispositivo.</small>
     </div>
   </div>
 
-  <!-- HEADER -->
   <header class="topbar">
-    <div class="brand">
-      <div class="brand-icon">🛡️</div>
-      <div class="brand-text">
-        <strong>Diabetes sin miedo</strong>
-        <small>Tu salud, tu control</small>
-      </div>
-    </div>
-
-    <div class="theme-actions">
-      <button class="icon-btn" id="dayBtn" title="Modo día" aria-label="Modo día">☀️</button>
-      <button class="icon-btn" id="nightBtn" title="Modo noche" aria-label="Modo noche">🌙</button>
-    </div>
+    <div class="brand"><div class="brand-icon">🛡️</div><div class="brand-text"><strong>Diabetes sin miedo</strong><small>Tu salud, tu control</small></div></div>
+    <div class="theme-actions"><button class="icon-btn" id="dayBtn" title="Modo día">☀️</button><button class="icon-btn" id="nightBtn" title="Modo noche">🌙</button></div>
   </header>
 
   <main>
-    <div class="disclaimer">
-      ⚠️ <strong>Importante:</strong> Esta app es educativa y organizativa. No reemplaza a tu médico, no indica dosis y no sustituye una urgencia médica.
-    </div>
+    <div class="disclaimer">⚠️ <strong>Importante:</strong> esta app es educativa y organizativa. No reemplaza a tu médico, no indica dosis y no sustituye una urgencia médica.</div>
 
-    <!-- INICIO -->
-    <section id="page-inicio" class="page active">
-      <div class="card hero">
-        <div>
-          <h2>Hola 👋</h2>
-          <p id="summaryText" class="muted">Empieza registrando tu glucosa de hoy.</p>
-        </div>
-        <div class="hero-badge" id="streakBadge">🔥 0 días</div>
-      </div>
-
+    <section id="page-home" class="page active">
+      <div class="card hero"><div><h2 id="homeGreeting">Hola 👋</h2><p id="homeSummary" class="muted">Empezá registrando tu glucosa de hoy.</p></div><div id="streakBadge" class="hero-badge">🔥 0 días</div></div>
       <div class="grid-2">
-        <button class="tile tile-blue" data-open="quick-glucose">
-          🩸
-          <span>Registrar glucosa</span>
-        </button>
-
-        <button class="tile tile-green" data-target="page-registros">
-          📊
-          <span>Ver historial</span>
-        </button>
-
-        <button class="tile tile-orange" data-target="page-comidas">
-          🥗
-          <span>Comidas</span>
-        </button>
-
-        <button class="tile tile-purple" data-target="page-bienestar">
-          🧘
-          <span>Bienestar</span>
-        </button>
+        <button class="tile tile-blue" data-open-panel="quick-glucose">🩸<span>Registrar glucosa</span></button>
+        <button class="tile tile-green" data-page="logs">📊<span>Historial</span></button>
+        <button class="tile tile-orange" data-page="recipes">🥗<span>Recetas</span></button>
+        <button class="tile tile-purple" data-page="plan">🗓️<span>Plan semanal</span></button>
       </div>
-
       <div id="quick-glucose" class="panel">
-        <h3>🩸 Registro rápido de glucosa</h3>
-
-        <div class="field-row">
-          <input id="glucoseValue" type="number" inputmode="numeric" min="20" max="600" placeholder="Valor en mg/dL" />
-          <select id="glucoseMoment">
-            <option value="En ayunas">En ayunas</option>
-            <option value="Antes de comer">Antes de comer</option>
-            <option value="Después de comer">Después de comer</option>
-            <option value="Antes de dormir">Antes de dormir</option>
-            <option value="Otro momento">Otro momento</option>
-          </select>
-        </div>
-
-        <textarea id="glucoseNote" rows="2" placeholder="Nota opcional: comida, síntoma, ejercicio, estrés..."></textarea>
-
-        <div class="row-actions">
-          <button id="saveGlucoseBtn" class="btn btn-primary">Guardar registro</button>
-          <button id="closeGlucoseBtn" class="btn btn-ghost">Cerrar</button>
-        </div>
+        <h3>Registro rápido</h3>
+        <div class="field-row"><input id="homeGlucoseValue" type="number" inputmode="numeric" min="20" max="600" placeholder="Glucosa mg/dL" /><select id="homeGlucoseContext"><option>Ayuno</option><option>Antes de comer</option><option>Después de comer</option><option>Antes de dormir</option><option>Otro</option></select></div>
+        <div class="row-actions"><button id="homeSaveGlucose" class="btn btn-primary">Guardar</button><button class="btn btn-ghost" data-close-panel="quick-glucose">Cerrar</button></div>
       </div>
-
-      <div class="card">
-        <div class="card-head">
-          <h3>💧 Agua de hoy</h3>
-          <span id="waterLabel" class="badge ok">0/8</span>
-        </div>
-
-        <div class="water-row" id="waterRow"></div>
-        <p class="muted small">Toca los vasos para marcar tu avance diario.</p>
-      </div>
-
-      <div class="card">
-        <h3>✅ Checklist de autocuidado</h3>
-        <ul class="clean-list" id="dailyChecklist">
-          <li class="check-item">
-            <label><input type="checkbox" data-check="medicacion" /> Tomé mi medicación</label>
-          </li>
-          <li class="check-item">
-            <label><input type="checkbox" data-check="glucosa" /> Medí mi glucosa</label>
-          </li>
-          <li class="check-item">
-            <label><input type="checkbox" data-check="agua" /> Bebí suficiente agua</label>
-          </li>
-          <li class="check-item">
-            <label><input type="checkbox" data-check="movimiento" /> Me moví al menos 10 minutos</label>
-          </li>
-          <li class="check-item">
-            <label><input type="checkbox" data-check="pies" /> Revisé mis pies</label>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card emergency">
-        <h3>🚨 Protocolo de hipoglucemia</h3>
-        <p>Si tienes temblor, sudor frío, mareo, hambre intensa o glucosa menor a <strong>70 mg/dL</strong>:</p>
-        <ol class="protocol">
-          <li>Consume <strong>15 g</strong> de azúcar rápida.</li>
-          <li>Espera <strong>15 minutos</strong>.</li>
-          <li>Vuelve a medir.</li>
-          <li>Si sigue bajo, repite.</li>
-        </ol>
-        <button id="emergencyBtn" class="btn btn-danger btn-block">Abrir guía de emergencia</button>
-      </div>
+      <div class="card"><div class="card-head"><h3>💧 Agua de hoy</h3><span id="homeWaterLabel" class="badge ok">0/8</span></div><div id="homeWaterRow" class="water-row"></div><p class="muted small">Tocá los vasos para registrar tu hidratación.</p></div>
+      <div class="card"><h3>✅ Autocuidado de hoy</h3><ul id="homeChecklist" class="clean-list"></ul></div>
+      <div class="card"><h3>📈 Últimas glucosas</h3><div id="homeChart" class="chart"></div><div id="homeRecent" class="history-list"></div><button class="btn btn-outline btn-block" data-page="logs">Ver historial completo</button></div>
+      <div class="card emergency"><h3>🚨 Protocolo de emergencia</h3><p>Si tenés temblor, sudor frío, mareo, hambre intensa o glucosa menor a <strong>70 mg/dL</strong>, aplicá la regla del 15.</p><ol class="protocol"><li>Consumí 15 g de azúcar rápida.</li><li>Esperá 15 minutos.</li><li>Medí otra vez.</li><li>Si sigue bajo, repetí.</li></ol><button id="emergencyBtn" class="btn btn-danger btn-block">Abrir guía completa</button></div>
     </section>
 
-    <!-- REGISTROS -->
-    <section id="page-registros" class="page">
-      <div class="card">
-        <h2>📊 Historial de glucosa</h2>
-
-        <div class="metrics">
-          <div class="metric">
-            <span>Última</span>
-            <strong id="lastGlucose">--</strong>
-          </div>
-          <div class="metric">
-            <span>Promedio 7 días</span>
-            <strong id="avgGlucose">--</strong>
-          </div>
-          <div class="metric">
-            <span>En rango</span>
-            <strong id="rangeGlucose">--</strong>
-          </div>
-        </div>
-
-        <div class="chart" id="chart"></div>
-
-        <div id="glucoseHistory" class="history-list"></div>
-
-        <div class="row-actions">
-          <button class="btn btn-primary" data-open="quick-glucose">+ Nuevo registro</button>
-          <button id="clearGlucoseBtn" class="btn btn-danger-outline">Limpiar historial</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>🧠 Lectura rápida</h3>
-        <ul>
-          <li><strong>Menor a 70 mg/dL:</strong> posible hipoglucemia. Aplicar regla del 15.</li>
-          <li><strong>Entre 70 y 180 mg/dL:</strong> zona generalmente deseable según muchos planes, pero tu médico puede personalizarla.</li>
-          <li><strong>Mayor a 180 mg/dL:</strong> posible hiperglucemia. Revisa hidratación, comida, medicación y consulta si se repite.</li>
-        </ul>
-      </div>
+    <section id="page-recipes" class="page">
+      <div class="card"><h2> Recetario completo</h2><input id="recipeSearch" placeholder="Buscar receta, ingrediente o etiqueta..." /><div id="recipeChips" class="tabs-mini"><button class="mini-tab active" data-recipe-filter="all">Todas</button><button class="mini-tab" data-recipe-filter="fav">Favoritas</button><button class="mini-tab" data-recipe-filter="Desayuno">Desayuno</button><button class="mini-tab" data-recipe-filter="Almuerzo/Cena">Almuerzo/Cena</button><button class="mini-tab" data-recipe-filter="Colación">Colación</button><button class="mini-tab" data-recipe-filter="Bebidas">Bebidas</button><button class="mini-tab" data-recipe-filter="Postres">Postres</button><button class="mini-tab" data-recipe-filter="bajo">Bajo carb</button><button class="mini-tab" data-recipe-filter="veg">Vegetariano</button><button class="mini-tab" data-recipe-filter="rapido">Rápido</button></div><div id="recipeGrid" class="recipe-grid"></div></div>
     </section>
 
-    <!-- COMIDAS -->
-    <section id="page-comidas" class="page">
-      <div class="card">
-        <h2>🥗 Alimentación inteligente</h2>
-
-        <div class="tabs-mini">
-          <button class="mini-tab active" data-sub="sub-plato">Plato saludable</button>
-          <button class="mini-tab" data-sub="sub-recetas">Recetas</button>
-          <button class="mini-tab" data-sub="sub-fuera">Comer fuera</button>
-          <button class="mini-tab" data-sub="sub-colaciones">Colaciones</button>
-        </div>
-
-        <div id="sub-plato" class="sub active">
-          <h3>🍽️ Método del plato</h3>
-          <p>Una guía visual sencilla para armado de comidas principales:</p>
-          <ul>
-            <li>🥬 <strong>1/2 plato:</strong> verduras y hortalizas sin almidón.</li>
-            <li>🍗 <strong>1/4 plato:</strong> proteína magra.</li>
-            <li>🍚 <strong>1/4 plato:</strong> carbohidrato integral o legumbre.</li>
-            <li>💧 Acompaña con agua, infusión o mate sin azúcar.</li>
-          </ul>
-        </div>
-
-        <div id="sub-recetas" class="sub">
-          <h3>📖 Ideas de recetas</h3>
-          <ul>
-            <li><strong>Omelette verde:</strong> huevo, espinaca, champiñones y aceitunas.</li>
-            <li><strong>Ensalada completa:</strong> leafy greens, tomate, pepinte, pollo y aceite de oliva.</li>
-            <li><strong>Lentejas caseras:</strong> con zanahoria, calabaza, cebolla y especias.</li>
-            <li><strong>Yogur con semillas:</strong> yogur natural sin azúcar, chía, linaza y canela.</li>
-          </ul>
-        </div>
-
-        <div id="sub-fuera" class="sub">
-          <h3>🍔 Comer fuera de casa</h3>
-          <ul>
-            <li>Pide salsas y aderezos aparte.</li>
-            <li>Elige plancha, horno, vapor o parrilla.</li>
-            <li>Reemplaza frituras por ensalada o vegetales.</li>
-            <li>Evita bebidas azucaradas; pide agua o soda sin azúcar.</li>
-          </ul>
-        </div>
-
-        <div id="sub-colaciones" class="sub">
-          <h3>🍎 Colaciones prácticas</h3>
-          <ul>
-            <li>Un puñado pequeño de frutos secos sin sal.</li>
-            <li>Yogur natural sin azúcar.</li>
-            <li>Zanahoria, apio o pepino con hummus.</li>
-            <li>Una fruta entera, preferiblemente con cáscara si aplica.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>🛒 Lista de compras</h3>
-        <div class="row-actions">
-          <input id="shoppingInput" placeholder="Ej: espinaca, pollo, lentejas..." />
-          <button id="addShoppingBtn" class="btn btn-primary">Agregar</button>
-        </div>
-        <ul id="shoppingList" class="clean-list"></ul>
-      </div>
+    <section id="page-plan" class="page">
+      <div class="card"><h2>🗓️ Plan de comidas</h2><div class="field-row"><select id="planDaySelect"></select><button id="goRecipes" class="btn btn-outline">Buscar recetas</button></div><div id="planList" class="plan-list"></div><div class="row-actions" style="margin-top:12px"><button id="generateShopping" class="btn btn-primary">Generar lista semanal</button><button id="clearPlanDay" class="btn btn-ghost">Limpiar día</button><button id="clearPlanWeek" class="btn btn-danger-outline">Limpiar semana</button></div></div>
+      <div class="card"><h3>🛒 Lista de compras</h3><div class="row-actions"><input id="manualShopping" placeholder="Agregar producto manual..." /><button id="addManualShopping" class="btn btn-primary">Agregar</button></div><ul id="shoppingList" class="clean-list"></ul></div>
     </section>
 
-    <!-- BIENESTAR -->
-    <section id="page-bienestar" class="page">
-      <div class="card">
-        <h2>🧘 Bienestar y hábitos</h2>
-
-        <div class="accordion">
-          <button class="acc-btn" data-acc="acc-stress">Estrés y glucosa</button>
-          <div id="acc-stress" class="acc-panel">
-            <p>El estrés puede elevar la glucosa por hormonas como cortisol y adrenalina.</p>
-            <ul>
-              <li>Respiración 4-7-8: inhala 4 seg, sostiene 7 seg, exhala 8 seg.</li>
-              <li>Camina 10 minutos cuando sientas tensión.</li>
-              <li>Escribe 3 cosas que puedes controlar hoy.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="acc-exercise">Movimiento seguro</button>
-          <div id="acc-exercise" class="acc-panel">
-            <ul>
-              <li>Caminata posterior a comidas: 10 a 15 minutos.</li>
-              <li>Fuerza ligera 2 o 3 veces por semana.</li>
-              <li>Estiramientos suaves al despertar.</li>
-              <li>Si haces ejercicio intenso, controla tu glucosa antes y después.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="acc-sleep">Sueño y descanso</button>
-          <div id="acc-sleep" class="acc-panel">
-            <ul>
-              <li>Intenta dormir entre 7 y 8 horas.</li>
-              <li>Mantén horarios regulares.</li>
-              <li>Evita pantallas al menos 30 a 60 minutos antes de dormir.</li>
-              <li>Reduce cafeína tardía si te afecta el sueño.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="acc-emotional">Salud emocional</button>
-          <div id="acc-emotional" class="acc-panel">
-            <p>El cansancio por cuidar la diabetes es real. No estás solo.</p>
-            <ul>
-              <li>Habla con tu equipo de salud si sientes ansiedad o agotamiento.</li>
-              <li>Un valor alto no es un fracaso; es información para ajustar.</li>
-              <li>Celebra pequeños avances: agua, caminata, medicación, registro.</li>
-            </ul>
-          </div>
-        </div>
+    <section id="page-logs" class="page">
+      <div class="card"><h2>📊 Registros de salud</h2><div class="tabs-mini" id="metricTabs"><button class="mini-tab active" data-metric="glucosa">Glucosa</button><button class="mini-tab" data-metric="presion">Presión</button><button class="mini-tab" data-metric="peso">Peso</button><button class="mini-tab" data-metric="hba1c">HbA1c</button></div>
+        <h3 id="logFormTitle">Registrar glucosa</h3><div class="field-row"><div><input id="logValue" placeholder="Ej: 110" /><small id="logUnit" class="muted">mg/dL</small></div><select id="logContext"></select></div><textarea id="logNote" rows="2" placeholder="Nota opcional: comida, síntoma, ejercicio, estrés..."></textarea><div class="row-actions"><button id="saveLogBtn" class="btn btn-primary">Guardar registro</button><button id="clearMetric" class="btn btn-danger-outline">Borrar este historial</button></div>
+        <div class="metrics"><div class="metric"><span>Último</span><strong id="logLast">--</strong></div><div class="metric"><span>Promedio</span><strong id="logAvg">--</strong></div><div class="metric"><span>Registros</span><strong id="logCount">0</strong></div><div class="metric"><span>En rango</span><strong id="logRange">--</strong></div></div>
+        <div id="logChart" class="chart"></div><div id="logHistory" class="history-list"></div>
+        <div class="row-actions"><button id="exportCsv" class="btn btn-outline">Exportar CSV</button><button id="printDiary" class="btn btn-primary">Imprimir informe</button></div>
       </div>
-
-      <div class="card">
-        <h3>💊 Medicación de hoy</h3>
-        <div class="row-actions">
-          <input id="medInput" placeholder="Ej: Metformina 850 mg" />
-          <button id="addMedBtn" class="btn btn-primary">Agregar</button>
-        </div>
-        <ul id="medList" class="med-list"></ul>
-      </div>
-
-      <div class="card">
-        <h3>🏃 Actividad física de hoy</h3>
-        <div class="chips" id="activityChips">
-          <button class="chip" data-activity="Caminata 10 min">Caminata 10 min</button>
-          <button class="chip" data-activity="Caminata 20 min">Caminata 20 min</button>
-          <button class="chip" data-activity="Caminata 30 min">Caminata 30 min</button>
-          <button class="chip" data-activity="Estiramientos">Estiramientos</button>
-          <button class="chip" data-activity="Fuerza ligera">Fuerza ligera</button>
-          <button class="chip" data-activity="Baile">Baile</button>
-        </div>
-        <p id="activityText" class="muted small">Registra tu movimiento de hoy.</p>
-      </div>
+      <div class="card"><h3>🧠 Lectura rápida</h3><ul><li><strong>Menor a 70 mg/dL:</strong> posible hipoglucemia. Aplicar regla del 15.</li><li><strong>Entre 70 y 180 mg/dL:</strong> zona generalmente deseable según muchos planes, pero tu médico puede personalizarla.</li><li><strong>Mayor a 180 mg/dL:</strong> posible hiperglucemia. Revisá hidratación, comida, medicación y consultá si se repite.</li></ul></div>
     </section>
 
-    <!-- EDUCACIÓN -->
-    <section id="page-educacion" class="page">
-      <div class="card">
-        <h2>💡 Educación y guías</h2>
-
-        <div class="accordion">
-          <button class="acc-btn" data-acc="edu-mitos">Mitos y realidades</button>
-          <div id="edu-mitos" class="acc-panel">
-            <ul>
-              <li><strong>Mito:</strong> “No puedo comer frutas.”<br><strong>Realidad:</strong> sí puedes, con porción adecuada y preferiblemente enteras.</li>
-              <li><strong>Mito:</strong> “La diabetes tipo 2 es solo por comer azúcar.”<br><strong>Realidad:</strong> es multifactorial: genética, peso, actividad, edad, hábitos y otros factores.</li>
-              <li><strong>Mito:</strong> “Si me siento bien, no necesito medirme.”<br><strong>Realidad:</strong> la glucosa puede estar alterada sin síntomas evidentes.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="edu-sick">Días de enfermedad</button>
-          <div id="edu-sick" class="acc-panel">
-            <ul>
-              <li>Mídete con más frecuencia, por ejemplo cada 4 horas si tu equipo lo indica.</li>
-              <li>Mantén hidratación.</li>
-              <li>No suspendas insulina ni medicación sin consultar.</li>
-              <li>Consulta si hay vómitos, fiebre alta, glucosa muy elevada o dificultad para comer.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="edu-travel">Kit de viaje</button>
-          <div id="edu-travel" class="acc-panel">
-            <ul>
-              <li>Glucómetro, tiras y lancetas en cantidad extra.</li>
-              <li>Medicamentos e insulina con cadena de frío si aplica.</li>
-              <li>Azúcar de acción rápida: caramelos, sobres de glucosa o jugo.</li>
-              <li>Documento o receta de tus medicamentos.</li>
-              <li>Contacto de emergencia y seguro médico.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="edu-feet">Cuidado de pies</button>
-          <div id="edu-feet" class="acc-panel">
-            <ul>
-              <li>Revisa tus pies diariamente.</li>
-              <li>Lava con agua tibia y seca bien, sobre todo entre los dedos.</li>
-              <li>Usa calzado cómodo y calcetines sin costuras molestas.</li>
-              <li>Nunca camines descalzo.</li>
-              <li>Consulta ante heridas, ampollas, enrojecimiento o dolor.</li>
-            </ul>
-          </div>
-
-          <button class="acc-btn" data-acc="edu-work">Trabajo y estudio</button>
-          <div id="edu-work" class="acc-panel">
-            <ul>
-              <li>Lleva colación y fuente de azúcar rápida.</li>
-              <li>Programa pausas activas.</li>
-              <li>Si usas insulina o medicación, organiza horarios discretos.</li>
-              <li>Educa a una persona de confianza sobre qué hacer ante una baja.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>📞 Recursos útiles</h3>
-        <p>Consulta siempre fuentes oficiales y a tu equipo de salud.</p>
-        <ul>
-          <li><a href="https://www.cdc.gov/diabetes/es/index.html" target="_blank" rel="noopener">CDC Diabetes en español</a></li>
-          <li><a href="https://www.niddk.nih.gov/health-information/informacion-de-la-salud/diabetes" target="_blank" rel="noopener">NIDDK Diabetes</a></li>
-          <li><a href="https://www.fad.org.ar/" target="_blank" rel="noopener">Federación Argentina de Diabetes</a></li>
-        </ul>
-      </div>
+    <section id="page-wellness" class="page">
+      <div class="card"><h2>🧘 Bienestar y hábitos</h2><h3>🫁 Respiración 4-7-8</h3><p class="muted small">Útil para bajar tensión antes de medirte, dormir o comer.</p><div id="breathStatus" class="badge ok">Listo para comenzar</div><div class="row-actions" style="margin-top:10px"><button id="startBreath" class="btn btn-primary">Iniciar</button><button id="stopBreath" class="btn btn-ghost">Detener</button></div></div>
+      <div class="card"><h3>💊 Medicación de hoy</h3><div class="row-actions"><input id="medInput" placeholder="Ej: Metformina 850 mg" /><button id="addMedBtn" class="btn btn-primary">Agregar</button></div><ul id="medList" class="med-list"></ul></div>
+      <div class="card"><h3>🏃 Actividad de hoy</h3><div class="chips" id="activityChips"><button class="chip" data-activity="Caminata 10 min">Caminata 10 min</button><button class="chip" data-activity="Caminata 20 min">Caminata 20 min</button><button class="chip" data-activity="Caminata 30 min">Caminata 30 min</button><button class="chip" data-activity="Estiramientos">Estiramientos</button><button class="chip" data-activity="Fuerza ligera">Fuerza ligera</button><button class="chip" data-activity="Baile">Baile</button></div><p id="activityText" class="muted small">Registra tu movimiento de hoy.</p></div>
+      <div class="card"><h3>😴 Sueño</h3><div class="field-row"><input id="sleepHours" type="number" min="0" max="14" step="0.5" placeholder="Horas dormidas" /><select id="sleepQuality"><option value="">Calidad del sueño</option><option value="Muy mala">Muy mala</option><option value="Regular">Regular</option><option value="Buena">Buena</option><option value="Muy buena">Muy buena</option></select></div><button id="saveSleepBtn" class="btn btn-primary btn-block">Guardar sueño</button><p id="sleepText" class="muted small" style="margin-top:10px">Sin registro de sueño hoy.</p></div>
+      <div class="card"><h3>🏋️ Rutinas seguras</h3><div id="exerciseList"></div></div>
+      <div class="card"><h3>🫂 Salud emocional</h3><ul><li>El cansancio por cuidar la diabetes es real.</li><li>Un valor alto no es un fracaso; es información para ajustar.</li><li>Celebrá pequeños avances: agua, caminata, medicación, registro.</li><li>Si sentís ansiedad, tristeza persistente o agotamiento, consultá a tu equipo de salud.</li></ul></div>
     </section>
 
-    <!-- AJUSTES -->
-    <section id="page-ajustes" class="page">
-      <div class="card premium">
-        <h2>👑 Versión Pro</h2>
-        <p>Informe PDF para el médico, recordatorios con alarma, sincronización en la nube, plan familiar y seguimiento avanzado.</p>
-        <button class="btn btn-block" id="premiumBtn">Quiero la versión Pro</button>
-      </div>
+    <section id="page-guides" class="page">
+      <div class="card"><h2>💡 Guías y educación</h2><input id="guideSearch" placeholder="Buscar guía: pies, viaje, estrés, mitos..." /><div id="guideList" class="accordion"></div></div>
+    </section>
 
-      <div class="card">
-        <h2>⚙️ Ajustes</h2>
-
-        <div class="setting-row">
-          <div class="setting-info">
-            <strong>Apariencia</strong>
-            <small>Cambia entre modo día y modo noche.</small>
-          </div>
-          <div class="segmented">
-            <button id="setDay">Día</button>
-            <button id="setNight">Noche</button>
-          </div>
-        </div>
-
-        <div class="setting-row">
-          <div class="setting-info">
-            <strong>Exportar datos</strong>
-            <small>Descarga un respaldo en formato JSON.</small>
-          </div>
-          <button id="exportBtn" class="btn btn-outline">Exportar</button>
-        </div>
-
-        <div class="setting-row">
-          <div class="setting-info">
-            <strong>Borrar datos</strong>
-            <small>Elimina toda la información guardada en este dispositivo.</small>
-          </div>
-          <button id="resetBtn" class="btn btn-danger-outline">Borrar</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>ℹ️ Acerca de Diabetes sin miedo</h3>
-        <p>
-          Esta aplicación busca acompañar a personas con diabetes o prediabetes mediante registro, educación y organización de hábitos.
-          No reemplaza consulta médica ni tratamiento profesional.
-        </p>
-        <div class="notice">
-          Ante síntomas graves, confusión, desmayo, dificultad para respirar o glucosa extremadamente alterada, busca ayuda médica inmediata.
-        </div>
-      </div>
+    <section id="page-settings" class="page">
+      <div class="card premium"><h2>👑 Versión Pro</h2><p>Informe PDF avanzado, sincronización en la nube, recordatorios reales, plan familiar y seguimiento profesional.</p><button id="premiumBtn" class="btn btn-block">Quiero la versión Pro</button></div>
+      <div class="card"><h2>⚙️ Mi perfil</h2><div class="field-row"><input id="settingsName" placeholder="Nombre" /><select id="settingsType"><option>No especificado</option><option>Tipo 1</option><option>Tipo 2</option><option>Prediabetes</option><option>Gestacional</option><option>Otro</option></select></div><div class="field-row"><input id="targetLow" type="number" min="40" max="140" placeholder="Rango bajo" /><input id="targetHigh" type="number" min="100" max="300" placeholder="Rango alto" /></div><button id="saveProfileBtn" class="btn btn-primary btn-block">Guardar perfil</button></div>
+      <div class="card"><h2>🌓 Apariencia</h2><div class="setting-row"><div class="setting-info"><strong>Modo día/noche</strong><small>Cambiá la apariencia de la app.</small></div><div class="segmented"><button id="setDay">Día</button><button id="setNight">Noche</button></div></div></div>
+      <div class="card"><h2>🔔 Recordatorios suaves</h2><div class="setting-row"><div class="setting-info"><strong>Activar avisos mientras la app esté abierta</strong><small>Recordatorios de agua, movimiento o control. No reemplazan alarmas médicas.</small></div><input id="reminderToggle" type="checkbox" style="width:24px;height:24px" /></div></div>
+      <div class="card"><h2>💾 Datos</h2><div class="row-actions"><button id="exportJson" class="btn btn-outline">Exportar copia JSON</button><label class="btn btn-outline" for="importFile" style="cursor:pointer">Importar copia<input id="importFile" type="file" accept="application/json" class="hide" /></label><button id="installBtn2" class="btn btn-primary hide">Instalar app</button><button id="resetApp" class="btn btn-danger-outline">Borrar todo</button></div></div>
+      <div class="card"><h3>ℹ️ Acerca de Diabetes sin miedo</h3><p>Aplicación para acompañar registro, educación y organización de hábitos. No reemplaza consulta médica ni tratamiento profesional.</p><div class="notice">Ante síntomas graves, confusión, desmayo, dificultad para respirar o glucosa extremadamente alterada, buscá ayuda médica inmediata.</div></div>
     </section>
   </main>
 
-  <!-- NAV -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-target="page-inicio">
-      <span>🏠</span>
-      <small>Inicio</small>
-    </button>
-    <button class="nav-btn" data-target="page-registros">
-      <span>📊</span>
-      <small>Registros</small>
-    </button>
-    <button class="nav-btn" data-target="page-comidas">
-      <span>🥗</span>
-      <small>Comidas</small>
-    </button>
-    <button class="nav-btn" data-target="page-bienestar">
-      <span>🧘</span>
-      <small>Bienestar</small>
-    </button>
-    <button class="nav-btn" data-target="page-educacion">
-      <span>💡</span>
-      <small>Guías</small>
-    </button>
-    <button class="nav-btn" data-target="page-ajustes">
-      <span>⚙️</span>
-      <small>Ajustes</small>
-    </button>
+    <button class="nav-btn active" data-page="home"><span>🏠</span><small>Inicio</small></button>
+    <button class="nav-btn" data-page="recipes"><span>🥗</span><small>Recetas</small></button>
+    <button class="nav-btn" data-page="plan"><span>🗓️</span><small>Plan</small></button>
+    <button class="nav-btn" data-page="logs"><span>📊</span><small>Registros</small></button>
+    <button class="nav-btn" data-page="wellness"><span>🧘</span><small>Bienestar</small></button>
+    <button class="nav-btn" data-page="guides"><span>💡</span><small>Guías</small></button>
+    <button class="nav-btn" data-page="settings"><span>⚙️</span><small>Ajustes</small></button>
   </nav>
 
   <div id="toast" class="toast"></div>
-
-  <div id="modal" class="modal hidden">
-    <div class="modal-card">
-      <h3 id="modalTitle"></h3>
-      <div id="modalBody"></div>
-      <button id="modalClose" class="btn btn-primary btn-block">Cerrar</button>
-    </div>
-  </div>
+  <div id="modal" class="modal hidden"><div class="modal-card"><h3 id="modalTitle"></h3><div id="modalBody"></div><button id="modalClose" class="btn btn-primary btn-block">Cerrar</button></div></div>
 
   <script>
-    (function () {
-      "use strict";
-
-      const $ = (selector, container = document) => container.querySelector(selector);
-      const $$ = (selector, container = document) => Array.from(container.querySelectorAll(selector));
-
-      const KEYS = {
-        theme: "dsm_theme",
-        glucose: "dsm_glucose",
-        water: "dsm_water",
-        meds: "dsm_meds",
-        shopping: "dsm_shopping",
-        activity: "dsm_activity",
-        checklist: "dsm_checklist",
-        streak: "dsm_streak"
-      };
-
-      const store = {
-        get(key, fallback) {
-          try {
-            const raw = localStorage.getItem(key);
-            if (raw === null) return fallback;
-            return JSON.parse(raw);
-          } catch (_) {
-            return fallback;
-          }
-        },
-        set(key, value) {
-          try {
-            localStorage.setItem(key, JSON.stringify(value));
-          } catch (_) {}
-        },
-        remove(key) {
-          try {
-            localStorage.removeItem(key);
-          } catch (_) {}
-        }
-      };
-
-      function todayKey() {
-        return new Date().toISOString().slice(0, 10);
-      }
-
-      function yesterdayKey() {
-        return new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-      }
-
-      function escapeHtml(value) {
-        return String(value || "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      }
-
-      let toastTimer = null;
-      function toast(message) {
-        const el = $("#toast");
-        if (!el) return;
-        el.textContent = message;
-        el.classList.add("show");
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
-      }
-
-      function openModal(title, bodyHtml) {
-        $("#modalTitle").textContent = title;
-        $("#modalBody").innerHTML = bodyHtml;
-        $("#modal").classList.remove("hidden");
-      }
-
-      function closeModal() {
-        $("#modal").classList.add("hidden");
-      }
-
-      $("#modalClose").addEventListener("click", closeModal);
-      $("#modal").addEventListener("click", (event) => {
-        if (event.target.id === "modal") closeModal();
-      });
-
-      // THEME
-      function setTheme(mode) {
-        document.documentElement.setAttribute("data-theme", mode);
-        store.set(KEYS.theme, mode);
-
-        $("#dayBtn").classList.toggle("active", mode === "light");
-        $("#nightBtn").classList.toggle("active", mode === "dark");
-        $("#setDay").classList.toggle("active", mode === "light");
-        $("#setNight").classList.toggle("active", mode === "dark");
-
-        const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", mode === "dark" ? "#0b1220" : "#0ea5e9");
-      }
-
-      setTheme(store.get(KEYS.theme, "light"));
-
-      $("#dayBtn").addEventListener("click", () => setTheme("light"));
-      $("#nightBtn").addEventListener("click", () => setTheme("dark"));
-      $("#setDay").addEventListener("click", () => setTheme("light"));
-      $("#setNight").addEventListener("click", () => setTheme("dark"));
-
-      // SPLASH
-      const splash = $("#splash");
-      function hideSplash() {
-        if (!splash || splash.classList.contains("hide")) return;
-        splash.classList.add("hide");
-        setTimeout(() => {
-          if (splash.parentNode) splash.parentNode.removeChild(splash);
-        }, 500);
-      }
-
-      $("#enterApp").addEventListener("click", hideSplash);
-
-      // NAVIGATION
-      function switchPage(pageId) {
-        $$(".page").forEach((page) => page.classList.toggle("active", page.id === pageId));
-        $$(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.target === pageId));
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      $$(".nav-btn").forEach((btn) => {
-        btn.addEventListener("click", () => switchPage(btn.dataset.target));
-      });
-
-      $$("[data-target]").forEach((el) => {
-        if (el.classList.contains("nav-btn")) return;
-        el.addEventListener("click", () => switchPage(el.dataset.target));
-      });
-
-      function togglePanel(panelId, forceOpen) {
-        const panel = document.getElementById(panelId);
-        if (!panel) return;
-        const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !panel.classList.contains("open");
-        panel.classList.toggle("open", shouldOpen);
-        if (shouldOpen) {
-          setTimeout(() => panel.scrollIntoView({ behavior: "smooth", block: "nearest" }), 80);
-        }
-      }
-
-      $$("[data-open]").forEach((btn) => {
-        btn.addEventListener("click", () => togglePanel(btn.dataset.open));
-      });
-
-      $("#closeGlucoseBtn").addEventListener("click", () => togglePanel("quick-glucose", false));
-
-      // MINI TABS
-      $$(".mini-tab").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const card = btn.closest(".card");
-          const subId = btn.dataset.sub;
-          $$(".mini-tab", card).forEach((b) => b.classList.toggle("active", b === btn));
-          $$(".sub", card).forEach((s) => s.classList.toggle("active", s.id === subId));
-        });
-      });
-
-      // ACCORDIONS
-      $$(".acc-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const panel = document.getElementById(btn.dataset.acc);
-          if (!panel) return;
-          const isOpen = panel.classList.contains("open");
-          btn.classList.toggle("open", !isOpen);
-          panel.classList.toggle("open", !isOpen);
-        });
-      });
-
-      // STREAK
-      function bumpStreak() {
-        const data = store.get(KEYS.streak, { last: "", count: 0 });
-        const today = todayKey();
-        if (data.last === today) return;
-
-        data.count = data.last === yesterdayKey() ? (Number(data.count) || 0) + 1 : 1;
-        data.last = today;
-        store.set(KEYS.streak, data);
-        updateDashboard();
-      }
-
-      // GLUCOSE
-      function getGlucoseLogs() {
-        return store.get(KEYS.glucose, []);
-      }
-
-      function glucoseStatus(value) {
-        const num = Number(value);
-        if (num < 70) return { label: "Bajo", cls: "low" };
-        if (num <= 180) return { label: "Rango", cls: "ok" };
-        return { label: "Alto", cls: "high" };
-      }
-
-      function saveGlucose() {
-        const raw = $("#glucoseValue").value.trim();
-        const value = Number(raw);
-
-        if (!raw || Number.isNaN(value)) {
-          toast("Ingresa un valor de glucosa.");
-          return;
-        }
-
-        if (value < 20 || value > 600) {
-          toast("Usa un valor realista entre 20 y 600 mg/dL.");
-          return;
-        }
-
-        const entry = {
-          id: Date.now(),
-          value,
-          moment: $("#glucoseMoment").value,
-          note: $("#glucoseNote").value.trim(),
-          date: new Date().toISOString()
-        };
-
-        const logs = getGlucoseLogs();
-        logs.unshift(entry);
-        store.set(KEYS.glucose, logs.slice(0, 200));
-
-        $("#glucoseValue").value = "";
-        $("#glucoseNote").value = "";
-
-        togglePanel("quick-glucose", false);
-        renderGlucose();
-        updateDashboard();
-        bumpStreak();
-        toast("Registro guardado ✅");
-      }
-
-      function renderGlucose() {
-        const logs = getGlucoseLogs();
-        const history = $("#glucoseHistory");
-        const chart = $("#chart");
-
-        if (!logs.length) {
-          history.innerHTML = '<p class="muted small">Todavía no hay registros. Empieza anotando tu primera medición.</p>';
-          chart.innerHTML = "";
-          $("#lastGlucose").textContent = "--";
-          $("#avgGlucose").textContent = "--";
-          $("#rangeGlucose").textContent = "--";
-          return;
-        }
-
-        history.innerHTML = logs.slice(0, 12).map((log) => {
-          const st = glucoseStatus(log.value);
-          const d = new Date(log.date);
-          const dateStr = d.toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) +
-            " · " +
-            d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
-
-          return `
-            <div class="history-item ${st.cls}">
-              <div>
-                <strong>${escapeHtml(log.value)} mg/dL</strong>
-                <div class="muted small">${escapeHtml(dateStr)} · ${escapeHtml(log.moment)}</div>
-                ${log.note ? `<div class="small">${escapeHtml(log.note)}</div>` : ""}
-              </div>
-              <span class="badge ${st.cls}">${st.label}</span>
-            </div>
-          `;
-        }).join("");
-
-        const now = Date.now();
-        const recent = logs.filter((log) => now - new Date(log.date).getTime() <= 7 * 86400000);
-        const avg = recent.length ? Math.round(recent.reduce((sum, item) => sum + item.value, 0) / recent.length) : 0;
-        const inRange = recent.length
-          ? Math.round((recent.filter((item) => item.value >= 70 && item.value <= 180).length / recent.length) * 100)
-          : 0;
-
-        $("#lastGlucose").textContent = `${logs[0].value} mg/dL`;
-        $("#avgGlucose").textContent = avg ? `${avg} mg/dL` : "--";
-        $("#rangeGlucose").textContent = recent.length ? `${inRange}%` : "--";
-
-        const chartData = logs.slice(0, 10).reverse();
-        const max = Math.max(250, ...chartData.map((item) => item.value));
-
-        chart.innerHTML = chartData.map((item) => {
-          const st = glucoseStatus(item.value);
-          const height = Math.max(12, Math.min(100, Math.round((item.value / max) * 100)));
-          return `<div class="bar ${st.cls}" style="height:${height}%" title="${item.value} mg/dL"></div>`;
-        }).join("");
-      }
-
-      $("#saveGlucoseBtn").addEventListener("click", saveGlucose);
-
-      $("#clearGlucoseBtn").addEventListener("click", () => {
-        if (!confirm("¿Seguro que quieres borrar el historial de glucosa?")) return;
-        store.set(KEYS.glucose, []);
-        renderGlucose();
-        updateDashboard();
-        toast("Historial borrado");
-      });
-
-      // WATER
-      function getWaterState() {
-        const raw = store.get(KEYS.water, { date: todayKey(), count: 0 });
-        if (raw.date !== todayKey()) {
-          return { date: todayKey(), count: 0 };
-        }
-        return raw;
-      }
-
-      function renderWater() {
-        const state = getWaterState();
-        const row = $("#waterRow");
-        row.innerHTML = "";
-
-        for (let i = 1; i <= 8; i++) {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "water-glass" + (i <= state.count ? " filled" : "");
-          btn.textContent = "💧";
-          btn.setAttribute("aria-label", "Vaso " + i);
-          btn.addEventListener("click", () => {
-            const current = getWaterState();
-            current.count = i === current.count ? i - 1 : i;
-            store.set(KEYS.water, current);
-            renderWater();
-            updateDashboard();
-            if (current.count > 0) bumpStreak();
-          });
-          row.appendChild(btn);
-        }
-
-        const label = $("#waterLabel");
-        label.textContent = `${state.count}/8`;
-        label.className = "badge " + (state.count >= 8 ? "ok" : state.count >= 4 ? "low" : "high");
-      }
-
-      // MEDS
-      function getMedsState() {
-        const raw = store.get(KEYS.meds, { date: todayKey(), items: [] });
-        if (raw.date !== todayKey()) {
-          return {
-            date: todayKey(),
-            items: (raw.items || []).map((item) => ({ ...item, done: false }))
-          };
-        }
-        return raw;
-      }
-
-      function renderMeds() {
-        const state = getMedsState();
-        const list = $("#medList");
-
-        if (!state.items.length) {
-          list.innerHTML = '<li class="muted small">Agrega tus medicamentos para marcarlos como tomados hoy.</li>';
-          updateDashboard();
-          return;
-        }
-
-        list.innerHTML = state.items.map((med) => `
-          <li class="med-item ${med.done ? "done" : ""}">
-            <label>
-              <input type="checkbox" data-med-toggle="${med.id}" ${med.done ? "checked" : ""} />
-              <span>${escapeHtml(med.name)}</span>
-            </label>
-            <button class="delete-btn" data-med-delete="${med.id}" title="Eliminar">✕</button>
-          </li>
-        `).join("");
-
-        updateDashboard();
-      }
-
-      $("#addMedBtn").addEventListener("click", () => {
-        const name = $("#medInput").value.trim();
-        if (!name) {
-          toast("Escribe el nombre del medicamento.");
-          return;
-        }
-
-        const state = getMedsState();
-        state.items.unshift({ id: Date.now(), name, done: false });
-        store.set(KEYS.meds, state);
-        $("#medInput").value = "";
-        renderMeds();
-        bumpStreak();
-        toast("Medicamento agregado");
-      });
-
-      $("#medList").addEventListener("change", (event) => {
-        const id = event.target.dataset.medToggle;
-        if (!id) return;
-
-        const state = getMedsState();
-        const item = state.items.find((med) => String(med.id) === String(id));
-        if (!item) return;
-
-        item.done = event.target.checked;
-        store.set(KEYS.meds, state);
-        renderMeds();
-        if (item.done) bumpStreak();
-      });
-
-      $("#medList").addEventListener("click", (event) => {
-        const id = event.target.dataset.medDelete;
-        if (!id) return;
-
-        const state = getMedsState();
-        state.items = state.items.filter((med) => String(med.id) !== String(id));
-        store.set(KEYS.meds, state);
-        renderMeds();
-      });
-
-      // ACTIVITY
-      function getActivityState() {
-        const raw = store.get(KEYS.activity, { date: todayKey(), items: [] });
-        return raw.date === todayKey() ? raw : { date: todayKey(), items: [] };
-      }
-
-      function renderActivity() {
-        const state = getActivityState();
-        $$("#activityChips .chip").forEach((chip) => {
-          chip.classList.toggle("active", state.items.includes(chip.dataset.activity));
-        });
-
-        $("#activityText").textContent = state.items.length
-          ? `Actividades registradas hoy: ${state.items.join(", ")}.`
-          : "Registra tu movimiento de hoy.";
-      }
-
-      $("#activityChips").addEventListener("click", (event) => {
-        const chip = event.target.closest(".chip");
-        if (!chip) return;
-
-        const state = getActivityState();
-        const value = chip.dataset.activity;
-
-        if (state.items.includes(value)) {
-          state.items = state.items.filter((item) => item !== value);
-        } else {
-          state.items.push(value);
-        }
-
-        store.set(KEYS.activity, state);
-        renderActivity();
-        if (state.items.length) bumpStreak();
-      });
-
-      // SHOPPING
-      function getShoppingList() {
-        return store.get(KEYS.shopping, []);
-      }
-
-      function renderShopping() {
-        const items = getShoppingList();
-        const list = $("#shoppingList");
-
-        if (!items.length) {
-          list.innerHTML = '<li class="muted small">Tu lista está vacía. Agrega alimentos saludables.</li>';
-          return;
-        }
-
-        list.innerHTML = items.map((item, index) => `
-          <li>
-            <span>${escapeHtml(item)}</span>
-            <button class="delete-btn" data-shop-delete="${index}" title="Eliminar">✕</button>
-          </li>
-        `).join("");
-      }
-
-      $("#addShoppingBtn").addEventListener("click", () => {
-        const value = $("#shoppingInput").value.trim();
-        if (!value) return;
-
-        const items = getShoppingList();
-        items.push(value);
-        store.set(KEYS.shopping, items);
-        $("#shoppingInput").value = "";
-        renderShopping();
-      });
-
-      $("#shoppingInput").addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          $("#addShoppingBtn").click();
-        }
-      });
-
-      $("#shoppingList").addEventListener("click", (event) => {
-        const index = event.target.dataset.shopDelete;
-        if (index === undefined) return;
-
-        const items = getShoppingList();
-        items.splice(Number(index), 1);
-        store.set(KEYS.shopping, items);
-        renderShopping();
-      });
-
-      // CHECKLIST
-      function getChecklistState() {
-        const raw = store.get(KEYS.checklist, { date: todayKey(), items: {} });
-        if (raw.date !== todayKey()) {
-          return { date: todayKey(), items: {} };
-        }
-        return raw;
-      }
-
-      function renderChecklist() {
-        const state = getChecklistState();
-        $$("#dailyChecklist input[type='checkbox']").forEach((box) => {
-          box.checked = Boolean(state.items[box.dataset.check]);
-        });
-      }
-
-      $("#dailyChecklist").addEventListener("change", (event) => {
-        const key = event.target.dataset.check;
-        if (!key) return;
-
-        const state = getChecklistState();
-        state.items[key] = event.target.checked;
-        store.set(KEYS.checklist, state);
-
-        if (event.target.checked) bumpStreak();
-        updateDashboard();
-      });
-
-      // DASHBOARD
-      function updateDashboard() {
-        const logs = getGlucoseLogs();
-        const water = getWaterState();
-        const meds = getMedsState();
-        const streak = store.get(KEYS.streak, { count: 0, last: "" });
-
-        const doneMeds = meds.items.filter((med) => med.done).length;
-        const totalMeds = meds.items.length;
-
-        let text = "Empieza registrando tu glucosa de hoy.";
-
-        if (logs.length) {
-          const st = glucoseStatus(logs[0].value);
-          text = `Última glucosa: ${logs[0].value} mg/dL · ${st.label}.`;
-        } else if (water.count > 0) {
-          text = `Vasos de agua hoy: ${water.count}/8. ¡Buen comienzo!`;
-        } else if (totalMeds > 0) {
-          text = `Medicación: ${doneMeds}/${totalMeds} marcada como tomada hoy.`;
-        }
-
-        $("#summaryText").textContent = text;
-        $("#streakBadge").textContent = `🔥 ${Number(streak.count) || 0} días`;
-      }
-
-      // EMERGENCY MODAL
-      $("#emergencyBtn").addEventListener("click", () => {
-        openModal(
-          "🚨 Guía de emergencia",
-          `
-            <p><strong>Si sospechas hipoglucemia</strong> (glucosa baja), puedes sentir:</p>
-            <ul>
-              <li>Temblor</li>
-              <li>Sudor frío</li>
-              <li>Mareo</li>
-              <li>Hambre intensa</li>
-              <li>Irritabilidad</li>
-              <li>Visión borrosa</li>
-            </ul>
-
-            <p><strong>Regla del 15:</strong></p>
-            <ol>
-              <li>Consume 15 g de carbohidrato de acción rápida.</li>
-              <li>Ejemplos: 3-4 caramelos duros, 1 sobre de glucosa, 1/2 vaso de jugo común o 1 cucharada de miel/azúcar disuelta.</li>
-              <li>Espera 15 minutos.</li>
-              <li>Vuelve a medir.</li>
-              <li>Si sigue bajo, repite.</li>
-            </ol>
-
-            <div class="notice">
-              Si hay confusión, desmayo, convulsión o no puede tragar, <strong>no des comida ni bebida</strong>. Busca ayuda médica inmediata.
-            </div>
-
-            <p><strong>Hiperglucemia persistente:</strong> si tienes glucosa muy alta, sed intensa, orina frecuente, náuseas, vómitos, aliento afrutado o dificultad para respirar, consulta urgentemente.</p>
-          `
-        );
-      });
-
-      // PREMIUM
-      $("#premiumBtn").addEventListener("click", () => {
-        openModal(
-          "👑 Diabetes sin miedo Pro",
-          `
-            <p>La versión Pro está pensada para usuarios que quieren un seguimiento más serio:</p>
-            <ul>
-              <li>Informe PDF listo para llevar al médico.</li>
-              <li>Gráficas por período.</li>
-              <li>Recordatorios de medicación con alarma.</li>
-              <li>Sincronización en la nube.</li>
-              <li>Perfil familiar o de cuidador.</li>
-              <li>Plan de comidas personalizado con nutricionista.</li>
-            </ul>
-            <div class="notice">
-              Esta es una demostración. Para venderla realmente, necesitarías backend, base de datos, autenticación, pagos y cumplimiento legal sanitario.
-            </div>
-          `
-        );
-      });
-
-      // EXPORT
-      $("#exportBtn").addEventListener("click", () => {
-        const payload = {
-          app: "Diabetes sin miedo",
-          exportedAt: new Date().toISOString(),
-          theme: document.documentElement.getAttribute("data-theme"),
-          glucose: getGlucoseLogs(),
-          water: getWaterState(),
-          meds: getMedsState(),
-          activity: getActivityState(),
-          shopping: getShoppingList(),
-          checklist: getChecklistState(),
-          streak: store.get(KEYS.streak, { count: 0, last: "" })
-        };
-
-        try {
-          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "diabetes-sin-miedo-datos.json";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(() => URL.revokeObjectURL(url), 1000);
-          toast("Datos exportados 📤");
-        } catch (_) {
-          toast("No se pudo exportar en este navegador.");
-        }
-      });
-
-      // RESET
-      $("#resetBtn").addEventListener("click", () => {
-        if (!confirm("¿Seguro que quieres borrar todos los datos guardados en este dispositivo?")) return;
-
-        Object.values(KEYS).forEach((key) => store.remove(key));
-        location.reload();
-      });
-
-      // OPTIONAL MANIFEST FOR PWA-LIKE INSTALL
-      try {
-        const svg =
-          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>" +
-          "<rect width='512' height='512' rx='96' fill='#0ea5e9'/>" +
-          "<circle cx='256' cy='256' r='145' fill='white' opacity='0.92'/>" +
-          "<text x='256' y='318' font-size='150' text-anchor='middle' fill='#0ea5e9' font-family='Arial'>DSM</text>" +
-          "</svg>";
-
-        const iconUrl = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-
-        const manifest = {
-          name: "Diabetes sin miedo",
-          short_name: "Diabetes sin miedo",
-          description: "Control de glucosa, hábitos, alimentación y bienestar.",
-          start_url: ".",
-          display: "standalone",
-          background_color: "#f3f7fb",
-          theme_color: "#0ea5e9",
-          icons: [
-            {
-              src: iconUrl,
-              sizes: "any",
-              type: "image/svg+xml",
-              purpose: "any maskable"
-            }
-          ]
-        };
-
-        const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
-        const link = document.createElement("link");
-        link.rel = "manifest";
-        link.href = URL.createObjectURL(blob);
-        document.head.appendChild(link);
-      } catch (_) {}
-
-      // INITIAL RENDER
-      renderWater();
-      renderGlucose();
-      renderMeds();
-      renderActivity();
+  (function(){
+    "use strict";
+    const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+    const DAYS=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+    const STATE_KEY="dsm_state_v4";
+    const todayKey=()=>new Date().toISOString().slice(0,10);
+    const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    const escapeHtml=v=>String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+
+    const RECIPES=[
+      {id:"r1",n:"Omelette verde",cat:"Desayuno",time:"15 min",serv:"1",tags:["bajo","rapido"],ing:["2 huevos","1 taza de espinaca","1/2 tomate picado","1 cdita de aceite de oliva","sal y pimienta"],steps:["Batir los huevos con sal y pimienta.","Calentar el aceite y sumar espinaca y tomate.","Verter el huevo y cocinar a fuego bajo 3-4 min.","Doblar y servir."],tip:"Acompañá con ensalada verde.",nut:{k:230,c:5,p:18,g:16}},
+      {id:"r2",n:"Huevos revueltos con champiñones",cat:"Desayuno",time:"12 min",serv:"1",tags:["bajo","rapido"],ing:["2 huevos","1 taza de champiñones","1 cdita de aceite","cebolla opcional"],steps:["Saltear champiñones y cebolla.","Agregar huevos batidos.","Revolver a fuego bajo hasta lograr textura cremosa."],tip:"Eviná fiambres procesados.",nut:{k:210,c:4,p:17,g:14}},
+      {id:"r3",n:"Bowl de yogur griego y frutos rojos",cat:"Desayuno",time:"5 min",serv:"1",tags:["rapido","veg"],ing:["1 yogur griego natural sin azúcar","1 cdita de chía","1/2 taza de frutos rojos","canela"],steps:["Mezclar yogur con chía.","Sumar frutos rojos y canela."],tip:"Los frutos rojos suelen tener menor impacto glucémico.",nut:{k:180,c:12,p:15,g:7}},
+      {id:"r4",n:"Avena overnight con manzana",cat:"Desayuno",time:"10 min + frío",serv:"1",tags:["veg"],ing:["3 cdas de avena","1/2 taza de leche descremada o vegetal","1 cdita de chía","1/2 manzana rallada","canela"],steps:["Mezclar avena, leche y chía.","Dejar en frío toda la noche.","Sumar manzana y canela al servir."],tip:"Controlá la porción de avena.",nut:{k:260,c:35,p:10,g:8}},
+      {id:"r5",n:"Tostada integral con palta y huevo",cat:"Desayuno",time:"10 min",serv:"1",tags:["rapido"],ing:["1 rebanada de pan integral","1/4 de palta","1 huevo","limón, sal y pimienta"],steps:["Tostar el pan.","Aplastar la palta con limón.","Cocinar el huevo y armar la tostada."],tip:"Preferí pan integral real, no tostadas ultraprocesadas.",nut:{k:250,c:22,p:12,g:14}},
+      {id:"r6",n:"Pancakes de avena y banana",cat:"Desayuno",time:"15 min",serv:"2",tags:["veg"],ing:["1 banana madura","1 huevo","3 cdas de avena","canela","1 pizca de polvo de hornear"],steps:["Licitar banana, huevo y avena.","Cocinar porciones en sartén antiadherente.","Dorar de ambos lados."],tip:"Sin azúcar agregada.",nut:{k:290,c:38,p:10,g:10}},
+      {id:"r7",n:"Smoothie verde de pepino y palta",cat:"Bebidas",time:"5 min",serv:"1",tags:["bajo","rapido","veg"],ing:["1 taza de espinaca","1/2 pepino","1/4 de palta","jugo de limón","agua o agua mineral"],steps:["Licitar todos los ingredientes.","Servir frío."],tip:"No reemplaza una comida completa.",nut:{k:120,c:10,p:3,g:8}},
+      {id:"r8",n:"Chia pudding con vainilla",cat:"Colación",time:"5 min + frío",serv:"1",tags:["veg","bajo"],ing:["1 cdita de chía","1/2 taza de leche vegetal sin azúcar","vainilla","frutos rojos"],steps:["Mezclar chía con leche y vainilla.","Dejar reposar en frío 2-4 horas.","Decorar con frutos rojos."],tip:"La chía aporta fibra.",nut:{k:160,c:12,p:6,g:9}},
+      {id:"r9",n:"Wrap de lechuga con pollo",cat:"Almuerzo/Cena",time:"15 min",serv:"1",tags:["bajo","rapido"],ing:["2 hojas de lechuga","pollo desmenuzado","tomate","palta","yogur natural"],steps:["Usar lechuga como base.","Sumar pollo y vegetales.","Aliñar con yogur natural."],tip:"Ideal para reducir pan.",nut:{k:220,c:10,p:20,g:11}},
+      {id:"r10",n:"Ensalada mediterránea de garbanzos",cat:"Almuerzo/Cena",time:"10 min",serv:"2",tags:["veg"],ing:["1/2 taza de garbanzos cocidos","pepino","tomate","cebolla morada","aceite de oliva","limón"],steps:["Cortar vegetales.","Mezclar con garbanzos.","Aliñar con aceite y limón."],tip:"Legumbres: buena fibra y proteína vegetal.",nut:{k:240,c:22,p:9,g:13}},
+      {id:"r11",n:"Lentejas guisadas con calabaza",cat:"Almuerzo/Cena",time:"35 min",serv:"3",tags:["veg"],ing:["1/2 taza de lentejas","calabaza","zanahoria","cebolla","especias"],steps:["Sofreír cebolla, zanahoria y calabaza.","Agregar lentejas y agua.","Cocinar hasta tierno."],tip:"Podés congelar porciones.",nut:{k:260,c:38,p:12,g:5}},
+      {id:"r12",n:"Pollo al horno con brócoli",cat:"Almuerzo/Cena",time:"30 min",serv:"1",tags:["bajo"],ing:["150 g de pechuga","brócoli","ajo","romero","aceite de oliva"],steps:["Condimentar el pollo.","Hornear 20-25 min.","Cocinar brócoli al vapor."],tip:"Proteína magra + verdura sin almidón.",nut:{k:280,c:12,p:34,g:11}},
+      {id:"r13",n:"Pescado al vapor con vegetales",cat:"Almuerzo/Cena",time:"25 min",serv:"1",tags:["bajo"],ing:["150 g de pescado blanco","zucchini","zanahoria","jengibre","salsa de soja baja en sodio"],steps:["Cocinar pescado y vegetales al vapor.","Aliñar con salsa baja en sodio y jengibre."],tip:"Cocción suave y sin fritura.",nut:{k:220,c:14,p:30,g:5}},
+      {id:"r14",n:"Salteado de tofu y verduras",cat:"Almuerzo/Cena",time:"20 min",serv:"2",tags:["veg","bajo"],ing:["150 g de tofu firme","pimientos","cebolla","ajonjolí","salsa de soja baja en sodio"],steps:["Dorar tofu en sartén.","Sumar vegetales y saltear.","Terminar con ajonjolí."],tip:"Tofu: opción vegetariana proteica.",nut:{k:230,c:16,p:18,g:12}},
+      {id:"r15",n:"Zoodles con salsa de tomate",cat:"Almuerzo/Cena",time:"18 min",serv:"1",tags:["bajo","veg"],ing:["1 calabaza en espirales","salsa de tomate casera","albahaca","queso rallado light"],steps:["Saltear zoodles 2-3 min.","Sumar salsa y albahaca.","Espolvorear queso."],tip:"Reemplaza pasta tradicional.",nut:{k:190,c:24,p:8,g:7}},
+      {id:"r16",n:"Empanadas de espinaca y ricotta al horno",cat:"Almuerzo/Cena",time:"35 min",serv:"4",tags:["veg"],ing:["masa para empanadas integral","espinaca","ricotta","huevo","cebolla"],steps:["Saltear espinaca y cebolla.","Mezclar con ricotta y huevo.","Armar y hornear hasta dorar."],tip:"Al horno reduce grasa frente a fritas.",nut:{k:250,c:26,p:11,g:11}},
+      {id:"r17",n:"Hamburguesa de pollo casera",cat:"Almuerzo/Cena",time:"25 min",serv:"2",tags:[],ing:["pechuga de pollo molida","avena","huevo","ensalada","pan integral opcional"],steps:["Mezclar pollo, avena y huevo.","Cocinar a la plancha.","Armar con ensalada."],tip:"Podés comerla sin pan para reducir carbohidratos.",nut:{k:270,c:18,p:28,g:10}},
+      {id:"r18",n:"Tacos de lechuga con carne magra",cat:"Almuerzo/Cena",time:"20 min",serv:"2",tags:["bajo"],ing:["carne molida magra","lechuga","tomate","cebolla","limón"],steps:["Cocinar carne con especias.","Usar hojas de lechuga como taco.","Sumar vegetales."],tip:"Crunchy sin fritura.",nut:{k:240,c:10,p:26,g:12}},
+      {id:"r19",n:"Curry de garbanzos y espinaca",cat:"Almuerzo/Cena",time:"30 min",serv:"3",tags:["veg"],ing:["garbanzos cocidos","espinaca","leche de coco light","curry","cebolla"],steps:["Sofreír cebolla con curry.","Agregar garbanzos y leche de coco.","Sumar espinaca al final."],tip:"Especias sin sal añadida.",nut:{k:280,c:28,p:11,g:13}},
+      {id:"r20",n:"Sopa de verduras con pollo",cat:"Almuerzo/Cena",time:"35 min",serv:"3",tags:[],ing:["pollo","zanahoria","apio","calabaza","cebolla","agua"],steps:["Cocinar pollo y vegetales.","Condimentar con hierbas.","Servir caliente."],tip:"Ideal para días de enfermedad si tu médico lo permite.",nut:{k:220,c:24,p:18,g:5}},
+      {id:"r21",n:"Berenjenas rellenas",cat:"Almuerzo/Cena",time:"40 min",serv:"2",tags:["bajo","veg"],ing:["berenjena","carne magra o lentejas","tomate","queso bajo grasa"],steps:["Ahuecar berenjenas.","Rellenar con mezcla cocida.","Hornear hasta dorar."],tip:"Berenejena aporta volumen y fibra.",nut:{k:230,c:16,p:22,g:10}},
+      {id:"r22",n:"Bowl de quinoa y salmón",cat:"Almuerzo/Cena",time:"25 min",serv:"1",tags:[],ing:["quinoa","salmón","espárragos","palta","limón"],steps:["Cocinar quinoa.","Sellado salmón a la plancha.","Armar bowl con vegetales."],tip:"Grasas buenas con control de porción.",nut:{k:340,c:30,p:24,g:14}},
+      {id:"r23",n:"Rollitos de jamón cocido y queso",cat:"Colación",time:"5 min",serv:"1",tags:["rapido","bajo"],ing:["jamón cocido natural","queso light","pepino","zanahoria"],steps:["Colocar queso y vegetales sobre el jamón.","Enrollar.","Servir con bastones de verdura."],tip:"Elegí fiambres de buena calidad y bajo sodio.",nut:{k:160,c:6,p:18,g:7}},
+      {id:"r24",n:"Hummus casero con vegetales",cat:"Colación",time:"10 min",serv:"4",tags:["veg","rapido"],ing:["garbanzos","tahini","limón","ajo","agua"],steps:["Licitar garbanzos con tahini y limón.","Ajustar textura con agua.","Servir con bastones de verdura."],tip:"Porción controlada: 2-3 cucharadas.",nut:{k:180,c:16,p:6,g:11}},
+      {id:"r25",n:"Yogur helado de frutillas",cat:"Postres",time:"5 min + frío",serv:"1",tags:["veg","rapido"],ing:["yogur griego natural","frutillas","edulcorante opcional"],steps:["Licitar yogur con frutillas.","Congelar 2-3 horas.","Mezclar una vez a mitad de tiempo."],tip:"Postre más ligero que helados industriales.",nut:{k:140,c:14,p:10,g:4}},
+      {id:"r26",n:"Gelatina light con frutos rojos",cat:"Postres",time:"10 min + frío",serv:"2",tags:["veg","rapido"],ing:["gelatina sin azúcar","agua","frutos rojos"],steps:["Preparar gelatina según indicado.","Verter en moldes con frutos rojos.","Enfriar hasta cuajar."],tip:"Revisá siempre el etiquetado.",nut:{k:80,c:2,p:1,g:0}},
+      {id:"r27",n:"Infusión de canela y manzanilla",cat:"Bebidas",time:"8 min",serv:"1",tags:["veg","rapido","bajo"],ing:["canela en rama","manzanilla","agua"],steps:["Calentar agua sin hervir fuerte.","Infusionar 5-8 min.","Colar y servir."],tip:"Sin azúcar agregada.",nut:{k:10,c:2,p:0,g:0}},
+      {id:"r28",n:"Agua saborizada con limón y menta",cat:"Bebidas",time:"5 min",serv:"1",tags:["veg","rapido","bajo"],ing:["agua","limón","pepino","menta"],steps:["Cortar frutas y hierbas.","Agregar al agua.","Dejar reposar 10 min."],tip:"Buena alternativa a bebidas azucaradas.",nut:{k:5,c:1,p:0,g:0}},
+      {id:"r29",n:"Café con canela y leche",cat:"Bebidas",time:"5 min",serv:"1",tags:["rapido"],ing:["café","canela","leche descremada o vegetal sin azúcar"],steps:["Preparar café.","Agregar canela y leche."],tip:"Evitá cremas azucaradas.",nut:{k:60,c:5,p:3,g:2}},
+      {id:"r30",n:"Budín de calabaza y avena",cat:"Postres",time:"45 min",serv:"6",tags:["veg"],ing:["calabaza cocida","avena","huevo","canela","edulcorante opcional"],steps:["Mezclar calabaza, avena y huevo.","Agregar canela y edulcorante.","Hornear en molde 30-35 min."],tip:"Porción pequeña: 1 fetta.",nut:{k:210,c:28,p:8,g:7}}
+    ];
+
+    const GUIDES=[
+      {id:"g1",t:"Entendiendo la diabetes",i:"📘",d:"La diabetes es una condición crónica que afecta la forma en que el cuerpo regula la glucosa.",b:["Tipo 1: el cuerpo produce poca o ninguna insulina.","Tipo 2: hay resistencia a la insulina y/o producción insuficiente.","Prediabetes: glucosa elevada pero no en rango diagnóstico de diabetes.","Gestacional: aparece durante el embarazo y requiere seguimiento.","El manejo incluye alimentación, movimiento, medicación si corresponde, control y educación."]},
+      {id:"g2",t:"Glucosa: rangos y señales",i:"🩸",d:"Los objetivos son individuales. Usá esta guía como referencia educativa.",b:["Ayuno frecuente: muchos planes apuntan a 80-130 mg/dL, pero tu médico puede ajustar.","Postcomida: suele evaluarse 1-2 horas después de comer.","Hipoglucemia: generalmente menor a 70 mg/dL o con síntomas.","Hiperglucemia: valores sostenidamente altos pueden requerir ajuste.","Anotá contexto: comida, ejercicio, estrés, enfermedad y medicación."]},
+      {id:"g3",t:"Método del plato",i:"🍽️",d:"Una forma simple de armar comidas sin contar todo constantemente.",b:["1/2 plato: verduras y hortalizas sin almidón.","1/4 plato: proteína magra.","1/4 plato: carbohidrato integral, legumbre o tubérculo.","Agregar grasa saludable en cantidad moderada.","Acompañar con agua, infusión o mate sin azúcar."]},
+      {id:"g4",t:"Carbohidratos inteligentes",i:"🌾",d:"No todos los carbohidratos impactan igual. Importan calidad, cantidad y contexto.",b:["Preferir enteros: frutas, legumbres, verduras, granos integrales.","Reducir harinas refinadas y ultraprocesados.","La fibra ayuda a mejorar saciedad y respuesta glucémica.","Leer etiquetas: azúcares totales, fibra y porción.","Combinar carbohidratos con proteína o grasa saludable puede moderar el pico."]},
+      {id:"g5",t:"Azúcar, edulcorantes y alcohol",i:"🍷",d:"El azúcar libre eleva glucosa rápido. El alcohol puede causar bajas tardías.",b:["Evitar bebidas azucaradas: gaseosas, jugos industriales, alcohol dulce.","Edulcorantes: pueden ayudar, pero no son licencia para exagerar.","Alcohol: nunca con el estómago vacío si tu médico te lo desaconseja.","Alcohol: puede provocar hipoglucemia varias horas después.","Consultar siempre por interacciones con medicación."]},
+      {id:"g6",t:"Actividad física segura",i:"🏃",d:"El movimiento ayuda a sensibilidad a insulina y bienestar general.",b:["Caminata postcomida de 10-15 minutos puede ser muy útil.","Fuerza ligera 2-3 veces por semana.","Estiramientos y equilibrio para prevención de caídas.","Si usás insulina, revisá glucosa antes y después del ejercicio.","Cuidar pies, hidratación y llevar azúcar rápida."]},
+      {id:"g7",t:"Estrés y sueño",i:"😴",d:"El estrés y el mal sueño pueden elevar la glucosa por hormonas como cortisol.",b:["Respiración 4-7-8: inhalar 4, sostener 7, exhalar 8.","Rutina de sueño: horarios regulares.","Evitar pantallas 30-60 minutos antes de dormir.","Reducir cafeína tardía si afecta tu descanso.","Pedir ayuda si el estrés es persistente."]},
+      {id:"g8",t:"Cuidado de pies",i:"🦶",d:"La neuropatía y la mala circulación pueden hacer que una herida pase desapercibida.",b:["Revisar pies diariamente.","Lavar con agua tibia y secar bien entre dedos.","No caminar descalzo.","Usar calzado cómodo y calcetines sin costuras molestas.","Consultar ante herida, ampolla, enrojecimiento, dolor o cambio de color."]},
+      {id:"g9",t:"Ojos, riñones y corazón",i:"🫀",d:"La diabetes aumenta riesgo de complicaciones vasculares y metabólicas.",b:["Fondo de ojo según indicación médica.","Control de función renal y albuminuria.","Presión arterial y colesterol dentro de objetivos individuales.","No fumar.","Consultar ante visión borrosa, hinchazón, dolor de pecho o falta de aire."]},
+      {id:"g10",t:"Días de enfermedad",i:"🤒",d:"Enfermarse puede descontrolar la glucosa aunque comas menos.",b:["Medir con más frecuencia si tu equipo lo indica.","Mantener hidratación.","No suspender insulina sin consulta.","Vigilar cetonas si tenés tipo 1 o indicación médica.","Consultar ante vómitos, fiebre alta, dolor abdominal o glucosa muy elevada."]},
+      {id:"g11",t:"Viajes",i:"🎒",d:"Planificar evita emergencias y cambios de rutina.",b:["Llevar doble cantidad de tiras, lancetas y medicamentos.","Insulina en hielo conservador sin congelar.","Documento o receta de medicamentos.","Azúcar rápida siempre accesible.","Ajustar horarios según fus horario y comidas."]},
+      {id:"g12",t:"Trabajo y estudio",i:"💼",d:"La rutina laboral puede alterar horarios de comida, medición y medicación.",b:["Tener colación y azúcar rápida en el escritorio.","Programar pausas activas.","Educar a una persona de confianza sobre hipoglucemia.","Organizar medicación de forma discreta si usás insulina.","Registrar valores para llevar a consulta."]},
+      {id:"g13",t:"Emergencias",i:"🚨",d:"Saber qué hacer puede evitar complicaciones graves.",b:["Hipoglucemia leve: regla del 15.","Hipoglucemia con confusión o desmayo: no dar comida ni bebida; buscar ayuda urgente.","Hiperglucemia persistente: revisar hidratación, medicación y signos de alarma.","Cetoacidosis: dolor abdominal, vómitos, aliento afrutado, respiración rápida; urgencia.","Si tenés glucagón recetado, que tu círculo cercano sepa usarlo."]},
+      {id:"g14",t:"Mitos y realidades",i:"🧠",d:"Mucha desinformación genera miedo y malas decisiones.",b:["Mito: no podés comer fruta. Realidad: sí, con porción adecuada.","Mito: la tipo 2 es solo por comer azúcar. Realidad: es multifactorial.","Mito: si te sentís bien no necesitás medir. Realidad: puede no haber síntomas.","Mito: la insulina cura. Realidad: es tratamiento, no cura.","Mito: el ejercicio está prohibido. Realidad: suele ser beneficioso con pautas."]},
+      {id:"g15",t:"Salud emocional",i:"🫂",d:"El burnout por diabetes es real y frecuente.",b:["Cansarse no significa fracasar.","Hablar con tu equipo de salud.","Buscar apoyo grupal o psicológico si lo necesitás.","Celebrar avances pequeños.","Separar un valor alto de tu identidad: es un dato, no un juicio."]},
+      {id:"g16",t:"Preguntas para tu médico",i:"🩺",d:"Llegar con preguntas mejora la consulta.",b:["¿Cuál es mi objetivo personal de HbA1c y glucosa?","¿Cómo adapto comidas a mi medicación y horarios?","¿Qué hago si tengo una baja o un valor alto?","¿Qué controles anuales necesito?","¿Puedo hacer ejercicio con mi tratamiento actual?","¿Es seguro consumir alcohol o edulcorantes en mi caso?"]}
+    ];
+
+    const EXERCISES=[
+      {n:"Caminata postcomida",t:"10-15 min",h:"Paso cómodo, después de almorzar o cenar.",s:"Útil para moderar pico glucémico. Llevar azúcar rápida si usás insulina."},
+      {n:"Sentadilla a silla",t:"2 series de 8-12",h:"Sentate y levantate sin usar manos si podés.",s:"Fortalece piernas. Cuidar rodillas y equilibrio."},
+      {n:"Elevación de talones",t:"2 series de 10-15",h:"Apoyate en pared si necesitás.",s:"Mejora circulación y estabilidad."},
+      {n:"Remo con banda o botellas",t:"2 series de 10-12",h:"Tirar codos hacia atrás sin encorvar.",s:"Trabaja espalda. Evitar pesos excesivos."},
+      {n:"Estiramientos suaves",t:"5-10 min",h:"Cuello, hombros, piernas y espalda.",s:"No rebotar. Respirar profundo."},
+      {n:"Equilibrio unipodal",t:"30-60 seg por lado",h:"Cerca de una pared o silla.",s:"Prevenir caídas. Suspender si hay mareo."},
+      {n:"Baile en casa",t:"10-20 min",h:"Música suave o movida según tu condición.",s:"Buena opción cardiovascular. Hidratarse."},
+      {n:"Respiración guiada",t:"3-5 min",h:"4-7-8 o respiración diafragmática.",s:"Ayuda a bajar estrés antes de medir o dormir."}
+    ];
+
+    const LOG_CONFIG={
+      glucosa:{label:"Glucosa",unit:"mg/dL",placeholder:"Ej: 110",contexts:["Ayuno","Antes de comer","Después de comer","Antes de dormir","Otro"]},
+      presion:{label:"Presión arterial",unit:"mmHg",placeholder:"Ej: 120/80",contexts:["Mañana","Tarde","Noche","Otro"]},
+      peso:{label:"Peso",unit:"kg",placeholder:"Ej: 72.5",contexts:["Mañana","Otro"]},
+      hba1c:{label:"Hemoglobina glicosilada",unit:"%",placeholder:"Ej: 6.8",contexts:["Laboratorio","Otro"]}
+    };
+
+    const CHECK_ITEMS=[
+      {k:"medicacion",t:"Tomé mi medicación"},
+      {k:"glucosa",t:"Medí mi glucosa"},
+      {k:"agua",t:"Bebí suficiente agua"},
+      {k:"movimiento",t:"Me moví 10-30 min"},
+      {k:"pies",t:"Revisé mis pies"},
+      {k:"sueno",t:"Dormí 7-8 horas"}
+    ];
+
+    const DEFAULTS={
+      theme:"light",
+      profile:{name:"",type:"No especificado",low:70,high:180},
+      logs:[],water:{date:"",count:0},meds:{date:"",items:[]},activity:{date:"",items:[]},
+      sleep:{date:"",hours:"",quality:""},checklist:{date:"",items:{}},favorites:[],
+      plan:Object.fromEntries(DAYS.map(d=>[d,[]])),shopping:[],streak:{date:"",count:0},reminders:false
+    };
+
+    function normalizeState(saved){
+      const base=JSON.parse(JSON.stringify(DEFAULTS));
+      if(!saved||typeof saved!=="object") return base;
+      const s=Object.assign({},base,saved);
+      s.profile=Object.assign({},base.profile,saved.profile||{});
+      s.water=Object.assign({},base.water,saved.water||{});
+      s.meds=Object.assign({},base.meds,saved.meds||{}); if(!Array.isArray(s.meds.items)) s.meds.items=[];
+      s.activity=Object.assign({},base.activity,saved.activity||{}); if(!Array.isArray(s.activity.items)) s.activity.items=[];
+      s.sleep=Object.assign({},base.sleep,saved.sleep||{});
+      s.checklist=Object.assign({},base.checklist,saved.checklist||{}); if(!s.checklist.items||typeof s.checklist.items!=="object") s.checklist.items={};
+      s.plan=Object.assign({},base.plan,saved.plan||{}); DAYS.forEach(d=>{if(!Array.isArray(s.plan[d])) s.plan[d]=[];});
+      s.favorites=Array.isArray(saved.favorites)?saved.favorites:base.favorites;
+      s.logs=Array.isArray(saved.logs)?saved.logs:base.logs;
+      s.shopping=Array.isArray(saved.shopping)?saved.shopping:base.shopping;
+      s.streak=Object.assign({},base.streak,saved.streak||{});
+      s.theme=saved.theme==="dark"?"dark":"light";
+      s.reminders=Boolean(saved.reminders);
+      return s;
+    }
+
+    let state;
+    try{ state=normalizeState(JSON.parse(localStorage.getItem(STATE_KEY))); }catch(e){ state=normalizeState(null); }
+    function save(){ try{ localStorage.setItem(STATE_KEY,JSON.stringify(state)); }catch(e){} }
+
+    let toastTimer=null;
+    function toast(msg){ const el=$("#toast"); if(!el)return; el.textContent=msg; el.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("show"),2200); }
+    function openModal(title,html){ $("#modalTitle").textContent=title; $("#modalBody").innerHTML=html; $("#modal").classList.remove("hidden"); }
+    function closeModal(){ $("#modal").classList.add("hidden"); }
+
+    function setTheme(mode){ state.theme=mode; document.documentElement.setAttribute("data-theme",mode); save(); ["dayBtn","nightBtn","setDay","setNight"].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove("active"); }); if(mode==="dark"){ $("#nightBtn").classList.add("active"); $("#setNight").classList.add("active"); } else { $("#dayBtn").classList.add("active"); $("#setDay").classList.add("active"); } const meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute("content",mode==="dark"?"#0b1220":"#0ea5e9"); }
+
+    function resetDaily(){
+      const td=todayKey();
+      if(state.water.date!==td) state.water={date:td,count:0};
+      if(state.meds.date!==td) state.meds={date:td,items:(state.meds.items||[]).map(m=>Object.assign({},m,{done:false}))};
+      if(state.activity.date!==td) state.activity={date:td,items:[]};
+      if(state.checklist.date!==td) state.checklist={date:td,items:{}};
+      save();
+    }
+
+    function bumpStreak(){
+      const td=todayKey(); if(state.streak.date===td) return;
+      const y=new Date(Date.now()-86400000).toISOString().slice(0,10);
+      state.streak.count = state.streak.date===y ? (Number(state.streak.count)||0)+1 : 1;
+      state.streak.date=td; save();
+    }
+
+    function glucoseStatus(v){
+      const num=parseFloat(v); if(isNaN(num)) return {label:"--",cls:""};
+      const low=Number(state.profile.low)||70, high=Number(state.profile.high)||180;
+      if(num<low) return {label:"Bajo",cls:"low"};
+      if(num<=high) return {label:"Rango",cls:"ok"};
+      return {label:"Alto",cls:"high"};
+    }
+
+    function fmtDate(iso){ const d=new Date(iso); return d.toLocaleDateString("es-ES",{day:"2-digit",month:"short"})+" · "+d.toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"}); }
+
+    function logItemHtml(log,withDelete){
+      const cfg=LOG_CONFIG[log.metric]||{label:log.metric,unit:""};
+      const st=log.metric==="glucosa"?glucoseStatus(log.value):{label:cfg.label,cls:""};
+      return '<div class="history-item '+st.cls+'"><div><strong>'+escapeHtml(log.value)+' '+escapeHtml(cfg.unit)+'</strong><div class="muted small">'+escapeHtml(fmtDate(log.date))+' · '+escapeHtml(log.context||"--")+'</div>'+(log.note?'<div class="small">'+escapeHtml(log.note)+'</div>':"")+'</div><div style="display:flex;gap:8px;align-items:center"><span class="badge '+st.cls+'">'+escapeHtml(st.label)+'</span>'+(withDelete?'<button class="delete-btn" data-log-delete="'+log.id+'" title="Eliminar">✕</button>':"")+'</div></div>';
+    }
+
+    function renderMiniChart(container,logs,metric){
+      if(!container) return;
+      if(!logs.length){ container.innerHTML='<p class="muted small center" style="margin:auto">Sin datos suficientes.</p>'; return; }
+      const vals=logs.map(l=>parseFloat(String(l.value).split("/")[0])).filter(n=>!isNaN(n));
+      const max=Math.max(metric==="glucosa"?250:100,...vals);
+      container.innerHTML=vals.map(v=>{
+        const h=Math.max(12,Math.min(100,Math.round((v/max)*100)));
+        const cls=metric==="glucosa"?glucoseStatus(v).cls:"";
+        return '<div class="bar '+cls+'" style="height:'+h+'%" title="'+v+'"></div>';
+      }).join("");
+    }
+
+    function renderWater(){
+      const row=$("#homeWaterRow"), label=$("#homeWaterLabel"); if(!row) return;
+      row.innerHTML=""; for(let i=1;i<=8;i++){ const b=document.createElement("button"); b.type="button"; b.className="water-glass"+(i<=state.water.count?" filled":""); b.textContent="💧"; b.setAttribute("data-water",i); row.appendChild(b); }
+      label.textContent=state.water.count+"/8"; label.className="badge "+(state.water.count>=8?"ok":state.water.count>=4?"low":"high");
+    }
+
+    function renderChecklist(){
+      const ul=$("#homeChecklist"); if(!ul) return;
+      ul.innerHTML=CHECK_ITEMS.map(item=>'<li class="check-item"><label><input type="checkbox" data-check="'+item.k+'" '+(state.checklist.items[item.k]?"checked":"")+' /><span>'+item.t+'</span></label></li>').join("");
+    }
+
+    function renderHome(){
+      $("#homeGreeting").textContent=state.profile.name?("Hola, "+state.profile.name):"Hola 👋";
+      $("#streakBadge").textContent="🔥 "+(Number(state.streak.count)||0)+" días";
+      const logs=state.logs.filter(l=>l.metric==="glucosa");
+      const medsDone=state.meds.items.filter(m=>m.done).length;
+      let summary="Empezá registrando tu glucosa, armando tu plan o marcando hábitos.";
+      if(logs.length){ const st=glucoseStatus(logs[0].value); summary="Última glucosa: "+logs[0].value+" mg/dL · "+st.label+"."; }
+      else if(state.water.count) summary="Agua de hoy: "+state.water.count+"/8 vasos.";
+      else if(state.meds.items.length) summary="Medicación marcada: "+medsDone+"/"+state.meds.items.length+".";
+      $("#homeSummary").textContent=summary;
+      renderWater(); renderChecklist(); renderMiniChart($("#homeChart"),logs.slice(0,10).reverse(),"glucosa");
+      $("#homeRecent").innerHTML=logs.slice(0,3).map(l=>logItemHtml(l,false)).join("")||'<p class="muted small">Sin registros de glucosa aún.</p>';
+    }
+
+    let recipeFilter="all", recipeSearch="";
+    function recipeMatches(r){
+      const q=recipeSearch.trim().toLowerCase();
+      const hay=(r.n+" "+r.cat+" "+r.tags.join(" ")+" "+r.ing.join(" ")).toLowerCase();
+      if(q && !hay.includes(q)) return false;
+      if(recipeFilter==="all") return true;
+      if(recipeFilter==="fav") return state.favorites.includes(r.id);
+      if(["Desayuno","Almuerzo/Cena","Colación","Bebidas","Postres"].includes(recipeFilter)) return r.cat===recipeFilter;
+      return r.tags.includes(recipeFilter);
+    }
+    function renderRecipes(){
+      $$("#recipeChips .mini-tab").forEach(b=>b.classList.toggle("active",b.dataset.recipeFilter===recipeFilter));
+      const list=RECIPES.filter(recipeMatches);
+      $("#recipeGrid").innerHTML=list.length?list.map(r=>{
+        const fav=state.favorites.includes(r.id);
+        return '<article class="recipe-card" data-recipe="'+r.id+'"><button class="fav-btn" data-fav="'+r.id+'" title="Favorita">'+(fav?"❤️":"🤍")+'</button><h4>'+escapeHtml(r.n)+'</h4><div class="recipe-meta">'+escapeHtml(r.cat)+' · '+escapeHtml(r.time)+' · '+escapeHtml(r.serv)+' porción(es)</div><div class="tag-list">'+r.tags.map(t=>'<span class="tag">'+escapeHtml(t)+'</span>').join("")+'</div></article>';
+      }).join(""):'<p class="muted">No se encontraron recetas con esos filtros.</p>';
+    }
+    function toggleFavorite(id){ if(state.favorites.includes(id)) state.favorites=state.favorites.filter(x=>x!==id); else state.favorites.push(id); save(); renderRecipes(); }
+    function openRecipe(id){
+      const r=RECIPES.find(x=>x.id===id); if(!r) return;
+      const fav=state.favorites.includes(r.id);
+      openModal(r.n,'<div class="recipe-meta">'+escapeHtml(r.cat)+' · '+escapeHtml(r.time)+' · '+escapeHtml(r.serv)+' porción(es)</div><div class="nutrition"><div>kcal<br><strong>'+r.nut.k+'</strong></div><div>HC<br><strong>'+r.nut.c+' g</strong></div><div>Prot<br><strong>'+r.nut.p+' g</strong></div><div>Grasa<br><strong>'+r.nut.g+' g</strong></div></div><p class="muted small">Valores estimados. Ajustá porciones según tu plan médico.</p><h3>Ingredientes</h3><ul>'+r.ing.map(i=>"<li>"+escapeHtml(i)+"</li>").join("")+'</ul><h3>Pasos</h3><ol>'+r.steps.map(s=>"<li>"+escapeHtml(s)+"</li>").join("")+'</ol>'+(r.tip?'<div class="notice">💡 '+escapeHtml(r.tip)+'</div>':"")+'<div class="row-actions" style="margin-top:12px"><button class="btn '+(fav?"btn-danger-outline":"btn-outline")+'" data-action="toggleFav" data-id="'+r.id+'">'+(fav?"Quitar de favoritas":"Marcar favorita")+'</button><select id="modalPlanDay">'+DAYS.map(d=>'<option value="'+d+'" '+(d===selectedPlanDay?"selected":"")+'>'+d+'</option>').join("")+'</select><button class="btn btn-primary" data-action="addPlan" data-id="'+r.id+'">Agregar al plan</button><button class="btn btn-ghost" data-action="addShopping" data-id="'+r.id+'">Añadir a compras</button></div>');
+    }
+
+    let selectedPlanDay=DAYS[(new Date().getDay()+6)%7];
+    function renderPlan(){
+      const sel=$("#planDaySelect"); sel.innerHTML=DAYS.map(d=>'<option value="'+d+'" '+(d===selectedPlanDay?"selected":"")+'>'+d+'</option>').join("");
+      const ids=state.plan[selectedPlanDay]||[];
+      $("#planList").innerHTML=ids.length?ids.map(id=>{ const r=RECIPES.find(x=>x.id===id); if(!r) return ""; return '<li class="plan-item"><div><strong>'+escapeHtml(r.n)+'</strong><div class="muted small">'+escapeHtml(r.cat)+' · '+escapeHtml(r.time)+'</div></div><button class="delete-btn" data-plan-remove="'+selectedPlanDay+'" data-id="'+r.id+'">✕</button></li>'; }).join(""):'<li class="muted small">Sin recetas planificadas para este día. Entrá a Recetas y agregá.</li>';
       renderShopping();
-      renderChecklist();
-      updateDashboard();
-    })();
+    }
+    function addToPlan(day,id){ if(!state.plan[day]) state.plan[day]=[]; if(!state.plan[day].includes(id)){ state.plan[day].push(id); save(); renderPlan(); toast("Agregado al plan de "+day); } }
+    function removeFromPlan(day,id){ state.plan[day]=(state.plan[day]||[]).filter(x=>x!==id); save(); renderPlan(); }
+    function addIngredients(ings){ ings.forEach(i=>{ const norm=i.trim(); if(norm && !state.shopping.some(s=>s.toLowerCase()===norm.toLowerCase())) state.shopping.push(norm); }); save(); renderShopping(); }
+    function addRecipeToShopping(id){ const r=RECIPES.find(x=>x.id===id); if(r) addIngredients(r.ing); toast("Ingredientes agregados a compras"); }
+    function generateWeeklyShopping(){ DAYS.forEach(d=>(state.plan[d]||[]).forEach(id=>{ const r=RECIPES.find(x=>x.id===id); if(r) addIngredients(r.ing); })); toast("Lista generada"); }
+    function renderShopping(){ const ul=$("#shoppingList"); ul.innerHTML=state.shopping.length?state.shopping.map((s,i)=>'<li class="shop-item"><span>'+escapeHtml(s)+'</span><button class="delete-btn" data-shop-delete="'+i+'">✕</button></li>').join(""):'<li class="muted small">Lista vacía.</li>'; }
+    function deleteShopping(i){ state.shopping.splice(i,1); save(); renderShopping(); }
+
+    let activeMetric="glucosa";
+    function renderLogs(){
+      $$("#metricTabs .mini-tab").forEach(b=>b.classList.toggle("active",b.dataset.metric===activeMetric));
+      const cfg=LOG_CONFIG[activeMetric]; $("#logFormTitle").textContent="Registrar "+cfg.label.toLowerCase(); $("#logValue").placeholder=cfg.placeholder; $("#logUnit").textContent=cfg.unit; $("#logContext").innerHTML=cfg.contexts.map(c=>"<option>"+c+"</option>").join("");
+      $("#logValue").type=activeMetric==="presion"?"text":"number"; $("#logValue").step=activeMetric==="peso"||activeMetric==="hba1c"?"0.1":"1";
+      const logs=state.logs.filter(l=>l.metric===activeMetric);
+      $("#logLast").textContent=logs.length?logs[0].value+" "+cfg.unit:"--";
+      const nums=logs.map(l=>parseFloat(String(l.value).split("/")[0])).filter(n=>!isNaN(n));
+      $("#logAvg").textContent=nums.length?Math.round(nums.reduce((a,b)=>a+b,0)/nums.length*10)/10+" "+cfg.unit:"--";
+      $("#logCount").textContent=logs.length;
+      if(activeMetric==="glucosa"){ const inR=logs.filter(l=>{const st=glucoseStatus(l.value); return st.cls==="ok";}).length; $("#logRange").textContent=logs.length?Math.round(inR/logs.length*100)+"%":"--"; } else $("#logRange").textContent="--";
+      renderMiniChart($("#logChart"),logs.slice(0,12).reverse(),activeMetric);
+      $("#logHistory").innerHTML=logs.slice(0,30).map(l=>logItemHtml(l,true)).join("")||'<p class="muted small">Sin registros para esta métrica.</p>';
+    }
+    function saveLog(metric,value,context,note){
+      value=String(value||"").trim(); if(!value){ toast("Ingresá un valor."); return false; }
+      if(metric==="glucosa"){ const n=Number(value); if(isNaN(n)||n<20||n>600){ toast("Usá un valor realista de glucosa."); return false; } }
+      if(metric==="peso"){ const n=Number(value); if(isNaN(n)||n<=0||n>400){ toast("Peso inválido."); return false; } }
+      if(metric==="hba1c"){ const n=Number(value); if(isNaN(n)||n<3||n>20){ toast("HbA1c inválida."); return false; } }
+      if(metric==="presion" && !/\d+\s*\/\s*\d+/.test(value)){ toast("Formato sugerido: 120/80."); return false; }
+      state.logs.unshift({id:uid(),metric,value,context,note:String(note||"").trim(),date:new Date().toISOString()});
+      state.logs=state.logs.slice(0,500); save(); bumpStreak(); renderLogs(); renderHome(); toast("Registro guardado ✅"); return true;
+    }
+    function deleteLog(id){ state.logs=state.logs.filter(l=>l.id!==id); save(); renderLogs(); renderHome(); }
+    function download(filename,content,type){ const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
+    function exportCsv(){ const rows=[["fecha","metrica","valor","unidad","contexto","nota"]].concat(state.logs.map(l=>[l.date,l.metric,l.value,(LOG_CONFIG[l.metric]||{}).unit||"",l.context||"",l.note||""])); download("diabetes-sin-miedo-registros.csv",rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")).join("\n"),"text/csv;charset=utf-8"); toast("CSV exportado"); }
+    function printDiary(){ const logs=state.logs.slice(0,80); openModal("Informe para el médico",'<p><strong>Paciente:</strong> '+escapeHtml(state.profile.name||"Sin nombre")+'</p><p><strong>Tipo:</strong> '+escapeHtml(state.profile.type||"No especificado")+'</p><p><strong>Rangos personales:</strong> '+escapeHtml(state.profile.low)+'-'+escapeHtml(state.profile.high)+' mg/dL</p><p><strong>Fecha de emisión:</strong> '+escapeHtml(new Date().toLocaleString("es-ES"))+'</p><table><thead><tr><th>Fecha</th><th>Métrica</th><th>Valor</th><th>Contexto</th><th>Nota</th></tr></thead><tbody>'+logs.map(l=>'<tr><td>'+escapeHtml(fmtDate(l.date))+'</td><td>'+escapeHtml((LOG_CONFIG[l.metric]||{}).label||l.metric)+'</td><td>'+escapeHtml(l.value)+' '+escapeHtml((LOG_CONFIG[l.metric]||{}).unit||"")+'</td><td>'+escapeHtml(l.context||"")+'</td><td>'+escapeHtml(l.note||"")+'</td></tr>').join("")+'</tbody></table><div class="notice">Este informe es una herramienta organizativa. No reemplaza criterio médico.</div><button class="btn btn-primary btn-block" data-action="print">Imprimir / Guardar PDF</button>'); }
+
+    function renderMeds(){
+      const ul=$("#medList"); if(!ul) return;
+      ul.innerHTML=state.meds.items.length?state.meds.items.map(m=>'<li class="med-item '+(m.done?"done":"")+'"><label><input type="checkbox" data-med-toggle="'+m.id+'" '+(m.done?"checked":"")+' /><span>'+escapeHtml(m.name)+'</span></label><button class="delete-btn" data-med-delete="'+m.id+'">✕</button></li>').join(""):'<li class="muted small">Agregá tus medicamentos para marcarlos como tomados hoy.</li>';
+    }
+    function addMed(){ const name=$("#medInput").value.trim(); if(!name){ toast("Escribí el medicamento."); return; } state.meds.items.unshift({id:uid(),name,done:false}); save(); $("#medInput").value=""; renderMeds(); bumpStreak(); toast("Medicamento agregado"); }
+    function toggleMed(id,done){ const m=state.meds.items.find(x=>String(x.id)===String(id)); if(m){ m.done=done; save(); renderMeds(); if(done) bumpStreak(); renderHome(); } }
+    function deleteMed(id){ state.meds.items=state.meds.items.filter(m=>String(m.id)!==String(id)); save(); renderMeds(); }
+
+    function renderActivity(){ $$("#activityChips .chip").forEach(c=>c.classList.toggle("active",state.activity.items.includes(c.dataset.activity))); $("#activityText").textContent=state.activity.items.length?("Actividades: "+state.activity.items.join(", ")):"Registra tu movimiento de hoy."; }
+    function toggleActivity(v){ if(state.activity.items.includes(v)) state.activity.items=state.activity.items.filter(x=>x!==v); else state.activity.items.push(v); save(); renderActivity(); if(state.activity.items.length) bumpStreak(); renderHome(); }
+
+    function renderSleep(){ $("#sleepText").textContent=state.sleep.date===todayKey()&&state.sleep.hours?("Hoy dormiste "+state.sleep.hours+" h · calidad: "+(state.sleep.quality||"sin especificar")):"Sin registro de sueño hoy."; }
+    function renderExercises(){ $("#exerciseList").innerHTML=EXERCISES.map(e=>'<details><summary>'+escapeHtml(e.n)+' · '+escapeHtml(e.t)+'</summary><p><strong>Cómo:</strong> '+escapeHtml(e.h)+'</p><p><strong>Seguridad:</strong> '+escapeHtml(e.s)+'</p></details>').join(""); }
+
+    let breathTimer=null, breathSec=0, breathPhase=0;
+    function startBreath(){
+      stopBreath(); const phases=[["Inhalá por la nariz",4],["Sostené el aire",7],["Exhalá por la boca",8]]; breathPhase=0; breathSec=phases[0][1];
+      const tick=()=>{ const [name,secs]=phases[breathPhase]; $("#breathStatus").textContent=name+" · "+breathSec+" s"; if(breathSec<=0){ breathPhase=(breathPhase+1)%phases.length; breathSec=phases[breathPhase][1]; } else breathSec--; };
+      tick(); breathTimer=setInterval(tick,1000);
+    }
+    function stopBreath(){ if(breathTimer) clearInterval(breathTimer); breathTimer=null; $("#breathStatus").textContent="Detenido"; }
+
+    let guideSearch="";
+    function renderGuides(){
+      const q=guideSearch.trim().toLowerCase();
+      const list=GUIDES.filter(g=>!q || (g.t+" "+g.d+" "+g.b.join(" ")).toLowerCase().includes(q));
+      $("#guideList").innerHTML=list.map(g=>'<div><button class="acc-btn" data-guide="'+g.id+'">'+g.i+" "+escapeHtml(g.t)+'</button><div id="guide-'+g.id+'" class="acc-panel"><p>'+escapeHtml(g.d)+'</p><ul>'+g.b.map(b=>"<li>"+escapeHtml(b)+"</li>").join("")+'</ul></div></div>').join("")||'<p class="muted">Sin resultados.</p>';
+    }
+    function toggleGuide(btn){ const panel=document.getElementById("guide-"+btn.dataset.guide); const open=panel.classList.contains("open"); panel.classList.toggle("open",!open); btn.classList.toggle("open",!open); }
+
+    function renderSettings(){
+      $("#settingsName").value=state.profile.name||""; $("#settingsType").value=state.profile.type||"No especificado"; $("#targetLow").value=state.profile.low; $("#targetHigh").value=state.profile.high; $("#reminderToggle").checked=state.reminders; setTheme(state.theme);
+    }
+    function saveProfile(){ state.profile.name=$("#settingsName").value.trim(); state.profile.type=$("#settingsType").value; state.profile.low=Number($("#targetLow").value)||70; state.profile.high=Number($("#targetHigh").value)||180; save(); renderHome(); renderLogs(); toast("Perfil guardado"); }
+
+    let reminderInterval=null;
+    function notify(title,body){ try{ if(typeof Notification!=="undefined" && Notification.permission==="granted") new Notification(title,{body}); else toast(body); }catch(e){ toast(body); } }
+    function initReminders(){ clearInterval(reminderInterval); if(!state.reminders || typeof Notification==="undefined" || Notification.permission!=="granted") return; reminderInterval=setInterval(()=>{ if(!document.hidden) notify("Diabetes sin miedo","Recordatorio suave: hidratate, movete o revisá tu glucosa si te corresponde."); },1000*60*30); }
+    function setReminders(on){ state.reminders=on; save(); if(on && typeof Notification!=="undefined" && Notification.permission!=="granted"){ Notification.requestPermission().then(initReminders); } else initReminders(); toast(on?"Recordatorios activados mientras la app esté abierta":"Recordatorios desactivados"); }
+
+    let deferredPrompt=null;
+    window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferredPrompt=e; $("#installBtn").classList.remove("hide"); $("#installBtn2").classList.remove("hide"); });
+    window.addEventListener("appinstalled",()=>{ deferredPrompt=null; $("#installBtn").classList.add("hide"); $("#installBtn2").classList.add("hide"); });
+    async function installApp(){ if(!deferredPrompt){ toast("Tu navegador no mostró el aviso de instalación. Probá desde Chrome/Edge servido por HTTPS."); return; } deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; }
+
+    function showPage(page){
+      $$(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));
+      $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+      window.scrollTo({top:0,behavior:"smooth"});
+      if(page==="home") renderHome(); if(page==="recipes") renderRecipes(); if(page==="plan") renderPlan(); if(page==="logs") renderLogs(); if(page==="wellness"){ renderMeds(); renderActivity(); renderSleep(); renderExercises(); } if(page==="guides") renderGuides(); if(page==="settings") renderSettings();
+    }
+
+    function handleAction(action,el){
+      const id=el.dataset.id;
+      if(action==="toggleFav"){ toggleFavorite(id); openRecipe(id); }
+      if(action==="addPlan"){ const day=$("#modalPlanDay")?$("#modalPlanDay").value:selectedPlanDay; addToPlan(day,id); }
+      if(action==="addShopping"){ addRecipeToShopping(id); }
+      if(action==="print"){ window.print(); }
+    }
+
+    document.addEventListener("click",e=>{
+      const nav=e.target.closest("[data-page]"); if(nav){ showPage(nav.dataset.page); return; }
+      const open=e.target.closest("[data-open-panel]"); if(open){ document.getElementById(open.dataset.openPanel).classList.toggle("open"); return; }
+      const close=e.target.closest("[data-close-panel]"); if(close){ document.getElementById(close.dataset.closePanel).classList.remove("open"); return; }
+      const water=e.target.closest("[data-water]"); if(water){ const i=Number(water.dataset.water); state.water.count=(i===state.water.count?i-1:i); if(state.water.count>0) bumpStreak(); save(); renderWater(); renderHome(); return; }
+      const rf=e.target.closest("[data-recipe-filter]"); if(rf){ recipeFilter=rf.dataset.recipeFilter; renderRecipes(); return; }
+      const fav=e.target.closest("[data-fav]"); if(fav){ e.stopPropagation(); toggleFavorite(fav.dataset.fav); return; }
+      const recipe=e.target.closest("[data-recipe]"); if(recipe){ openRecipe(recipe.dataset.recipe); return; }
+      const action=e.target.closest("[data-action]"); if(action){ handleAction(action.dataset.action,action); return; }
+      const guide=e.target.closest("[data-guide]"); if(guide){ toggleGuide(guide); return; }
+      const metric=e.target.closest("[data-metric]"); if(metric){ activeMetric=metric.dataset.metric; renderLogs(); return; }
+      const delLog=e.target.closest("[data-log-delete]"); if(delLog){ deleteLog(delLog.dataset.logDelete); return; }
+      const medDel=e.target.closest("[data-med-delete]"); if(medDel){ deleteMed(medDel.dataset.medDelete); return; }
+      const shopDel=e.target.closest("[data-shop-delete]"); if(shopDel){ deleteShopping(Number(shopDel.dataset.shopDelete)); return; }
+      const planRem=e.target.closest("[data-plan-remove]"); if(planRem){ removeFromPlan(planRem.dataset.planRemove,planRem.dataset.id); return; }
+      const act=e.target.closest("[data-activity]"); if(act){ toggleActivity(act.dataset.activity); return; }
+    });
+
+    document.addEventListener("change",e=>{
+      const check=e.target.closest("[data-check]"); if(check){ state.checklist.items[check.dataset.check]=check.checked; if(check.checked) bumpStreak(); save(); renderHome(); return; }
+      const medToggle=e.target.closest("[data-med-toggle]"); if(medToggle){ toggleMed(medToggle.dataset.medToggle,medToggle.checked); return; }
+      if(e.target.id==="planDaySelect"){ selectedPlanDay=e.target.value; renderPlan(); return; }
+      if(e.target.id==="reminderToggle"){ setReminders(e.target.checked); return; }
+      if(e.target.id==="importFile" && e.target.files[0]){ const file=e.target.files[0]; const reader=new FileReader(); reader.onload=()=>{ try{ state=normalizeState(JSON.parse(reader.result)); save(); location.reload(); }catch(err){ toast("Archivo inválido."); } }; reader.readAsText(file); }
+    });
+
+    $("#enterApp").addEventListener("click",()=>{ const n=$("#splashName").value.trim(); if(n){ state.profile.name=n; save(); } const s=$("#splash"); s.classList.add("hide"); setTimeout(()=>{ if(s.parentNode) s.parentNode.removeChild(s); },500); initReminders(); });
+    $("#splashDay").addEventListener("click",()=>setTheme("light")); $("#splashNight").addEventListener("click",()=>setTheme("dark"));
+    $("#dayBtn").addEventListener("click",()=>setTheme("light")); $("#nightBtn").addEventListener("click",()=>setTheme("dark"));
+    $("#setDay").addEventListener("click",()=>setTheme("light")); $("#setNight").addEventListener("click",()=>setTheme("dark"));
+    $("#installBtn").addEventListener("click",installApp); $("#installBtn2").addEventListener("click",installApp);
+    $("#modalClose").addEventListener("click",closeModal); $("#modal").addEventListener("click",e=>{ if(e.target.id==="modal") closeModal(); });
+    $("#homeSaveGlucose").addEventListener("click",()=>{ saveLog("glucosa',$("#homeGlucoseValue").value,$("#homeGlucoseContext").value,""); $("#homeGlucoseValue").value=""; document.getElementById("quick-glucose").classList.remove("open"); });
+    $("#saveLogBtn").addEventListener("click",()=>{ saveLog(activeMetric,$("#logValue").value,$("#logContext").value,$("#logNote").value); $("#logValue").value=""; $("#logNote").value=""; });
+    $("#clearMetric").addEventListener("click",()=>{ if(confirm("¿Borrar todos los registros de esta métrica?")){ state.logs=state.logs.filter(l=>l.metric!==activeMetric); save(); renderLogs(); renderHome(); toast("Historial borrado"); } });
+    $("#exportCsv").addEventListener("click",exportCsv); $("#printDiary").addEventListener("click",printDiary);
+    $("#goRecipes").addEventListener("click",()=>showPage("recipes"));
+    $("#generateShopping").addEventListener("click",generateWeeklyShopping);
+    $("#clearPlanDay").addEventListener("click",()=>{ state.plan[selectedPlanDay]=[]; save(); renderPlan(); });
+    $("#clearPlanWeek").addEventListener("click",()=>{ if(confirm("¿Limpiar todo el plan semanal?")){ DAYS.forEach(d=>state.plan[d]=[]); save(); renderPlan(); } });
+    $("#addManualShopping").addEventListener("click",()=>{ const v=$("#manualShopping").value.trim(); if(v){ addIngredients([v]); $("#manualShopping").value=""; } });
+    $("#manualShopping").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); $("#addManualShopping").click(); } });
+    $("#recipeSearch").addEventListener("input",e=>{ recipeSearch=e.target.value; renderRecipes(); });
+    $("#guideSearch").addEventListener("input",e=>{ guideSearch=e.target.value; renderGuides(); });
+    $("#addMedBtn").addEventListener("click",addMed);
+    $("#medInput").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); addMed(); } });
+    $("#startBreath").addEventListener("click",startBreath); $("#stopBreath").addEventListener("click",stopBreath);
+    $("#saveSleepBtn").addEventListener("click",()=>{ const h=$("#sleepHours").value, q=$("#sleepQuality").value; if(!h){ toast("Ingresá horas de sueño."); return; } state.sleep={date:todayKey(),hours:h,quality:q}; save(); bumpStreak(); renderSleep(); renderHome(); toast("Sueño guardado"); });
+    $("#saveProfileBtn").addEventListener("click",saveProfile);
+    $("#exportJson").addEventListener("click",()=>{ download("diabetes-sin-miedo-copia.json",JSON.stringify(state,null,2),"application/json"); toast("Copia exportada"); });
+    $("#resetApp").addEventListener("click",()=>{ if(confirm("¿Borrar todos los datos guardados en este dispositivo?")){ localStorage.removeItem(STATE_KEY); location.reload(); } });
+    $("#emergencyBtn").addEventListener("click",()=>openModal("🚨 Guía de emergencia",'<p><strong>Hipoglucemia</strong>: temblor, sudor frío, mareo, hambre intensa, irritabilidad o glucosa menor a 70 mg/dL.</p><ol><li>Consumí 15 g de carbohidrato rápido: 3-4 caramelos, sobre de glucosa, 1/2 vaso de jugo común.</li><li>Esperá 15 minutos.</li><li>Medí otra vez.</li><li>Si sigue bajo, repetí.</li></ol><div class="notice">Si hay confusión, desmayo, convulsión o no puede tragar, <strong>no des comida ni bebida</strong>. Buscá ayuda médica inmediata.</div><p><strong>Hiperglucemia</strong>: sed intensa, orina frecuente, náuseas, vómitos, dolor abdominal, aliento afrutado o dificultad para respirar requieren consulta urgente.</p>'));
+    $("#premiumBtn").addEventListener("click",()=>openModal("👑 Diabetes sin miedo Pro",'<p>Funciones pensadas para una versión paga:</p><ul><li>Informe PDF avanzado para el médico.</li><li>Sincronización en la nube y multi-dispositivo.</li><li>Recordatorios reales con alarma.</li><li>Plan familiar o de cuidador.</li><li>Seguimiento por período con gráficas comparativas.</li><li>Consulta integrada con nutricionista o educador.</li></ul><div class="notice">Esta demo guarda datos localmente. Para venderla formalmente necesitás backend, base de datos, autenticación, pagos y cumplimiento legal sanitario.</div>'));
+
+    try{
+      const svg="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='#0ea5e9'/><circle cx='256' cy='256' r='145' fill='white' opacity='0.92'/><text x='256' y='318' font-size='130' text-anchor='middle' fill='#0ea5e9' font-family='Arial'>DSM</text></svg>";
+      const iconUrl="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(svg);
+      const manifest={name:"Diabetes sin miedo",short_name:"Diabetes sin miedo",description:"Control de glucosa, recetas, plan de comidas, bienestar y educación.",start_url:".",display:"standalone",background_color:"#f3f7fb",theme_color:"#0ea5e9",icons:[{src:iconUrl,sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]};
+      const blob=new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
+      const link=document.createElement("link"); link.rel="manifest"; link.href=URL.createObjectURL(blob); document.head.appendChild(link);
+    }catch(e){}
+
+    resetDaily(); setTheme(state.theme); renderHome(); renderRecipes(); renderPlan(); renderLogs(); renderMeds(); renderActivity(); renderSleep(); renderExercises(); renderGuides(); renderSettings();
+  })();
   </script>
 </body>
 </html>
